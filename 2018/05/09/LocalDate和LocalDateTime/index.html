@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java8,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="使用LocalDate和LocalTime1234567891011//2017-03-20LocalDate date = LocalDate.of(2017, 3, 20);int year = date.getYear();//2017  返回年份Month month = date.getMonth();//MARCH 返回月份 3月int dayOfMonth = date.getDay">
+<meta name="keywords" content="java8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LocalDate和LocalDateTime">
+<meta property="og:url" content="http://www.ten951.com/2018/05/09/LocalDate和LocalDateTime/index.html">
+<meta property="og:site_name" content="读书与做事">
+<meta property="og:description" content="使用LocalDate和LocalTime1234567891011//2017-03-20LocalDate date = LocalDate.of(2017, 3, 20);int year = date.getYear();//2017  返回年份Month month = date.getMonth();//MARCH 返回月份 3月int dayOfMonth = date.getDay">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-23T08:07:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LocalDate和LocalDateTime">
+<meta name="twitter:description" content="使用LocalDate和LocalTime1234567891011//2017-03-20LocalDate date = LocalDate.of(2017, 3, 20);int year = date.getYear();//2017  返回年份Month month = date.getMonth();//MARCH 返回月份 3月int dayOfMonth = date.getDay">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.ten951.com/2018/05/09/LocalDate和LocalDateTime/">
+
+
+
+
+
+  <title>LocalDate和LocalDateTime | 读书与做事</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">读书与做事</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀的普通人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2018/05/09/LocalDate和LocalDateTime/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ten951">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="读书与做事">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LocalDate和LocalDateTime</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-09T13:02:13+08:00">
+                2018-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/book/" itemprop="url" rel="index">
+                    <span itemprop="name">book</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="使用LocalDate和LocalTime"><a href="#使用LocalDate和LocalTime" class="headerlink" title="使用LocalDate和LocalTime"></a>使用LocalDate和LocalTime</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//2017-03-20</span></span><br><span class="line">LocalDate date = LocalDate.of(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">20</span>);</span><br><span class="line"><span class="keyword">int</span> year = date.getYear();<span class="comment">//2017  返回年份</span></span><br><span class="line">Month month = date.getMonth();<span class="comment">//MARCH 返回月份 3月</span></span><br><span class="line"><span class="keyword">int</span> dayOfMonth = date.getDayOfMonth();<span class="comment">//20 返回月中的第几天</span></span><br><span class="line">DayOfWeek dayOfWeek = date.getDayOfWeek();<span class="comment">//MONDAY 返回星期几</span></span><br><span class="line"><span class="keyword">int</span> len = date.lengthOfMonth();<span class="comment">//31 返回这个月有多少天</span></span><br><span class="line"><span class="keyword">boolean</span> leapYear = date.isLeapYear(); <span class="comment">//false 是否是闰年</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//获取系统时间</span></span><br><span class="line">LocalDate now = LocalDate.now(); <span class="comment">//相当于 new Date()</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//14:33:45</span></span><br><span class="line">LocalTime time = LocalTime.of(<span class="number">14</span>, <span class="number">33</span>, <span class="number">45</span>);</span><br><span class="line"><span class="keyword">int</span> hour = time.getHour();<span class="comment">//时</span></span><br><span class="line"><span class="keyword">int</span> minute = time.getMinute();<span class="comment">//分</span></span><br><span class="line"><span class="keyword">int</span> second = time.getSecond();<span class="comment">//秒</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//还可以通过解析代表他们的字符串创建.</span></span><br><span class="line">LocalDate date = LocalDate.parse(<span class="string">"2017-03-20"</span>);</span><br><span class="line">LocalDate dateTime = LocalDate.parse(<span class="string">"14:33:20"</span>);</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+<h3 id="合并日期和时间"><a href="#合并日期和时间" class="headerlink" title="合并日期和时间"></a>合并日期和时间</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">LocalDate date = LocalDate.of(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">20</span>);</span><br><span class="line">LocalTime time = LocalTime.of(<span class="number">14</span>, <span class="number">33</span>, <span class="number">45</span>);</span><br><span class="line">LocalDateTime dateTime = LocalDateTime.of(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">20</span>, <span class="number">14</span>, <span class="number">41</span>, <span class="number">40</span>);</span><br><span class="line">LocalDateTime dateTime1 = LocalDateTime.of(date, time);</span><br><span class="line">LocalDateTime dateTime2 = date.atTime(<span class="number">14</span>, <span class="number">33</span>, <span class="number">45</span>);</span><br><span class="line">LocalDateTime dateTime3 = date.atTime(time);</span><br><span class="line">LocalDateTime dateTime4 = time.atDate(date);</span><br><span class="line"><span class="comment">//从LocalDateTime装换为LocalDate和LocalTime</span></span><br><span class="line">LocalDate localDate = dateTime.toLocalDate();</span><br><span class="line">LocalTime localTime = dateTime.toLocalTime();</span><br></pre></td></tr></table></figure>
+
+<h3 id="操纵-解析和格式化日期"><a href="#操纵-解析和格式化日期" class="headerlink" title="操纵,解析和格式化日期"></a>操纵,解析和格式化日期</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//以直观的方式操作LocalDate属性</span></span><br><span class="line">LocalDate date = LocalDate.of(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">20</span>);<span class="comment">//2017-3-20</span></span><br><span class="line">LocalDate localDate = date.withYear(<span class="number">2011</span>);<span class="comment">//2011-3-20</span></span><br><span class="line">LocalDate localDate1 = localDate.withDayOfMonth(<span class="number">25</span>);<span class="comment">//2011-3-25</span></span><br><span class="line">LocalDate with = localDate1.with(ChronoField.MONTH_OF_YEAR, <span class="number">9</span>);<span class="comment">//2011-9-25</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//以相对的方式操作LocalDate属性</span></span><br><span class="line"></span><br><span class="line">LocalDate localDate2 = date.plusWeeks(<span class="number">1</span>);<span class="comment">//一周后 2017-03-27</span></span><br><span class="line">LocalDate localDate3 = localDate2.minusYears(<span class="number">3</span>);<span class="comment">//3年前 2014-03-27</span></span><br><span class="line">LocalDate plus = localDate3.plus(<span class="number">6</span>, ChronoUnit.MONTHS);<span class="comment">//6个月后 2014-09-27</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="下面介绍LocalDate-LocalTime-LocalDateTime-Instant的通用方法"><a href="#下面介绍LocalDate-LocalTime-LocalDateTime-Instant的通用方法" class="headerlink" title="下面介绍LocalDate LocalTime LocalDateTime Instant的通用方法:"></a>下面介绍LocalDate LocalTime LocalDateTime Instant的通用方法:</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Temporal是接口  所有的日期时间类 实现了该接口</span></span><br><span class="line"><span class="comment">//from 依据传入的Temporal对象创建对象实例</span></span><br><span class="line"><span class="comment">//now 依据系统时钟创建Temporal对象</span></span><br><span class="line"><span class="comment">//of 有Temporal对象的某个部分创建该对象的实例</span></span><br><span class="line"><span class="comment">//parse 由字符串创建Temporal对象的实例</span></span><br><span class="line"><span class="comment">//atOffset 将Temporal对象和某个时区偏移相结合</span></span><br><span class="line"><span class="comment">//atZone 将Temporal对象和某个时区相结合</span></span><br><span class="line"><span class="comment">//format 使用某个指定的格式器将Temporal对象转换为字符串(Instant类不提供该方法)</span></span><br><span class="line"><span class="comment">//get 读取Temporal对象的某一部分</span></span><br><span class="line"><span class="comment">//minus 创建Temporal对象的一个副本,通过将当前Temporal对象的值减去一定的时长创建该副本</span></span><br><span class="line"><span class="comment">//plus 创建Temporal对象的一个副本,通过将当前Temporal对象的值加上一定的时长创建该副本</span></span><br><span class="line"><span class="comment">//with 以该Temporal对象为模板,对某些状态进行修改创建该对象的副本</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用TemporalAdjuster"><a href="#使用TemporalAdjuster" class="headerlink" title="使用TemporalAdjuster"></a>使用TemporalAdjuster</h3><p>日期和时间 API 提供了大量预定义的TemporalAdjuster,我们可以通过TemporalAdjuster类的静态工方法访问它们.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.time.LocalDate;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> java.time.temporal.TemporalAdjusters.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Darcy</span></span><br><span class="line"><span class="comment"> *         Created by Administrator on 2017/3/20.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestTemporalAdjuster</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        LocalDate date = LocalDate.of(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">20</span>);</span><br><span class="line">        LocalDate date1 = date.with(nextOrSame(DayOfWeek.SUNDAY));<span class="comment">//下一个周日 2017-03-26</span></span><br><span class="line">        LocalDate date3 = date1.with(lastDayOfMonth());<span class="comment">//当月最后一天 2017-03-31</span></span><br><span class="line">        System.out.println(date3);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="常用的工厂方法介绍"><a href="#常用的工厂方法介绍" class="headerlink" title="常用的工厂方法介绍"></a>常用的工厂方法介绍</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//dayOfWeekInMonth  创建一个新的日期,它的值为同一个月中每一周的第几天,</span></span><br><span class="line"><span class="comment">//firstDayOfMonth  创建一个新的日期,它的值为当月的第一天</span></span><br><span class="line"><span class="comment">//firstDayOfNextMonth  创建一个新的日期,它的值为下个月的第一天</span></span><br><span class="line"><span class="comment">//firstDayOfNextYear  创建一个新的日期,它的值为明年的第一天</span></span><br><span class="line"><span class="comment">//firstDayOfYear  创建一个新的日期,它的值为当年的第一天</span></span><br><span class="line"><span class="comment">//firstInMonth 创建一个新的日期 它的值同一个月中,第一个符合星期几要求的值</span></span><br><span class="line"><span class="comment">//lastDayOfMonth  创建一个新的日期,它的值为当月的最后一天</span></span><br><span class="line"><span class="comment">//lastDayOfNextMonth  创建一个新的日期,它的值为下个月的最后一天</span></span><br><span class="line"><span class="comment">//lastDayOfNextYear  创建一个新的日期,它的值为明年的最后一天</span></span><br><span class="line"><span class="comment">//lastDayOfYear  创建一个新的日期,它的值为当年的最后一天</span></span><br><span class="line"><span class="comment">//lastInMonth 创建一个新的日期 它的值同一个月中,最后一个符合星期几要求的值</span></span><br><span class="line"><span class="comment">//next/previous 创建一个新的日期 并将其值设定为日期调整后或者调整前,第一个符合指定星期几要求的日期</span></span><br><span class="line"><span class="comment">//nextOrSame/previousOrSame 创建一个新的日期 并将其值设定为日期调整后或者调整前,第一个符合指定星期几要求的日期 如果该日期符合要求,直接返回改对象</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="定制TemporalAdjuster实现自定义的日期操作"><a href="#定制TemporalAdjuster实现自定义的日期操作" class="headerlink" title="定制TemporalAdjuster实现自定义的日期操作"></a>定制TemporalAdjuster实现自定义的日期操作</h3><p>定制TemporalAdjuster 能计算明天的日期,同时过滤掉周六和周日</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 定制TemporalAdjuster 能计算明天的日期,同时过滤掉周六和周日</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Darcy</span></span><br><span class="line"><span class="comment"> *         Created by Administrator on 2017/3/20.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NextWorkingDay</span> <span class="keyword">implements</span> <span class="title">TemporalAdjuster</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Temporal <span class="title">adjustInto</span><span class="params">(Temporal temporal)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//读取当天日期</span></span><br><span class="line">        DayOfWeek dow = DayOfWeek.of(temporal.get(ChronoField.DAY_OF_WEEK));</span><br><span class="line">        <span class="keyword">int</span> dayToAdd = <span class="number">1</span>;<span class="comment">//正常情况下增加一天</span></span><br><span class="line">        <span class="keyword">if</span> (dow == DayOfWeek.FRIDAY) dayToAdd = <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">if</span> (dow == DayOfWeek.SATURDAY) dayToAdd = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">return</span> temporal.plus(dayToAdd, ChronoUnit.DAYS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用方式:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LocalDate date = LocalDate.of(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">20</span>);</span><br><span class="line">LocalDate with = date.with(<span class="keyword">new</span> NextWorkingDay());</span><br></pre></td></tr></table></figure>
+
+<p>还有2种实现方式:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//或者用lambda表达式 但是这种不利于复用</span></span><br><span class="line">LocalDate with1 = date.with(temporal -&gt; &#123;</span><br><span class="line">    DayOfWeek dow = DayOfWeek.of(temporal.get(ChronoField.DAY_OF_WEEK));</span><br><span class="line">    <span class="keyword">int</span> dayToAdd = <span class="number">1</span>;<span class="comment">//正常情况下增加一天</span></span><br><span class="line">    <span class="keyword">if</span> (dow == DayOfWeek.FRIDAY) dayToAdd = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">if</span> (dow == DayOfWeek.SATURDAY) dayToAdd = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> temporal.plus(dayToAdd, ChronoUnit.DAYS);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">//便于复用</span></span><br><span class="line">TemporalAdjuster nextWorkingDay = TemporalAdjusters.ofDateAdjuster(temporal -&gt; &#123;</span><br><span class="line">    <span class="comment">//读取当天日期</span></span><br><span class="line">    DayOfWeek dow = DayOfWeek.of(temporal.get(ChronoField.DAY_OF_WEEK));</span><br><span class="line">    <span class="keyword">int</span> dayToAdd = <span class="number">1</span>;<span class="comment">//正常情况下增加一天</span></span><br><span class="line">    <span class="keyword">if</span> (dow == DayOfWeek.FRIDAY) dayToAdd = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">if</span> (dow == DayOfWeek.SATURDAY) dayToAdd = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">return</span> temporal.plus(dayToAdd, ChronoUnit.DAYS);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">date.with(nextWorkingDay);</span><br></pre></td></tr></table></figure>
+
+<h3 id="打印输出及解析日期-时间对象"><a href="#打印输出及解析日期-时间对象" class="headerlink" title="打印输出及解析日期-时间对象"></a>打印输出及解析日期-时间对象</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">LocalDate date = LocalDate.of(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">20</span>);</span><br><span class="line">String format = date.format(DateTimeFormatter.BASIC_ISO_DATE);<span class="comment">//20170320</span></span><br><span class="line">String format2 = date.format(DateTimeFormatter.ISO_LOCAL_DATE);<span class="comment">//2017-03-20</span></span><br><span class="line"></span><br><span class="line">LocalDate.parse(<span class="string">"20170320"</span>, DateTimeFormatter.BASIC_ISO_DATE);</span><br><span class="line">LocalDate.parse(<span class="string">"2017-03-20"</span>, DateTimeFormatter.ISO_LOCAL_DATE);</span><br><span class="line"></span><br><span class="line"><span class="comment">//按照某种格式创建DateTimeFormatter</span></span><br><span class="line">DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(<span class="string">"dd/MM/yyyy"</span>);</span><br><span class="line">String format1 = date.format(dateTimeFormatter);</span><br><span class="line">LocalDate parse = LocalDate.parse(format1, dateTimeFormatter);</span><br><span class="line"></span><br><span class="line"><span class="comment">//如果需要更加细粒度的控制,DateTimeFormatterBuilder类提供了更复杂的格式器,可以使用 一步一步的构造自己的格式器</span></span><br><span class="line">DateTimeFormatter formatter = <span class="keyword">new</span> DateTimeFormatterBuilder()</span><br><span class="line">        .appendText(ChronoField.DAY_OF_MONTH)</span><br><span class="line">        .appendLiteral(<span class="string">". "</span>)</span><br><span class="line">        .appendText(ChronoField.MONTH_OF_YEAR)</span><br><span class="line">        .appendLiteral(<span class="string">" "</span>)</span><br><span class="line">        .appendText(ChronoField.YEAR)</span><br><span class="line">        .parseCaseInsensitive()<span class="comment">//对大小写不敏感</span></span><br><span class="line">        .toFormatter(Locale.CHINA);</span><br><span class="line">LocalDate date3 = LocalDate.of(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">20</span>);</span><br><span class="line">String format3 = date3.format(formatter); <span class="comment">//20. 三月 2017</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="处理不同时区的历法"><a href="#处理不同时区的历法" class="headerlink" title="处理不同时区的历法"></a>处理不同时区的历法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//地区ID都为&#123;区域&#125;/&#123;城市&#125;的格式,这些地区集合的设定都由英特网编号分配机构(IANA)的市区数据库提供</span></span><br><span class="line">ZoneId romeZone = ZoneId.of(<span class="string">"Europe/Rome"</span>);</span><br><span class="line"><span class="comment">//可以通过Java8的新方法 将老的时区装换为ZoneId</span></span><br><span class="line">ZoneId zoneId = TimeZone.getDefault().toZoneId();</span><br><span class="line"></span><br><span class="line">LocalDate date = LocalDate.of(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">20</span>);</span><br><span class="line">ZonedDateTime zonedDateTime = date.atStartOfDay(romeZone);</span><br><span class="line">LocalDateTime dateTime = LocalDateTime.of(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">20</span>, <span class="number">14</span>, <span class="number">41</span>, <span class="number">40</span>);</span><br><span class="line">ZonedDateTime zonedDateTime1 = dateTime.atZone(romeZone);</span><br><span class="line">Instant now = Instant.now();</span><br><span class="line">ZonedDateTime zonedDateTime2 = now.atZone(romeZone);</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用别的日历系统</span></span><br><span class="line"><span class="comment">//java8 另外提供了4中其他的日历系统 ThaiBuddhistDate MinguoDate JapaneseDate HijrahDate</span></span><br><span class="line">ThaiBuddhistDate now1 = ThaiBuddhistDate.now();<span class="comment">//ThaiBuddhist BE 2560-03-20</span></span><br><span class="line">MinguoDate now2 = MinguoDate.now();<span class="comment">//Minguo ROC 106-03-20</span></span><br><span class="line">JapaneseDate now3 = JapaneseDate.now();<span class="comment">//Japanese Heisei 29-03-20</span></span><br><span class="line">HijrahDate now4 = HijrahDate.now();<span class="comment">//Hijrah-umalqura AH 1438-06-21</span></span><br><span class="line">JapaneseDate from = JapaneseDate.from(date); <span class="comment">//Japanese Heisei 29-03-20</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java8/" rel="tag"># java8</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/09/并发编程/" rel="prev" title="并发编程">
+                并发编程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ten951</p>
+              <p class="site-description motion-element" itemprop="description">学习工作技能,感悟生活细节</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ten951" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangyongtian520@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用LocalDate和LocalTime"><span class="nav-number">1.</span> <span class="nav-text">使用LocalDate和LocalTime</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并日期和时间"><span class="nav-number">2.</span> <span class="nav-text">合并日期和时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操纵-解析和格式化日期"><span class="nav-number">3.</span> <span class="nav-text">操纵,解析和格式化日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下面介绍LocalDate-LocalTime-LocalDateTime-Instant的通用方法"><span class="nav-number">4.</span> <span class="nav-text">下面介绍LocalDate LocalTime LocalDateTime Instant的通用方法:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用TemporalAdjuster"><span class="nav-number">5.</span> <span class="nav-text">使用TemporalAdjuster</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用的工厂方法介绍"><span class="nav-number">5.1.</span> <span class="nav-text">常用的工厂方法介绍</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定制TemporalAdjuster实现自定义的日期操作"><span class="nav-number">6.</span> <span class="nav-text">定制TemporalAdjuster实现自定义的日期操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打印输出及解析日期-时间对象"><span class="nav-number">7.</span> <span class="nav-text">打印输出及解析日期-时间对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理不同时区的历法"><span class="nav-number">8.</span> <span class="nav-text">处理不同时区的历法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ten951</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+<script>
+  	var _mtac = {};
+  	(function() {
+  		var mta = document.createElement("script");
+  		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.4";
+  		mta.setAttribute("name", "MTAH5");
+  		mta.setAttribute("sid", "500682921");
+
+  		var s = document.getElementsByTagName("script")[0];
+  		s.parentNode.insertBefore(mta, s);
+  	})();
+</script>
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
