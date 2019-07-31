@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="读书与做事">
 <meta property="og:description" content="数据结构简单动态字符串 (SDS)12345678struct sdshdr &amp;#123;    // 记录buf[]数组中已经使用字节的数量, 等于SDS所保存字符串长度    int len;    // 记录buf数组中未使用字节的数量    int free;    // 字节数组, 用于保存字符串    char buf[]&amp;#125;  由于len的存在. 保证了获取一个SDS的长度复">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-24T09:33:22.000Z">
+<meta property="og:updated_time" content="2019-07-31T02:33:28.630Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis相关">
 <meta name="twitter:description" content="数据结构简单动态字符串 (SDS)12345678struct sdshdr &amp;#123;    // 记录buf[]数组中已经使用字节的数量, 等于SDS所保存字符串长度    int len;    // 记录buf数组中未使用字节的数量    int free;    // 字节数组, 用于保存字符串    char buf[]&amp;#125;  由于len的存在. 保证了获取一个SDS的长度复">
@@ -418,7 +418,7 @@
 <h5 id="解决键冲突"><a href="#解决键冲突" class="headerlink" title="解决键冲突"></a>解决键冲突</h5><p>拉链法. dictEntry节点组成的链表没有执行链表表尾的指针. 程序将新节点添加到链表的表头位置.</p>
 <h5 id="rehash"><a href="#rehash" class="headerlink" title="rehash"></a>rehash</h5><p>随着操作的不断执行, 哈希表保存的键值对会逐渐地增多或者减少, 为了让哈希表负载因子维持在一个合理的范围内. 程序需要对哈希表的大小进行相应的拓展和收缩. 拓展和收缩哈希表的工作可以通过执行rehash操作来完成. 步骤:</p>
 <ol>
-<li>为字典ht[1]哈希表分配空间, 这个哈希表的空间大小取决于要执行的操作, 以及ht[0]当前包含的键值对数量. 即是ht[0].used属性的值/</li>
+<li>为字典ht[1]哈希表分配空间, 这个哈希表的空间大小取决于要执行的操作, 以及ht[0]当前包含的键值对数量. 即是ht[0].used属性的值.</li>
 <li>将保存在ht[0]中的所有键值对rehash到ht[1]上面.</li>
 <li>当ht[0]所包含的键值对都迁移到了ht[1]之后. 释放ht[0], 将ht[1]设置为ht[0], 并在ht[1]新创建一个空白哈希表. 为下一次rehash做准备.</li>
 </ol>
@@ -836,7 +836,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -858,7 +858,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
