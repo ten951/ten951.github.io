@@ -88,7 +88,7 @@
 <meta property="og:description" content="复制旧版复制功能Redis的复制功能分为同步sync和命令传播command propagate两个操作:  同步操作同于将从服务器的数据库状态更新至主服务器当前所处的状态 命令传播操作用于在主服务器的数据库状态被修改, 导致主从服务器的数据库状态出现不一致时, 让主从服务器的数据库重新回到一致状态  同步当客户端向从服务器发送slaveof命令, 要求从服务器复制主服务器时. 从服务器对主服务器">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20190530114021.png">
-<meta property="og:updated_time" content="2019-05-31T06:56:38.000Z">
+<meta property="og:updated_time" content="2019-08-01T11:54:06.293Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis相关2">
 <meta name="twitter:description" content="复制旧版复制功能Redis的复制功能分为同步sync和命令传播command propagate两个操作:  同步操作同于将从服务器的数据库状态更新至主服务器当前所处的状态 命令传播操作用于在主服务器的数据库状态被修改, 导致主从服务器的数据库状态出现不一致时, 让主从服务器的数据库重新回到一致状态  同步当客户端向从服务器发送slaveof命令, 要求从服务器复制主服务器时. 从服务器对主服务器">
@@ -466,14 +466,14 @@
 <h2 id="检查客观下线状态"><a href="#检查客观下线状态" class="headerlink" title="检查客观下线状态"></a>检查客观下线状态</h2><p>当一个Sentinel键一个主服务器判定为主观下线, 为了确认这个主服务器是否真的下线了, 它会想同样监视着一个主服务器的其他Sentinel进行询问, 看它们是否也认为主服务器已经进入了下线状态, 当Sentinel从其他Sentinel那里接收到足够数量的已下线判断之后, Sentinel就会将从服务器判定为客观下线. 并对主服务器执行故障转移.</p>
 <h2 id="选举领头Sentinel"><a href="#选举领头Sentinel" class="headerlink" title="选举领头Sentinel"></a>选举领头Sentinel</h2><p>当一个主服务器被判断为客观下线时, 监控这个下线主服务器的各个Sentinel会进行协商. 选举一个领头Sentinel, 并由证领头的对下线主服务器执行故障转移操作.</p>
 <ol>
-<li>所有在线的Sentinel都要资格宣威领头的.</li>
+<li>所有在线的Sentinel都有资格被选举为领头的.</li>
 <li>每个进行领头Sentinel选举之后, 不论选举是否成功. 所有Sentinel的配置纪元的值都会增长1.</li>
 <li>在一个配置纪元里, 所有Sentinel都有一次将某个Sentinel设置为局部领头Sentinel的机会.并且局部领头一旦设置, 在这个配置纪元里面就不能再更改.</li>
-<li>每个发现主服务器进入客观下线的Sentinel否会要求其他Sentinel将自己设置为局部领头Sentinel.</li>
+<li>每个发现主服务器进入客观下线的Sentinel都会要求其他Sentinel将自己设置为局部领头Sentinel.</li>
 <li>当一个Sentinel像另一个Sentinel发送SENTINEL is-master-down-by-addr命令, 其中命令中runid参数不是*而是自己的运行ID时, 这就表示希望对方能选自己为局部领头.</li>
 <li>设置局部领头是先到先得的. 当一个Sentinel设置了一个Sentinel节点为局部领头. 在收到其他设置局部领头的请求会被拒绝.</li>
 <li>当收到设置局部领头命令后, 会向发送者回复一条命令. 回复中的leader_runid参数和leader_epoch参数分别记录了自己的局部领头Sentinel的运行ID和配置纪元.</li>
-<li>源Sentinel咋接收到目标Sentinel返回的命令回复之后, 检查回复中的leader_runid参数和leader_epoch参数和自己的是否一致, 如果一致表示对方选了自己当局部领头, 不一致, 就是选了别的节点.</li>
+<li>源Sentinel在接收到目标Sentinel返回的命令回复之后, 检查回复中的leader_runid参数和leader_epoch参数和自己的是否一致, 如果一致表示对方选了自己当局部领头, 不一致, 就是选了别的节点.</li>
 <li>如果某个Sentinel呗半数以上的人节点选为局部领头, 那么这个节点就成为了领头Sentinel.</li>
 <li>如果在给定时间内, 没选出来. 那么在过一段时间后, 继续选举. 直到选出领头为止.</li>
 </ol>
@@ -533,7 +533,7 @@
 <li>每当节点往数据库中添加一个新的键值对时, 节点就会将这个键以及键的槽号关联到slots_to_keys跳跃表</li>
 <li>每当节点删除数据库中的某个键值对时. 节点就会从跳跃表中解除呗删除键与槽号的关联.</li>
 </ol>
-<p>通过跳跃表中记录各个数据键所属的槽号. 节点可以很方便地对属于某个或某些槽的所有数据库键进行批量操作. 例如命令 </p>
+<p>通过跳跃表中记录各个数据键所属的槽号. 节点可以很方便地对属于某个或某些槽的所有数据库键进行批量操作. 例如命令</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cluster getkeysinslot &lt;slot&gt; &lt;count&gt;</span><br></pre></td></tr></table></figure>
 
 <h3 id="重新分片"><a href="#重新分片" class="headerlink" title="重新分片"></a>重新分片</h3><p>集群的重新分片操作可以将任意数量已经指派给某个节点的槽改为指派另一个节点, 并且相关槽所属的键值对也会从源节点移动到目标节点.</p>
