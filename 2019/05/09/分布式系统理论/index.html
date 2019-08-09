@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="读书与做事">
 <meta property="og:description" content="分布式系统概念 进程和线程. 进程是具有一定独立功能的程序关于某个数据集合上的一次运行活动.进程是系统进行资源分配和调度的一个独立单位. 线程是进程的实体, 是CPU调度和分派的基本单位, 它是比进程更小的能独立运行的基本单位. 并发. 当多个线程在操作时. 如果系统一个CPU. 则它根本不可能真正同时执行一个以上的线程. 它只是把CPU运行时间划分成若干个时间段. 在将时间段分配给各个线程执行.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-11T08:46:55.000Z">
+<meta property="og:updated_time" content="2019-08-08T07:00:33.558Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式系统理论">
 <meta name="twitter:description" content="分布式系统概念 进程和线程. 进程是具有一定独立功能的程序关于某个数据集合上的一次运行活动.进程是系统进行资源分配和调度的一个独立单位. 线程是进程的实体, 是CPU调度和分派的基本单位, 它是比进程更小的能独立运行的基本单位. 并发. 当多个线程在操作时. 如果系统一个CPU. 则它根本不可能真正同时执行一个以上的线程. 它只是把CPU运行时间划分成若干个时间段. 在将时间段分配给各个线程执行.">
@@ -385,7 +385,7 @@
 <ul>
 <li><p>并行. 当系统有一个以上CPU时. 则线程的操作有可能非并发. 当一个cpu执行一个线程. 另一个CPU可以执行另一个线程. 两个线程互不抢占CPU资源. 可以同时进行, 这种方式我们称之为并行(Parallel)</p>
 </li>
-<li><p>集群. 一组相互独立. 通过高速互联计算机, 它们构成了一个组. 并以单一系统的模式加以管理. 分布式系统可以表达为很多机器组成的集群. 考彼此之间的网络通信. 担当的角色可能不同. 共同完成同一件事情的系统.</p>
+<li><p>集群. 一组相互独立. 通过高速互联计算机, 它们构成了一个组. 并以单一系统的模式加以管理. 分布式系统可以表达为很多机器组成的集群. 靠彼此之间的网络通信. 担当的角色可能不同. 共同完成同一件事情的系统.</p>
 </li>
 </ul>
 <blockquote>
@@ -422,7 +422,7 @@
 <li>proposer发送prepare. proposer生成全局唯一且递增的提案ID, 向Poxos集群的所在机器发送请求. 这里无需携带提案内容. 只携带提案ID即可(提案ID叫做pn).</li>
 <li>acceptor应答prepare. acceptor收到提案请求后, 做出如下约定: 1) 不应答&lt;=pn的prepare请求. 2)对于 &lt; pn的accept请求亦不处理. acceptor做出的处理包括: 1) 应答前要在本地持久化当前提案ID 2)如果现在请求的提案ID–pn大于此前存放的proposalID, 则做如下处理</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(pn&gt;proposalId) <span class="keyword">else</span> &#123; proposalId = pn&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(pn&gt;proposalId)  &#123; proposalId = pn&#125;</span><br></pre></td></tr></table></figure>
 
 <p>如果该acceptor accept过的提案. 则返回提案中proposalId最大的那个提案的内容. 否则是空值.</p>
 <h4 id="accept阶段"><a href="#accept阶段" class="headerlink" title="accept阶段"></a>accept阶段</h4><ol>
@@ -438,7 +438,7 @@
 <li>提交阶段. 基于投票结果, 由协商器决定提交事务抑或是退出事务处理. 各事务参与者遵循指示, 对本地事务资源做需要的动作</li>
 </ol>
 <p>2PC最大的不足是提交协议是阻塞性的. 如果事务协调器宕机. 某些参与者将无法解决他们的事务: 一个参与者发送确认消息给协调器. 因为协调器无法工作而导致事务未处理完而处于悬挂状态.</p>
-<p>因此在高并发网站中使用分布式事务的2PC协议要把握如写原则:</p>
+<p>因此在高并发网站中使用分布式事务的2PC协议要把握如下原则:</p>
 <p>1) 能不用2PC 就尽量不要用 负责度高, 性能挑战也高<br>2) 要获得事务强一致性, 也要在性能和一致性上做折中. 比如加上超时机制. 阶段性补偿机制.</p>
 <h3 id="3PC"><a href="#3PC" class="headerlink" title="3PC"></a>3PC</h3><p>分为3次交互.</p>
 <ul>
@@ -454,12 +454,11 @@
 <li>候选人 候选人就是在选举过程中提名自己的实体, 一旦选举成功, 则成为领导者.</li>
 </ol>
 <p>算法分为两个阶段. 首先是选举过程. 它向其他服务器发出要求选举自己的请求, 比如日志复制.</p>
-<p>1) 任何一个服务器都可以成为一个候选者, 它向其他服务器(选民)发出要求选举自己的请求,<br>2) 其他服务器同意了 回复ok指令 此时如果有一个follower服务器宕机, 没有收到请求选举的请求. 则只要达到板书以上的票数, 候选人还是可以成为领导者<br>3) 这个候选者成为了领导者. 它可以向选民们发出要执行具体操作动作的指令. 比如进行日志复制.<br>4) 一旦这个leader宕机崩溃了. 那么follower中会有一个成为候选者, 发出邀请选举, 相当于执行1)~2)的步骤.</p>
-<h3 id="Lease机制"><a href="#Lease机制" class="headerlink" title="Lease机制"></a>Lease机制</h3><p>Lease是由授权者授予分布式环境一段时间内的承诺. 例如 缓存服务器把数据分发给对应节点A B C, 其中节点A B得到数据v01, 有效期为12:00:00, 而节点C收到数据v02, 有效期为12:15:00, 节点A可以把v01数据缓存到本地. 在Lease时间范围内方向使用 而Server也遵守承诺, 在Lease过期时间内不修改数据.</p>
-<p>当时间到12:00:01时. 此时v01数据过期, 则AB会删除本地数据. 而此时Server会阻塞一直到已发布的所有Lease都已经过期, 在更新数据并发出新的Lease.</p>
+<p>1) 任何一个服务器都可以成为一个候选者, 它向其他服务器(选民)发出要求选举自己的请求,<br>2) 其他服务器同意了 回复ok指令 此时如果有一个follower服务器宕机, 没有收到请求选举的请求. 则只要达到半数以上的票数, 候选人还是可以成为领导者<br>3) 这个候选者成为了领导者. 它可以向选民们发出要执行具体操作动作的指令. 比如进行日志复制.<br>4) 一旦这个leader宕机崩溃了. 那么follower中会有一个成为候选者, 发出邀请选举, 相当于执行1)~2)的步骤.</p>
+<h3 id="Lease机制"><a href="#Lease机制" class="headerlink" title="Lease机制"></a>Lease机制</h3><p>Lease是由授权者授予分布式环境一段时间内的承诺.<br>例如 缓存服务器把数据分发给对应节点A B C,<br>其中节点A B得到数据v01, 有效期为12:00:00,<br>而节点C收到数据v02, 有效期为12:15:00, 节点A可以把v01数据缓存到本地. 在Lease时间范围内方向使用 而Server也遵守承诺, 在Lease过期时间内不修改数据.<br>当时间到12:00:01时. 此时v01数据过期, 则AB会删除本地数据. 而此时Server会阻塞一直到已发布的所有Lease都已经过期, 在更新数据并发出新的Lease.</p>
 <h3 id="脑裂问题"><a href="#脑裂问题" class="headerlink" title="脑裂问题"></a>脑裂问题</h3><p>主备是实现高可用的有效方式. 但是存在脑裂问题. 是指一个高可用HA系统中. 当联系着的两个节点断开联时, 本来为一个整体的系统. 分裂为两个独立节点, 这时两个节点开始争抢共享资源. 结果会导致系统混乱 数据损坏.</p>
 <p>解决脑裂的问题, 有一种做法是加入仲裁机制. 例如加入第三方检测服务器monitor.</p>
-<h3 id="Quorum-NWR"><a href="#Quorum-NWR" class="headerlink" title="Quorum NWR"></a>Quorum NWR</h3><p>NWR是一种咋分布式存储系统中泳衣控制一致性级别的一种策略. N 同一份数据的拷贝数 W 是更新一个数据对象的时候需要确保成功更新的份数. R读取一个数据需要读取的拷贝的份数.</p>
+<h3 id="Quorum-NWR"><a href="#Quorum-NWR" class="headerlink" title="Quorum NWR"></a>Quorum NWR</h3><p>NWR是一种在分布式存储系统中用于控制一致性级别的一种策略. N 同一份数据的拷贝数 W 是更新一个数据对象的时候需要确保成功更新的份数. R读取一个数据需要读取的拷贝的份数.</p>
 <blockquote>
 <p>W&gt;N/2 W+R&gt;N 公式表明写操作要确保成功的份数应该高于数据拷贝总份数的一半. 写操作加上读操作的总份数也要高于同一份数据拷贝总份数.</p>
 </blockquote>

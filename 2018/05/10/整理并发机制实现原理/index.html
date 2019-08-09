@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="读书与做事">
 <meta property="og:description" content="volatile  在并发编程中synchronized和volatile都有重要的角色.volatile是轻量级的synchronized,它在多线程开发中保证了共享变量的可见性,  可见性的意思是当一个线程修改一个共享变量时,另外一个线程能读到这个修改的值    volatile变量修饰使用恰当的话,它比synchronized的使用和执行成本更低.因为没有线程的上下文的切换和调度.  vol">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-21T03:52:33.000Z">
+<meta property="og:updated_time" content="2019-08-08T08:29:29.360Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="整理并发机制实现原理">
 <meta name="twitter:description" content="volatile  在并发编程中synchronized和volatile都有重要的角色.volatile是轻量级的synchronized,它在多线程开发中保证了共享变量的可见性,  可见性的意思是当一个线程修改一个共享变量时,另外一个线程能读到这个修改的值    volatile变量修饰使用恰当的话,它比synchronized的使用和执行成本更低.因为没有线程的上下文的切换和调度.  vol">
@@ -411,7 +411,6 @@
 <blockquote>
 <p>所谓缓存锁定,是指内存区域如果被缓存在处理器缓存行中,并且在Lock操作期间被锁定,那么当它执行锁操作回写到内存时,处理器不在总线上声言LOCK#信号,而是修改内部的内存地址,并允许它的缓存一致性机制来保证操作的原子性,因为缓存一致性机制会阻止同时修改由两个以上处理器缓存的内存区域数据,当其他处理器回写已被锁定的缓存行的数据时,会使缓存行无效,</p>
 </blockquote>
-<h4 id="Java实现原子操作"><a href="#Java实现原子操作" class="headerlink" title="Java实现原子操作"></a>Java实现原子操作</h4><p>通过锁和循环CAS的方式来实现原子操作</p>
 
       
     </div>
@@ -602,7 +601,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile"><span class="nav-number">1.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">2.</span> <span class="nav-text">synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#锁的升级"><span class="nav-number">2.1.</span> <span class="nav-text">锁的升级</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#偏向锁"><span class="nav-number">2.1.1.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#轻量级锁"><span class="nav-number">2.1.2.</span> <span class="nav-text">轻量级锁</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原子操作的实现原理"><span class="nav-number">3.</span> <span class="nav-text">原子操作的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#处理器保证原子操作"><span class="nav-number">3.1.</span> <span class="nav-text">处理器保证原子操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java实现原子操作"><span class="nav-number">3.2.</span> <span class="nav-text">Java实现原子操作</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile"><span class="nav-number">1.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">2.</span> <span class="nav-text">synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#锁的升级"><span class="nav-number">2.1.</span> <span class="nav-text">锁的升级</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#偏向锁"><span class="nav-number">2.1.1.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#轻量级锁"><span class="nav-number">2.1.2.</span> <span class="nav-text">轻量级锁</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原子操作的实现原理"><span class="nav-number">3.</span> <span class="nav-text">原子操作的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#处理器保证原子操作"><span class="nav-number">3.1.</span> <span class="nav-text">处理器保证原子操作</span></a></li></ol></li></ol></div>
             
 
           </div>
