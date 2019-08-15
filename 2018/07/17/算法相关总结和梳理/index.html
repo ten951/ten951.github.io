@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7651180-eaf5d3c2958c4c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7651180-c5db1c5e557446af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-07-17T10:55:13.000Z">
+<meta property="og:updated_time" content="2019-08-13T08:05:00.847Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法相关总结和梳理">
 <meta name="twitter:description" content="表, 栈和队列表list ADT有两种流行的实现方式,在JDK中都有体现,  ArrayList类提供了List ADT的一种可增长数组的实现.使用ArrayList的优点在于,对get和set的调用花费常数时间,其缺点是新项的插入和现有项的删除代价昂贵,除非变动是在数组的末端进行. LinkedList类则提供了List ADT双链表实现,使用LinkedList的优点在于,新项的插入和现有项的">
@@ -402,7 +402,7 @@
 <h3 id="查找树ADT-二叉查找树"><a href="#查找树ADT-二叉查找树" class="headerlink" title="查找树ADT(二叉查找树)"></a>查找树ADT(二叉查找树)</h3><p>对于树中的每个节点X,它的左子树中所有项的值小于X中的项.而它的右子树中所有项的值大于X中的项.</p>
 <p>findMin 从根开始并且只要有左儿子就向左进行,终止点就是最小元素</p>
 <p>findMax 从根开始并且只要有右儿子就向右进行,终止点就是最大元素</p>
-<p>remove<br>      1. 节点是一片叶子. 那么它可以立即被删除<br>      2. 节点有一个儿子. 该节点可以在其父节点调整自己的链以绕过该节点后被删除.<br>      3. 节点有两个儿子. 用其右子树的最小的数据代替该节点的数据并递归地删除那个节点,<br>insert 为了将X插入到树T中,需要沿树查找,如果找到X,则说明也不做.否则,将X插入到遍历的路径上的最后一点上,(要保证二叉树的性质)</p>
+<p>remove<br>      1. 节点是一片叶子. 那么它可以立即被删除<br>      2. 节点有一个儿子. 该节点可以在其父节点调整自己的链以绕过该节点后被删除.<br>      3. 节点有两个儿子. 用其右子树的最小的数据代替该节点的数据并递归地删除那个节点,<br>insert 为了将X插入到树T中,需要沿树查找,如果找到X,则什么也不做.否则,将X插入到遍历的路径上的最后一点上,(要保证二叉树的性质)</p>
 <p>contains 如果在树T中存在含有项X的节点,那额这个需要返回true,否则返回false.如果树T是空集,返回false.我们队树T的左子树和右子树进行一次递归调用,这依赖X和存储在T中的项的关系.</p>
 <p><strong>缺点: 当把预先拍好序的数据,insert树中,会出现极端情况.树没有左节点或者没有右节点. 一种解决办法就是要有一个称为平衡的附加结构条件:任何节点的深度均不得过深.</strong></p>
 <h3 id="AVL树"><a href="#AVL树" class="headerlink" title="AVL树"></a>AVL树</h3><p>AVL树是带有平衡条件的二叉树.(每个节点的左子树和右子树的高度最多差1)</p>
@@ -443,13 +443,8 @@
 <td align="center">在a的右子树根节点的左子树上插入节点而破坏平衡</td>
 <td align="left">先右旋后左旋</td>
 </tr>
-<tr>
-<td>#### 单旋转: 看先后插入 3,2,1,4,5,6,7. insert方法构建的过程.</td>
-<td align="center"></td>
-<td align="left"></td>
-</tr>
 </tbody></table>
-<p><img src="https://upload-images.jianshu.io/upload_images/7651180-eaf5d3c2958c4c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h4 id="单旋转-看先后插入-3-2-1-4-5-6-7-insert方法构建的过程"><a href="#单旋转-看先后插入-3-2-1-4-5-6-7-insert方法构建的过程" class="headerlink" title="单旋转: 看先后插入 3,2,1,4,5,6,7. insert方法构建的过程"></a>单旋转: 看先后插入 3,2,1,4,5,6,7. insert方法构建的过程</h4><p><img src="https://upload-images.jianshu.io/upload_images/7651180-eaf5d3c2958c4c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 <h4 id="双旋转"><a href="#双旋转" class="headerlink" title="双旋转"></a>双旋转</h4><p><img src="https://upload-images.jianshu.io/upload_images/7651180-c5db1c5e557446af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
 
       
@@ -641,7 +636,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#表-栈和队列"><span class="nav-number">1.</span> <span class="nav-text">表, 栈和队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表"><span class="nav-number">1.1.</span> <span class="nav-text">表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈ADT"><span class="nav-number">1.2.</span> <span class="nav-text">栈ADT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#队列ADT"><span class="nav-number">1.3.</span> <span class="nav-text">队列ADT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树"><span class="nav-number">2.</span> <span class="nav-text">树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#树的遍历"><span class="nav-number">2.1.</span> <span class="nav-text">树的遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找树ADT-二叉查找树"><span class="nav-number">2.2.</span> <span class="nav-text">查找树ADT(二叉查找树)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AVL树"><span class="nav-number">2.3.</span> <span class="nav-text">AVL树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#旋转"><span class="nav-number">2.3.1.</span> <span class="nav-text">旋转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#双旋转"><span class="nav-number">2.3.2.</span> <span class="nav-text">双旋转</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#表-栈和队列"><span class="nav-number">1.</span> <span class="nav-text">表, 栈和队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表"><span class="nav-number">1.1.</span> <span class="nav-text">表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈ADT"><span class="nav-number">1.2.</span> <span class="nav-text">栈ADT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#队列ADT"><span class="nav-number">1.3.</span> <span class="nav-text">队列ADT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树"><span class="nav-number">2.</span> <span class="nav-text">树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#树的遍历"><span class="nav-number">2.1.</span> <span class="nav-text">树的遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找树ADT-二叉查找树"><span class="nav-number">2.2.</span> <span class="nav-text">查找树ADT(二叉查找树)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AVL树"><span class="nav-number">2.3.</span> <span class="nav-text">AVL树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#旋转"><span class="nav-number">2.3.1.</span> <span class="nav-text">旋转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单旋转-看先后插入-3-2-1-4-5-6-7-insert方法构建的过程"><span class="nav-number">2.3.2.</span> <span class="nav-text">单旋转: 看先后插入 3,2,1,4,5,6,7. insert方法构建的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#双旋转"><span class="nav-number">2.3.3.</span> <span class="nav-text">双旋转</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
