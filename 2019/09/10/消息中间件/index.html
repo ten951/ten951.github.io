@@ -88,7 +88,7 @@
 <meta property="og:description" content="rabbitmqExchangeTypes direct  bindingKey和routingKey完全匹配的queue中 Fanout  不管routingKey是什么.他都会把消息发送到与exchange绑定的所有queue中 Topic   exchange将消息发送到routingKey模式匹配的queue中. #表示匹配多个单词 *表示匹配一个单词 单词之间用.分隔 RPC     客">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20190910154128.png">
-<meta property="og:updated_time" content="2019-09-10T10:52:07.561Z">
+<meta property="og:updated_time" content="2019-09-17T10:49:57.642Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="消息中间件">
 <meta name="twitter:description" content="rabbitmqExchangeTypes direct  bindingKey和routingKey完全匹配的queue中 Fanout  不管routingKey是什么.他都会把消息发送到与exchange绑定的所有queue中 Topic   exchange将消息发送到routingKey模式匹配的queue中. #表示匹配多个单词 *表示匹配一个单词 单词之间用.分隔 RPC     客">
@@ -383,6 +383,7 @@
 <li>RPC     客户端C发送请求（消息）时，在消息的属性（MessageProperties）中设置两个值replyTo（一个Queue名称，用于告诉服务器处理完成后将通知我的消息发送到这个Queue中）和correlationId（此次请求的标识号，服务器处理完成后需要将此属性返还，客户端将根据这个id了解哪条请求被成功执行了或执行失败. 服务器端S处理完消息后，将生成一条应答消息到replyTo指定的Queue，同时带上correlationId属性。客户端之前已订阅replyTo指定的Queue，从中收到服务器的应答消息后，根据其中的correlationId属性分析哪条请求被执行了，根据执行结果进行后续业务处理.</li>
 </ul>
 <h3 id="virtualhost"><a href="#virtualhost" class="headerlink" title="virtualhost"></a>virtualhost</h3><p>每一个vhost本质上是一个mini-rabbitmq server，分别管理各自的exchange和bindings。vhost相当于物理的server，可以为不同app提供边界隔离，使得应用安全的运行在不同的vhost实例上，相互之间不会干扰。producer和consumer连接rabbit server需要指定一个vhost。</p>
+<a id="more"></a>
 <h3 id="消息存储"><a href="#消息存储" class="headerlink" title="消息存储"></a>消息存储</h3><ul>
 <li><p>disc 则需要对exchange／queue／delivery mode都要设置成durable模式。当RabbitMQ失效了，message仍然可以在重启之后恢复.</p>
 </li>
