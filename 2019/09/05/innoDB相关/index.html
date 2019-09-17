@@ -88,7 +88,7 @@
 <meta property="og:description" content="体系结构 InnoDB存储引擎由多个内存块组成. 可以认为这些内存块组成了一个很大的内存池. 主要负责:  维护所有进程/线程需要访问的多个内部数据数据 缓存磁盘上的数据. 方便快速的读取.同时在对磁盘文件进行修改之前在这里缓存 重做日志redo log缓冲  后台线程innoDB是个多线程模型. 因此很多线程都具有不同的分工.  Master Thread 核心的后台线程. 负责将缓冲池中的数据">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20190905103235.png">
-<meta property="og:updated_time" content="2019-09-09T07:46:56.944Z">
+<meta property="og:updated_time" content="2019-09-10T03:42:13.191Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="innoDB相关">
 <meta name="twitter:description" content="体系结构 InnoDB存储引擎由多个内存块组成. 可以认为这些内存块组成了一个很大的内存池. 主要负责:  维护所有进程/线程需要访问的多个内部数据数据 缓存磁盘上的数据. 方便快速的读取.同时在对磁盘文件进行修改之前在这里缓存 重做日志redo log缓冲  后台线程innoDB是个多线程模型. 因此很多线程都具有不同的分工.  Master Thread 核心的后台线程. 负责将缓冲池中的数据">
@@ -470,12 +470,15 @@
 <li>select … lock share mode. 在读取是添加行级别S锁</li>
 </ol>
 <h4 id="行锁的3种算法"><a href="#行锁的3种算法" class="headerlink" title="行锁的3种算法"></a>行锁的3种算法</h4><ol>
-<li>record lock 单个行记录上锁 总是去锁住索引记录, 没有任何一个索引, 就使用隐士的主键进行锁定</li>
-<li>Gap lock 间隙锁 锁定一个范围 不包含记录本身</li>
-<li>Next-key lock: 1+2 锁定一个范围 并且锁定记录本身</li>
+<li><p>record lock 单个行记录上锁 总是去锁住索引记录, 没有任何一个索引, 就使用隐士的主键进行锁定<br>单条索引记录上加锁，record lock锁住的永远是索引，而非记录本身，即使该表上没有任何索引，那么innodb会在后台创建一个隐藏的聚集主键索引，那么锁住的就是这个隐藏的聚集主键索引。所以说当一条sql没有走任何索引时，那么将会在每一条聚集索引后面加X锁，这个类似于表锁，但原理上和表锁应该是完全不同的。</p>
+</li>
+<li><p>Gap lock 间隙锁 锁定一个范围 不包含记录本身<br>在索引记录之间的间隙中加锁，或者是在某一条索引记录之前或者之后加锁，并不包括该索引记录本身.</p>
+</li>
+<li><p>Next-key lock: 1+2 锁定一个范围 并且锁定记录本身</p>
+</li>
 </ol>
 <h4 id="phantom-problem-幻像问题"><a href="#phantom-problem-幻像问题" class="headerlink" title="phantom problem(幻像问题)"></a>phantom problem(幻像问题)</h4><p>phantom problem问题是指 在一个事务下, 连续执行两次同样的SQL语句可能导致不同的结果. 第二次sql可能会返回之前不存在的行.</p>
-<p>innoDB的默认隔离级别 repeatable read, 通过使用Next-key lock算法来避免phantom problem问题. 在这算法下 对于索引的扫描, 不仅是锁住扫描的索引. 而且还锁住这些索引覆盖的范围(GAP) 因此在这个范围内插入式不允许的. 这样就避免了另外的事务在这个范围内插入数据导致不可重复读问题.</p>
+<p>innoDB的默认隔离级别 repeatable read, 通过使用Next-key lock算法来避免phantom problem问题. 在这算法下 对于索引的扫描, 不仅是锁住扫描的索引. 而且还锁住这些索引覆盖的范围(GAP) 因此在这个范围内插入是不允许的. 这样就避免了另外的事务在这个范围内插入数据导致不可重复读问题.</p>
 <h4 id="丢失更新问题"><a href="#丢失更新问题" class="headerlink" title="丢失更新问题"></a>丢失更新问题</h4><p>丢失更新问题是数据级别解决不了. 发送情况是A事务select 数据A. B事务也select A 这是A事务更新数据A为C提交, 然后B事务更新数据A为D. 最后导致C数据丢失. 这个问题需要程序加锁 做全局排序.</p>
 <h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h4><p>innodb采用两种方式解决死锁问题. 1 被动方式: 使用超时锁. 2 主动的方式. wait-for graph(等待图)原理是采用两张链表 1 锁信息链. 2 事务等待链 通过上述链表可以构造出一张图. 如果途中出现回路. 就代表着死锁.</p>
 <p>通过深度优先算法. 检测环的存在. 如果出现死锁. innodb选择undo量最小的事务进行回滚.</p>
@@ -566,6 +569,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/09/10/消息中间件/" rel="prev" title="消息中间件">
+                消息中间件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -641,7 +648,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -663,7 +670,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

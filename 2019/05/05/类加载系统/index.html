@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="Class装载系统步骤 加载 连接   验证 准备 解析   初始化  条件Class只有在必须要使用的时候才会被装载. JVM不会无条件地装载Class类型. 一个类或接口在初次使用前. 必须要进行初始化. 使用是指主动使用. 情况分几种:  当创建一个类的实例时. 比如使用new关键字. 或者通过反射. 克隆. 反序列化. 当调用类的静态方法时. 当使用类或者接口的经典字段时(final常量除">
+<meta name="description" content="类加载器作用是将class文件加载到JVM中.存放在元数据区.  bootstrap classloader  jvm自己实现的. 加载$JAVA_HOME/jre/lib extClassloader 也是jvm的一部分.  加载$JAVA_HOME/jre/lib/ext包 appClassloader 加载classpath路径的类  Class装载系统步骤 加载 连接   验证 准备 解析">
 <meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="类加载系统">
 <meta property="og:url" content="http://www.ten951.com/2019/05/05/类加载系统/index.html">
 <meta property="og:site_name" content="读书与做事">
-<meta property="og:description" content="Class装载系统步骤 加载 连接   验证 准备 解析   初始化  条件Class只有在必须要使用的时候才会被装载. JVM不会无条件地装载Class类型. 一个类或接口在初次使用前. 必须要进行初始化. 使用是指主动使用. 情况分几种:  当创建一个类的实例时. 比如使用new关键字. 或者通过反射. 克隆. 反序列化. 当调用类的静态方法时. 当使用类或者接口的经典字段时(final常量除">
+<meta property="og:description" content="类加载器作用是将class文件加载到JVM中.存放在元数据区.  bootstrap classloader  jvm自己实现的. 加载$JAVA_HOME/jre/lib extClassloader 也是jvm的一部分.  加载$JAVA_HOME/jre/lib/ext包 appClassloader 加载classpath路径的类  Class装载系统步骤 加载 连接   验证 准备 解析">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.ten951.com/images/ClassLoader%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.png">
 <meta property="og:image" content="http://www.ten951.com/images/tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6.png">
-<meta property="og:updated_time" content="2019-08-05T02:43:07.240Z">
+<meta property="og:updated_time" content="2019-09-17T01:44:45.445Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="类加载系统">
-<meta name="twitter:description" content="Class装载系统步骤 加载 连接   验证 准备 解析   初始化  条件Class只有在必须要使用的时候才会被装载. JVM不会无条件地装载Class类型. 一个类或接口在初次使用前. 必须要进行初始化. 使用是指主动使用. 情况分几种:  当创建一个类的实例时. 比如使用new关键字. 或者通过反射. 克隆. 反序列化. 当调用类的静态方法时. 当使用类或者接口的经典字段时(final常量除">
+<meta name="twitter:description" content="类加载器作用是将class文件加载到JVM中.存放在元数据区.  bootstrap classloader  jvm自己实现的. 加载$JAVA_HOME/jre/lib extClassloader 也是jvm的一部分.  加载$JAVA_HOME/jre/lib/ext包 appClassloader 加载classpath路径的类  Class装载系统步骤 加载 连接   验证 准备 解析">
 <meta name="twitter:image" content="http://www.ten951.com/images/ClassLoader%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.png">
 
 
@@ -377,7 +377,13 @@
       
 
       
-        <h2 id="Class装载系统"><a href="#Class装载系统" class="headerlink" title="Class装载系统"></a>Class装载系统</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ul>
+        <h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><p>作用是将class文件加载到JVM中.存放在元数据区.</p>
+<ul>
+<li>bootstrap classloader  jvm自己实现的. 加载$JAVA_HOME/jre/lib</li>
+<li>extClassloader 也是jvm的一部分.  加载$JAVA_HOME/jre/lib/ext包</li>
+<li>appClassloader 加载classpath路径的类</li>
+</ul>
+<h2 id="Class装载系统"><a href="#Class装载系统" class="headerlink" title="Class装载系统"></a>Class装载系统</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ul>
 <li>加载</li>
 <li>连接</li>
 </ul>
@@ -576,7 +582,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -598,7 +604,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -647,7 +653,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Class装载系统"><span class="nav-number">1.</span> <span class="nav-text">Class装载系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤"><span class="nav-number">1.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件"><span class="nav-number">1.2.</span> <span class="nav-text">条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载类"><span class="nav-number">1.3.</span> <span class="nav-text">加载类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证类"><span class="nav-number">1.4.</span> <span class="nav-text">验证类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备阶段"><span class="nav-number">1.5.</span> <span class="nav-text">准备阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析类"><span class="nav-number">1.6.</span> <span class="nav-text">解析类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">1.7.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ClassLoader"><span class="nav-number">2.</span> <span class="nav-text">ClassLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#认识ClassLoader"><span class="nav-number">2.1.</span> <span class="nav-text">认识ClassLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类"><span class="nav-number">2.2.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委托模式"><span class="nav-number">2.3.</span> <span class="nav-text">双亲委托模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#突破双亲委托"><span class="nav-number">2.4.</span> <span class="nav-text">突破双亲委托</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat类加载机制"><span class="nav-number">3.</span> <span class="nav-text">tomcat类加载机制</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器"><span class="nav-number">1.</span> <span class="nav-text">类加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class装载系统"><span class="nav-number">2.</span> <span class="nav-text">Class装载系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤"><span class="nav-number">2.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件"><span class="nav-number">2.2.</span> <span class="nav-text">条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载类"><span class="nav-number">2.3.</span> <span class="nav-text">加载类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证类"><span class="nav-number">2.4.</span> <span class="nav-text">验证类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备阶段"><span class="nav-number">2.5.</span> <span class="nav-text">准备阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析类"><span class="nav-number">2.6.</span> <span class="nav-text">解析类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">2.7.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ClassLoader"><span class="nav-number">3.</span> <span class="nav-text">ClassLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#认识ClassLoader"><span class="nav-number">3.1.</span> <span class="nav-text">认识ClassLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类"><span class="nav-number">3.2.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委托模式"><span class="nav-number">3.3.</span> <span class="nav-text">双亲委托模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#突破双亲委托"><span class="nav-number">3.4.</span> <span class="nav-text">突破双亲委托</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat类加载机制"><span class="nav-number">4.</span> <span class="nav-text">tomcat类加载机制</span></a></li></ol></div>
             
 
           </div>
