@@ -88,7 +88,7 @@
 <meta property="og:description" content="复制旧版复制功能Redis的复制功能分为同步sync和命令传播command propagate两个操作:  同步操作同于将从服务器的数据库状态更新至主服务器当前所处的状态 命令传播操作用于在主服务器的数据库状态被修改, 导致主从服务器的数据库状态出现不一致时, 让主从服务器的数据库重新回到一致状态  同步当客户端向从服务器发送slaveof命令, 要求从服务器复制主服务器时. 从服务器对主服务器">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20190530114021.png">
-<meta property="og:updated_time" content="2019-08-01T11:54:06.293Z">
+<meta property="og:updated_time" content="2019-09-20T02:39:00.875Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis相关2">
 <meta name="twitter:description" content="复制旧版复制功能Redis的复制功能分为同步sync和命令传播command propagate两个操作:  同步操作同于将从服务器的数据库状态更新至主服务器当前所处的状态 命令传播操作用于在主服务器的数据库状态被修改, 导致主从服务器的数据库状态出现不一致时, 让主从服务器的数据库重新回到一致状态  同步当客户端向从服务器发送slaveof命令, 要求从服务器复制主服务器时. 从服务器对主服务器">
@@ -386,7 +386,7 @@
 <li>从服务器向主服务器发送sync命令</li>
 <li>收到sync命令的主服务器执行bgsave命令, 在后台生成一个RDB文件. 并使用一个缓冲区记录从现在开始执行的所有写命令</li>
 <li>bgsave执行完毕后. 主服务器会将生成RDB文件发送给从服务器. 从服务器载入RDB文件, 使得自己数据库状态和主服务器执行bgsave命令时的状态一致.</li>
-<li>主服务器将缓冲区里面的所欲写命令发送给从服务器. 从服务器执行这些写命令, 将自己数据库状态更新至主服务器数据库当前所处的状态.<a id="more"></a>
+<li>主服务器将缓冲区里面的所有写命令发送给从服务器. 从服务器执行这些写命令, 将自己数据库状态更新至主服务器数据库当前所处的状态.<a id="more"></a>
 <h4 id="命令传播"><a href="#命令传播" class="headerlink" title="命令传播"></a>命令传播</h4></li>
 </ol>
 <p>为了让主从服务器再次回到一致状态, 主服务器需要对从服务器执行命令传播操作: 主服务器将自己执行的写命令 ,发送给从服务器执行. 当从服务器执行了相同的写命令之后, 主从服务器将再次回到一致状态.</p>
@@ -724,7 +724,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -746,7 +746,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

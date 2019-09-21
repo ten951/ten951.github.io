@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="中间件,">
+  <meta name="keywords" content="Spring,">
 
 
 
@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="rabbitmqExchangeTypes direct  bindingKey和routingKey完全匹配的queue中 Fanout  不管routingKey是什么.他都会把消息发送到与exchange绑定的所有queue中 Topic   exchange将消息发送到routingKey模式匹配的queue中. #表示匹配多个单词 *表示匹配一个单词 单词之间用.分隔 RPC     客">
-<meta name="keywords" content="中间件">
+<meta name="description" content="创建bean实例的核心方法，填充bean实例1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939">
+<meta name="keywords" content="Spring">
 <meta property="og:type" content="article">
-<meta property="og:title" content="消息中间件">
-<meta property="og:url" content="http://www.ten951.com/2019/09/10/消息中间件/index.html">
+<meta property="og:title" content="Bean之AbstractBeanFactory类createBean方法">
+<meta property="og:url" content="http://www.ten951.com/2019/09/18/Bean之AbstractBeanFactory类createBean方法/index.html">
 <meta property="og:site_name" content="读书与做事">
-<meta property="og:description" content="rabbitmqExchangeTypes direct  bindingKey和routingKey完全匹配的queue中 Fanout  不管routingKey是什么.他都会把消息发送到与exchange绑定的所有queue中 Topic   exchange将消息发送到routingKey模式匹配的queue中. #表示匹配多个单词 *表示匹配一个单词 单词之间用.分隔 RPC     客">
+<meta property="og:description" content="创建bean实例的核心方法，填充bean实例1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20190910154128.png">
-<meta property="og:updated_time" content="2019-09-17T10:49:57.642Z">
+<meta property="og:updated_time" content="2019-09-18T02:29:36.725Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="消息中间件">
-<meta name="twitter:description" content="rabbitmqExchangeTypes direct  bindingKey和routingKey完全匹配的queue中 Fanout  不管routingKey是什么.他都会把消息发送到与exchange绑定的所有queue中 Topic   exchange将消息发送到routingKey模式匹配的queue中. #表示匹配多个单词 *表示匹配一个单词 单词之间用.分隔 RPC     客">
-<meta name="twitter:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20190910154128.png">
+<meta name="twitter:title" content="Bean之AbstractBeanFactory类createBean方法">
+<meta name="twitter:description" content="创建bean实例的核心方法，填充bean实例1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939">
 
 
 
@@ -122,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://www.ten951.com/2019/09/10/消息中间件/">
+  <link rel="canonical" href="http://www.ten951.com/2019/09/18/Bean之AbstractBeanFactory类createBean方法/">
 
 
 
 
 
-  <title>消息中间件 | 读书与做事</title>
+  <title>Bean之AbstractBeanFactory类createBean方法 | 读书与做事</title>
   
 
 
@@ -287,7 +285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/09/10/消息中间件/">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/09/18/Bean之AbstractBeanFactory类createBean方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ten951">
@@ -304,7 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">消息中间件</h1>
+          <h1 class="post-title" itemprop="name headline">Bean之AbstractBeanFactory类createBean方法</h1>
         
 
         <div class="post-meta">
@@ -316,8 +314,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-10T09:14:11+08:00">
-                2019-09-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-18T10:12:19+08:00">
+                2019-09-18
               </time>
             
 
@@ -376,72 +374,7 @@
       
 
       
-        <h2 id="rabbitmq"><a href="#rabbitmq" class="headerlink" title="rabbitmq"></a>rabbitmq</h2><h3 id="ExchangeTypes"><a href="#ExchangeTypes" class="headerlink" title="ExchangeTypes"></a>ExchangeTypes</h3><ul>
-<li>direct  bindingKey和routingKey完全匹配的queue中</li>
-<li>Fanout  不管routingKey是什么.他都会把消息发送到与exchange绑定的所有queue中</li>
-<li>Topic   exchange将消息发送到routingKey模式匹配的queue中. #表示匹配多个单词 *表示匹配一个单词 单词之间用.分隔</li>
-<li>RPC     客户端C发送请求（消息）时，在消息的属性（MessageProperties）中设置两个值replyTo（一个Queue名称，用于告诉服务器处理完成后将通知我的消息发送到这个Queue中）和correlationId（此次请求的标识号，服务器处理完成后需要将此属性返还，客户端将根据这个id了解哪条请求被成功执行了或执行失败. 服务器端S处理完消息后，将生成一条应答消息到replyTo指定的Queue，同时带上correlationId属性。客户端之前已订阅replyTo指定的Queue，从中收到服务器的应答消息后，根据其中的correlationId属性分析哪条请求被执行了，根据执行结果进行后续业务处理.</li>
-</ul>
-<h3 id="virtualhost"><a href="#virtualhost" class="headerlink" title="virtualhost"></a>virtualhost</h3><p>每一个vhost本质上是一个mini-rabbitmq server，分别管理各自的exchange和bindings。vhost相当于物理的server，可以为不同app提供边界隔离，使得应用安全的运行在不同的vhost实例上，相互之间不会干扰。producer和consumer连接rabbit server需要指定一个vhost。</p>
-<a id="more"></a>
-<h3 id="消息存储"><a href="#消息存储" class="headerlink" title="消息存储"></a>消息存储</h3><ul>
-<li><p>disc 则需要对exchange／queue／delivery mode都要设置成durable模式。当RabbitMQ失效了，message仍然可以在重启之后恢复.</p>
-</li>
-<li><p>ram RabbitMQ处理message的效率要高很多，ram和disc两种方式的效率比大概是3:1。如果在有其它HA手段保障的情况下，选用ram方式是可以提高消息队列的工作效率的。如果使用ram方式，RabbitMQ能够承载的访问量则取决于可用的内存大小。</p>
-</li>
-</ul>
-<h3 id="队列详情"><a href="#队列详情" class="headerlink" title="队列详情"></a>队列详情</h3><h4 id="普通队列"><a href="#普通队列" class="headerlink" title="普通队列"></a>普通队列</h4><p>通常队列由两部分组成：<br>一部分是AMQQueue，负责AMQP协议相关的消息处理，即接收生产者发布的消息、向消费者投递消息、处理消息confirm、acknowledge等等；<br>另一部分是BackingQueue，它提供了相关的接口供AMQQueue调用，完成消息的存储以及可能的持久化工作等。</p>
-<p>在RabbitMQ中BackingQueue又由5个子队列组成：Q1, Q2, Delta, Q3和Q4。RabbitMQ中的消息一旦进入队列，不是固定不变的，它会随着系统的负载在队列中不断流动，消息不断发生变化。在BackingQueue中，消息的生命周期分为4个状态：</p>
-<ul>
-<li><p>Alpha：消息的内容和消息索引都在RAM中。Q1和Q4的状态。</p>
-</li>
-<li><p>Beta：消息的内容保存在DISK上，消息索引保存在RAM中。Q2和Q3的状态。</p>
-</li>
-<li><p>Gamma：消息内容保存在DISK上，消息索引在DISK和RAM都有。Q2和Q3的状态。</p>
-</li>
-<li><p>Delta：消息内容和索引都在DISK上。Delta的状态。</p>
-</li>
-</ul>
-<p>上述就是RabbitMQ的多层队列结构的设计，我们可以看出从Q1到Q4，基本经历RAM-&gt;DISK-&gt;RAM这样的过程。这样设计的好处是：当队列负载很高的情况下，能够通过将一部分消息由磁盘保存来节省内存空间，当负载降低的时候，这部分消息又渐渐回到内存，被消费者获取，使得整个队列具有很好的弹性。从Q1-&gt;Q2-&gt;delta这一个过程是将消息逐步从RAM移动到DISK的过程，而delta-&gt;Q3-&gt;Q4是从DISK逐步移动到RAM的过程。</p>
-<p>引起消息流动主要有两方面因素：其一是消费者获取消息；其二是由于内存不足引起消息换出到磁盘。RabbitMQ在系统运行时会根据消息传输的速度计算一个当前内存中能够保存的最大消息数量（Target_RAM_Count），当内存中的消息数量大于该值时，就会引起消息的流动。进入队列的消息，一般会按照Q1-&gt;Q2-&gt;Delta-&gt;Q3-&gt;Q4的顺序进行流动，但是并不是每条消息都一定会经历所有的状态，这个取决于当前系统的负载状况。</p>
-<p>通常在负载正常时，如果消息被消费的速度不小于接收新消息的速度，对于不需要保证可靠不丢的消息极可能只会有Alpha状态。对于durable=true的消息，它一定会进入gamma状态，<strong>若开启publish confirm机制，只有到了这个阶段才会确认该消息已经被接受，</strong>若消息消费速度足够快，内存也充足，这些消息也不会继续走到下一状态。</p>
-<p>通常在系统负载较高时，已接受到的消息若不能很快被消费掉，这些消息就会进入到很深的队列中去，增加处理每个消息的平均开销。因为要花更多的时间和资源处理“积压”的消息，所以用于处理新来的消息的能力就会降低，使得后来的消息又被积压进入很深的队列，继续加大处理每个消息的平均开销，这样情况就会越来越恶化，使得系统的处理能力大大降低。</p>
-<h4 id="镜像队列"><a href="#镜像队列" class="headerlink" title="镜像队列"></a>镜像队列</h4><p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20190910154128.png" alt="20190910154128.png"></p>
-<p>镜像队列是一种特殊的队列. 它内部包裹了一个普通BackingQueue做本地消息持久化处理，在此基础上增加了将消息,ack复制到所有镜像的功能,所有对mirror_queue_master的操作，会通过组播GM的方式同步到各slave节点。GM负责消息的广播，mirror_queue_slave负责回调处理，而master上的回调处理是由coordinator负责完成。mirror_queue_slave中包含了普通的BackingQueue进行消息的存储，master节点中BackingQueue包含在mirror_queue_master中由AMQQueue进行调用。</p>
-<p>消息的发布（除了Basic.Publish之外）与消费都是通过master节点完成。master节点对消息进行处理的同时将消息的处理动作通过GM广播给所有的slave节点，slave节点的GM收到消息后，通过回调交由mirror_queue_slave进行实际的处理。</p>
-<p>对于Basic.Publish，消息同时发送到master和所有slave上，如果此时master宕掉了，消息还发送slave上，这样当slave提升为master的时候消息也不会丢失。</p>
-<ul>
-<li>组播（GM）</li>
-</ul>
-<p>GM,Guarenteed Multicast. GM模块实现的一种可靠的组播通讯协议，该协议能够保证组播消息的原子性，即保证组中活着的节点要么都收到消息要么都收不到。它的实现大致如下：</p>
-<p>将所有的节点形成一个循环链表，每个节点都会监控位于自己左右两边的节点，当有节点新增时，相邻的节点保证当前广播的消息会复制到新的节点上；当有节点失效时，相邻的节点会接管保证本次广播的消息会复制到所有的节点。在master节点和slave节点上的这些gm形成一个group，group（gm_group）的信息会记录在mnesia中。不同的镜像队列形成不同的group。<strong>从master节点发出gm后，消息顺着链表依次传送到所有的节点，由于所有节点组成一个循环链表，master节点对应的gm最终会收到自己发送的消息，这个时候master节点就知道消息已经复制到所有的slave节点了。</strong></p>
-<ul>
-<li>节点的失效</li>
-</ul>
-<p>如果某个slave失效了，系统除了做些记录外几乎啥都不做：master依旧是master，客户端不需要采取任何行动，或者被通知slave失效。</p>
-<p>如果master失效了，那么slave中的一个必须被选中为master。被选中作为新的master的slave通常是最老的那个，因为最老的slave与前任master之间的同步状态应该是最好的。然而，需要注意的是，如果存在没有任何一个slave与master完全同步的情况，那么前任master中未被同步的消息将会丢失。</p>
-<h3 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h3><h4 id="镜像队列1"><a href="#镜像队列1" class="headerlink" title="镜像队列1"></a>镜像队列1</h4><p>RabbitMQ集群的队列(Queue)在默认的情况下只存在单一节点（node）上。我们也可以把队列配置成同时存在在多个节点上，也就是说队列可以被镜像到多个节点上。发布(publish)到镜像队列上的消息(message)会被复制(replicated)到所有的节点上。一个镜像队列包含一个主(master)和多个从(slave)。</p>
-<h4 id="非同步的Slave（unsynchronised-slave）"><a href="#非同步的Slave（unsynchronised-slave）" class="headerlink" title="非同步的Slave（unsynchronised slave）"></a>非同步的Slave（unsynchronised slave）</h4><p>在rabbitmq中同步(synchronised)是用来描述master和slave之间的数据状态是否一致的。如果slave包含master中的所有message，则这个slave是synchronised，如果这个slave并没有包含master中所有的message，则这个slave是unsynchronised。</p>
-<h4 id="在什么情况下会出现unsynchronisedslave"><a href="#在什么情况下会出现unsynchronisedslave" class="headerlink" title="在什么情况下会出现unsynchronisedslave"></a>在什么情况下会出现unsynchronisedslave</h4><p>当一个新slave加入到一个镜像队列时，这时这个新slave是空的，而master中这时可能包含之前接收到的消息。假设这时master包含了N条消息，这是第N+1条消息被添加到这个镜像队列中，这个新slave会从这个第N+1条消息开始接收。此时这个slave就是unsynchronised slave。随着前5条消息从镜像队列中被消费掉（consumed）, 这个slave变成了synchronised。</p>
-<p>slave 重新加入(rejoin)到镜像队列时，也会出现非同步的情况。一个slave要重新加入镜像队列之前，slave可能已经接收了一些消息，要重新加入镜像队列，就要清空自己之前已经接收的所有消息，好像自己是第一次加入队列一样。（slave在很多情况下会需要重新加入镜像队列，例如：网络分区(networkpartition)）</p>
-<h4 id="服务可用性（Availablity）与数据可靠性（Reliability）"><a href="#服务可用性（Availablity）与数据可靠性（Reliability）" class="headerlink" title="服务可用性（Availablity）与数据可靠性（Reliability）"></a>服务可用性（Availablity）与数据可靠性（Reliability）</h4><ul>
-<li><p>选主的方式. 当master因为某种原因失效时，最早加入镜像队列的slave被提升成master。</p>
-</li>
-<li><p>单节点</p>
-</li>
-</ul>
-<p>如果RabbitMQ集群只有一个broker节点，那么该节点的失效将导致整个服务临时性的不可用，并且可能会导致message的丢失（尤其是在非持久化message存储于非持久化queue中的时候）。当然可以将所有的publish的message都设置为持久化的，并且使用持久化的queue，但是这样仍然无法避免由于缓存导致的问题：因为message在发送之后和被写入磁盘并执行fsync之间存在一个虽然短暂但是会产生问题的时间窗。通过publisher的confirm机制能够确保客户端知道哪些message已经存入磁盘，尽管如此，一般不希望遇到因单点故障导致的服务不可用。</p>
-<ul>
-<li>普通队列</li>
-</ul>
-<p>如果RabbitMQ集群是由多个broker节点构成的，那么从服务的整体可用性上来讲，该集群对于单点失效是有弹性的，但是同时也需要注意：尽管exchange和binding能够在单点失效问题上幸免于难，但是queue和其上持有的message却不行，这是因为queue及其内容仅仅存储于单个节点之上，所以一个节点的失效表现为其对应的queue不可用。</p>
-<ul>
-<li>镜像队列</li>
-</ul>
-<p>RabbitMQ的镜像队列机制是将queue镜像到cluster中其他的节点之上。在通常的用法中，针对每一个镜像队列都包含一个master和多个slave，分别位于于不同的节点。slave会准确地按照master执行命令的顺序进行命令执行，故slave与master上维护的状态应该是相同的。所有动作都只会向master发送，然后由master将命令执行的结果广播给slave们，故看似从镜像队列中的消费操作实际上是在master上执行的。</p>
-<p>在该实现下，如果镜像队列中的一个master失效了，集群自动选出一个slave（最老的slave）提升为master，此后message可以继续发送到队列上。</p>
-<p>RabbitMQ的镜像队列同时支持publisher confirm和事务两种机制。在事务机制中，只有当前事务在全部镜像queue中执行之后，客户端才会收到Tx.CommitOk的消息。同样的，在publisher confirm机制中，向publisher进行当前message确认的前提是该message被全部镜像所接受了。</p>
-<h2 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h2>
+        <h3 id="创建bean实例的核心方法，填充bean实例"><a href="#创建bean实例的核心方法，填充bean实例" class="headerlink" title="创建bean实例的核心方法，填充bean实例"></a>创建bean实例的核心方法，填充bean实例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> Object <span class="title">createBean</span><span class="params">(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> BeanCreationException </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">			logger.trace(<span class="string">"Creating instance of bean '"</span> + beanName + <span class="string">"'"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		RootBeanDefinition mbdToUse = mbd;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Make sure bean class is actually resolved at this point, and</span></span><br><span class="line">		<span class="comment">// clone the bean definition in case of a dynamically resolved Class</span></span><br><span class="line">		<span class="comment">// which cannot be stored in the shared merged bean definition.</span></span><br><span class="line">        <span class="comment">//确保bean类在这一点上已经被解析，并且</span></span><br><span class="line">        <span class="comment">//在动态解析类的情况下克隆bean定义</span></span><br><span class="line">        <span class="comment">//不能存储在共享合并bean定义中</span></span><br><span class="line">		Class&lt;?&gt; resolvedClass = resolveBeanClass(mbd, beanName);</span><br><span class="line">		<span class="keyword">if</span> (resolvedClass != <span class="keyword">null</span> &amp;&amp; !mbd.hasBeanClass() &amp;&amp; mbd.getBeanClassName() != <span class="keyword">null</span>) &#123;</span><br><span class="line">			mbdToUse = <span class="keyword">new</span> RootBeanDefinition(mbd);</span><br><span class="line">			mbdToUse.setBeanClass(resolvedClass);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Prepare method overrides.</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//对override属性进行标记及验证</span></span><br><span class="line">			mbdToUse.prepareMethodOverrides();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanDefinitionValidationException ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanDefinitionStoreException(mbdToUse.getResourceDescription(),</span><br><span class="line">					beanName, <span class="string">"Validation of method overrides failed"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.</span></span><br><span class="line">            <span class="comment">//给BeanPostProcessors一个机会来返回代理来替代真正的实例   实质上是执行InstantiationAwareBeanPostProcessor接口的postProcessBeforeInstantiation()方法返回代理类, 然后执行BeanPostProcessor#postProcessAfterInitialization方法</span></span><br><span class="line">			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);</span><br><span class="line">            <span class="comment">// 当经过前置处理后的返回结果如果不为空，那么会直接略过后续bean的创建直接返回结果。这一特性虽然很容易被忽略，但是</span></span><br><span class="line">            <span class="comment">// 却起着至关重要的作用，我们熟知的AOP功能就是基于这里的判断的</span></span><br><span class="line">			<span class="keyword">if</span> (bean != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> bean;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbdToUse.getResourceDescription(), beanName,</span><br><span class="line">					<span class="string">"BeanPostProcessor before instantiation of bean failed"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 核心方法创建bean</span></span><br><span class="line">			Object beanInstance = doCreateBean(beanName, mbdToUse, args);</span><br><span class="line">			<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">				logger.trace(<span class="string">"Finished creating instance of bean '"</span> + beanName + <span class="string">"'"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> beanInstance;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanCreationException | ImplicitlyAppearedSingletonException ex) &#123;</span><br><span class="line">			<span class="comment">// A previously detected exception with proper bean creation context already,</span></span><br><span class="line">			<span class="comment">// or illegal singleton state to be communicated up to DefaultSingletonBeanRegistry.</span></span><br><span class="line">			<span class="keyword">throw</span> ex;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">					mbdToUse.getResourceDescription(), beanName, <span class="string">"Unexpected exception during bean creation"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">doCreateBean</span><span class="params">(<span class="keyword">final</span> String beanName, <span class="keyword">final</span> RootBeanDefinition mbd, <span class="keyword">final</span> @Nullable Object[] args)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> BeanCreationException </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Instantiate the bean.</span></span><br><span class="line">		BeanWrapper instanceWrapper = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">if</span> (mbd.isSingleton()) &#123;</span><br><span class="line">			instanceWrapper = <span class="keyword">this</span>.factoryBeanInstanceCache.remove(beanName);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (instanceWrapper == <span class="keyword">null</span>) &#123;</span><br><span class="line">			instanceWrapper = createBeanInstance(beanName, mbd, args);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">final</span> Object bean = instanceWrapper.getWrappedInstance();</span><br><span class="line">		Class&lt;?&gt; beanType = instanceWrapper.getWrappedClass();</span><br><span class="line">		<span class="keyword">if</span> (beanType != NullBean.class) &#123;</span><br><span class="line">			mbd.resolvedTargetType = beanType;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Allow post-processors to modify the merged bean definition.</span></span><br><span class="line">		<span class="keyword">synchronized</span> (mbd.postProcessingLock) &#123;</span><br><span class="line">			<span class="keyword">if</span> (!mbd.postProcessed) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbd.getResourceDescription(), beanName,</span><br><span class="line">							<span class="string">"Post-processing of merged bean definition failed"</span>, ex);</span><br><span class="line">				&#125;</span><br><span class="line">				mbd.postProcessed = <span class="keyword">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Eagerly cache singletons to be able to resolve circular references</span></span><br><span class="line">		<span class="comment">// even when triggered by lifecycle interfaces like BeanFactoryAware.</span></span><br><span class="line">		<span class="keyword">boolean</span> earlySingletonExposure = (mbd.isSingleton() &amp;&amp; <span class="keyword">this</span>.allowCircularReferences &amp;&amp;</span><br><span class="line">				isSingletonCurrentlyInCreation(beanName));</span><br><span class="line">		<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">			<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">				logger.trace(<span class="string">"Eagerly caching bean '"</span> + beanName +</span><br><span class="line">						<span class="string">"' to allow for resolving potential circular references"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			addSingletonFactory(beanName, () -&gt; getEarlyBeanReference(beanName, mbd, bean));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Initialize the bean instance.</span></span><br><span class="line">		Object exposedObject = bean;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			populateBean(beanName, mbd, instanceWrapper);</span><br><span class="line">			exposedObject = initializeBean(beanName, exposedObject, mbd);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">if</span> (ex <span class="keyword">instanceof</span> BeanCreationException &amp;&amp; beanName.equals(((BeanCreationException) ex).getBeanName())) &#123;</span><br><span class="line">				<span class="keyword">throw</span> (BeanCreationException) ex;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">						mbd.getResourceDescription(), beanName, <span class="string">"Initialization of bean failed"</span>, ex);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">			Object earlySingletonReference = getSingleton(beanName, <span class="keyword">false</span>);</span><br><span class="line">			<span class="keyword">if</span> (earlySingletonReference != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">if</span> (exposedObject == bean) &#123;</span><br><span class="line">					exposedObject = earlySingletonReference;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span> (!<span class="keyword">this</span>.allowRawInjectionDespiteWrapping &amp;&amp; hasDependentBean(beanName)) &#123;</span><br><span class="line">					String[] dependentBeans = getDependentBeans(beanName);</span><br><span class="line">					Set&lt;String&gt; actualDependentBeans = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(dependentBeans.length);</span><br><span class="line">					<span class="keyword">for</span> (String dependentBean : dependentBeans) &#123;</span><br><span class="line">						<span class="keyword">if</span> (!removeSingletonIfCreatedForTypeCheckOnly(dependentBean)) &#123;</span><br><span class="line">							actualDependentBeans.add(dependentBean);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">if</span> (!actualDependentBeans.isEmpty()) &#123;</span><br><span class="line">						<span class="keyword">throw</span> <span class="keyword">new</span> BeanCurrentlyInCreationException(beanName,</span><br><span class="line">								<span class="string">"Bean with name '"</span> + beanName + <span class="string">"' has been injected into other beans ["</span> +</span><br><span class="line">								StringUtils.collectionToCommaDelimitedString(actualDependentBeans) +</span><br><span class="line">								<span class="string">"] in its raw version as part of a circular reference, but has eventually been "</span> +</span><br><span class="line">								<span class="string">"wrapped. This means that said other beans do not use the final version of the "</span> +</span><br><span class="line">								<span class="string">"bean. This is often the result of over-eager type matching - consider using "</span> +</span><br><span class="line">								<span class="string">"'getBeanNamesOfType' with the 'allowEagerInit' flag turned off, for example."</span>);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Register bean as disposable.</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			registerDisposableBeanIfNecessary(beanName, bean, mbd);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanDefinitionValidationException ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">					mbd.getResourceDescription(), beanName, <span class="string">"Invalid destruction signature"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> exposedObject;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -458,7 +391,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/中间件/" rel="tag"># 中间件</a>
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
           
         </div>
       
@@ -471,8 +404,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/05/innoDB相关/" rel="next" title="innoDB相关">
-                <i class="fa fa-chevron-left"></i> innoDB相关
+              <a href="/2019/09/12/Autowired注解背后的故事/" rel="next" title="@Autowired注解背后的故事">
+                <i class="fa fa-chevron-left"></i> @Autowired注解背后的故事
               </a>
             
           </div>
@@ -481,8 +414,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/09/12/Autowired注解背后的故事/" rel="prev" title="@Autowired注解背后的故事">
-                @Autowired注解背后的故事 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/09/21/JUC并发包-lucks/" rel="prev" title="JUC并发包-lucks">
+                JUC并发包-lucks <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -631,7 +564,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#rabbitmq"><span class="nav-number">1.</span> <span class="nav-text">rabbitmq</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ExchangeTypes"><span class="nav-number">1.1.</span> <span class="nav-text">ExchangeTypes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#virtualhost"><span class="nav-number">1.2.</span> <span class="nav-text">virtualhost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息存储"><span class="nav-number">1.3.</span> <span class="nav-text">消息存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#队列详情"><span class="nav-number">1.4.</span> <span class="nav-text">队列详情</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通队列"><span class="nav-number">1.4.1.</span> <span class="nav-text">普通队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#镜像队列"><span class="nav-number">1.4.2.</span> <span class="nav-text">镜像队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集群"><span class="nav-number">1.5.</span> <span class="nav-text">集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#镜像队列1"><span class="nav-number">1.5.1.</span> <span class="nav-text">镜像队列1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非同步的Slave（unsynchronised-slave）"><span class="nav-number">1.5.2.</span> <span class="nav-text">非同步的Slave（unsynchronised slave）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在什么情况下会出现unsynchronisedslave"><span class="nav-number">1.5.3.</span> <span class="nav-text">在什么情况下会出现unsynchronisedslave</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务可用性（Availablity）与数据可靠性（Reliability）"><span class="nav-number">1.5.4.</span> <span class="nav-text">服务可用性（Availablity）与数据可靠性（Reliability）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka"><span class="nav-number">2.</span> <span class="nav-text">kafka</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建bean实例的核心方法，填充bean实例"><span class="nav-number">1.</span> <span class="nav-text">创建bean实例的核心方法，填充bean实例</span></a></li></ol></div>
             
 
           </div>
