@@ -98,7 +98,7 @@
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007125430.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007131527.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007131535.png">
-<meta property="og:updated_time" content="2019-10-07T05:16:02.780Z">
+<meta property="og:updated_time" content="2019-10-07T07:53:41.831Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ForkJoinPool框架原理">
 <meta name="twitter:description" content="声明 本文是看大神博客的笔记.之所以写是为了记忆. 好记性不如烂笔头 原文地址Ressmix  思想FJ框架的基本思想就是将一个大任务分解fork成一系列的子任务. 当多个不同的子任务都执行完毕后,. 可以将他们各自的结果合并join成一个大结果集. 最终合并成大任务的结果. 工作窃取算法通过思想我们可以看出, 需要一些线程来执行F出的任务. 每次都创建和销毁线程, 开销很大. 所以FK框架利用">
@@ -392,6 +392,7 @@
 <h2 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h2><p>FJ框架的基本思想就是将一个大任务分解fork成一系列的子任务. 当多个不同的子任务都执行完毕后,. 可以将他们各自的结果合并join成一个大结果集. 最终合并成大任务的结果.</p>
 <h3 id="工作窃取算法"><a href="#工作窃取算法" class="headerlink" title="工作窃取算法"></a>工作窃取算法</h3><p>通过思想我们可以看出, 需要一些线程来执行F出的任务. 每次都创建和销毁线程, 开销很大. 所以FK框架利用了线程池来调度任务. 既然调度必然有两个要素. 1 工作线程和任务队列. 一般的线程池只有一个任务队列. 但是对于FK来说. F出各个子任务其实是平行关系. 为了提高效率减少线程竞争. 应该将这些平行的任务放在不同的队列中去. 大任务分成子任务 子1 子2 子3. 必然会对应三个任务队列. 在创建三个工作线程于队列一一对应. </p>
 <p>由于线程处理不同的任务. 执行效率一定不一致, 有的线程先执行完比. 有的还在执行中, 我们希望执行完毕的线程去帮忙. 这就需要他出别的任务队列中窃取任务来执行. 这就是所谓的<strong>工作窃取算法</strong></p>
+<a id="more"></a>
 <h3 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h3><ul>
 <li>ForkJoinPool: ExcutorService的实现类. 负责工作线程的管理. 任务队列的维护  任务的调度流程</li>
 <li>ForkJoinTask: Future接口的实现类, fork是核心方法. 用于分解任务并异步执行. 而join方法在任务结果计算完毕后才会运行. 用来合并或返回计算结果.</li>
