@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="并发包,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="声明 本文是看大神博客的笔记.之所以写是为了记忆. 好记性不如烂笔头 原文地址Ressmix  思想FJ框架的基本思想就是将一个大任务分解fork成一系列的子任务. 当多个不同的子任务都执行完毕后,. 可以将他们各自的结果合并join成一个大结果集. 最终合并成大任务的结果. 工作窃取算法通过思想我们可以看出, 需要一些线程来执行F出的任务. 每次都创建和销毁线程, 开销很大. 所以FK框架利用">
+<meta name="keywords" content="并发包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ForkJoinPool框架原理">
+<meta property="og:url" content="http://www.ten951.com/2019/10/07/ForkJoinPool框架原理/index.html">
+<meta property="og:site_name" content="读书与做事">
+<meta property="og:description" content="声明 本文是看大神博客的笔记.之所以写是为了记忆. 好记性不如烂笔头 原文地址Ressmix  思想FJ框架的基本思想就是将一个大任务分解fork成一系列的子任务. 当多个不同的子任务都执行完毕后,. 可以将他们各自的结果合并join成一个大结果集. 最终合并成大任务的结果. 工作窃取算法通过思想我们可以看出, 需要一些线程来执行F出的任务. 每次都创建和销毁线程, 开销很大. 所以FK框架利用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007122622.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007122820.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007123047.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007123250.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007123547.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007124045.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007124529.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007124726.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007125430.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007131527.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007131535.png">
+<meta property="og:updated_time" content="2019-10-07T05:16:02.780Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ForkJoinPool框架原理">
+<meta name="twitter:description" content="声明 本文是看大神博客的笔记.之所以写是为了记忆. 好记性不如烂笔头 原文地址Ressmix  思想FJ框架的基本思想就是将一个大任务分解fork成一系列的子任务. 当多个不同的子任务都执行完毕后,. 可以将他们各自的结果合并join成一个大结果集. 最终合并成大任务的结果. 工作窃取算法通过思想我们可以看出, 需要一些线程来执行F出的任务. 每次都创建和销毁线程, 开销很大. 所以FK框架利用">
+<meta name="twitter:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007122622.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.ten951.com/2019/10/07/ForkJoinPool框架原理/">
+
+
+
+
+
+  <title>ForkJoinPool框架原理 | 读书与做事</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">读书与做事</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">优秀的普通人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/10/07/ForkJoinPool框架原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ten951">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="读书与做事">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ForkJoinPool框架原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-07T11:39:20+08:00">
+                2019-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/book/" itemprop="url" rel="index">
+                    <span itemprop="name">book</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>声明 本文是看大神博客的笔记.之所以写是为了记忆. 好记性不如烂笔头 原文地址<a href="https://segmentfault.com/blog/ressmix_multithread" target="_blank" rel="noopener">Ressmix</a></p>
+</blockquote>
+<h2 id="思想"><a href="#思想" class="headerlink" title="思想"></a>思想</h2><p>FJ框架的基本思想就是将一个大任务分解fork成一系列的子任务. 当多个不同的子任务都执行完毕后,. 可以将他们各自的结果合并join成一个大结果集. 最终合并成大任务的结果.</p>
+<h3 id="工作窃取算法"><a href="#工作窃取算法" class="headerlink" title="工作窃取算法"></a>工作窃取算法</h3><p>通过思想我们可以看出, 需要一些线程来执行F出的任务. 每次都创建和销毁线程, 开销很大. 所以FK框架利用了线程池来调度任务. 既然调度必然有两个要素. 1 工作线程和任务队列. 一般的线程池只有一个任务队列. 但是对于FK来说. F出各个子任务其实是平行关系. 为了提高效率减少线程竞争. 应该将这些平行的任务放在不同的队列中去. 大任务分成子任务 子1 子2 子3. 必然会对应三个任务队列. 在创建三个工作线程于队列一一对应. </p>
+<p>由于线程处理不同的任务. 执行效率一定不一致, 有的线程先执行完比. 有的还在执行中, 我们希望执行完毕的线程去帮忙. 这就需要他出别的任务队列中窃取任务来执行. 这就是所谓的<strong>工作窃取算法</strong></p>
+<h3 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h3><ul>
+<li>ForkJoinPool: ExcutorService的实现类. 负责工作线程的管理. 任务队列的维护  任务的调度流程</li>
+<li>ForkJoinTask: Future接口的实现类, fork是核心方法. 用于分解任务并异步执行. 而join方法在任务结果计算完毕后才会运行. 用来合并或返回计算结果.</li>
+<li>ForkJoinWokerThread: Thread的子类. 作为线程池中的工作线程Worker执行任务</li>
+<li>WorkQueue: 任务队列 用于保存任务</li>
+</ul>
+<h4 id="ForkJoinPool"><a href="#ForkJoinPool" class="headerlink" title="ForkJoinPool"></a>ForkJoinPool</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">*<span class="doctag">@param</span> parallelism 并行级别 默认为CPU的核心数</span></span><br><span class="line"><span class="comment">*<span class="doctag">@param</span> factory 工作线程工厂</span></span><br><span class="line"><span class="comment">*<span class="doctag">@param</span> handler 异常处理器</span></span><br><span class="line"><span class="comment">*<span class="doctag">@param</span> mode 调度模式 true FIFO_queue  队列模式  false 表示LIFO_queue 栈模式</span></span><br><span class="line"><span class="comment">*<span class="doctag">@param</span> workerNamePrefix 工作线程的名称前缀</span></span><br><span class="line"><span class="comment">* ctl 和线程池中的是一样的 表示状态和线程数量的核心</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">ForkJoinPool</span><span class="params">(<span class="keyword">int</span> parallelism,</span></span></span><br><span class="line"><span class="function"><span class="params">                     ForkJoinWorkerThreadFactory factory,</span></span></span><br><span class="line"><span class="function"><span class="params">                     UncaughtExceptionHandler handler,</span></span></span><br><span class="line"><span class="function"><span class="params">                     <span class="keyword">int</span> mode,</span></span></span><br><span class="line"><span class="function"><span class="params">                     String workerNamePrefix)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.workerNamePrefix = workerNamePrefix;</span><br><span class="line">    <span class="keyword">this</span>.factory = factory;</span><br><span class="line">    <span class="keyword">this</span>.ueh = handler;</span><br><span class="line">    <span class="keyword">this</span>.config = (parallelism &amp; SMASK) | mode;</span><br><span class="line">    <span class="keyword">long</span> np = (<span class="keyword">long</span>)(-parallelism); <span class="comment">// offset ctl counts</span></span><br><span class="line">    <span class="keyword">this</span>.ctl = ((np &lt;&lt; AC_SHIFT) &amp; AC_MASK) | ((np &lt;&lt; TC_SHIFT) &amp; TC_MASK);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ForkJoinPool</span><span class="params">(<span class="keyword">int</span> parallelism,</span></span></span><br><span class="line"><span class="function"><span class="params">                    ForkJoinWorkerThreadFactory factory,</span></span></span><br><span class="line"><span class="function"><span class="params">                    UncaughtExceptionHandler handler,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">boolean</span> asyncMode)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(checkParallelism(parallelism),</span><br><span class="line">         checkFactory(factory),</span><br><span class="line">         handler,</span><br><span class="line">         asyncMode ? FIFO_QUEUE : LIFO_QUEUE,</span><br><span class="line">         <span class="string">"ForkJoinPool-"</span> + nextPoolId() + <span class="string">"-worker-"</span>);</span><br><span class="line">    checkPermission();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="ForkJoinTask"><a href="#ForkJoinTask" class="headerlink" title="ForkJoinTask"></a>ForkJoinTask</h4><p>抽象类 FK框架提供了两个实现类 </p>
+<p>RecursiveAction: 没有返回结果的FJ任务<br>RecursiveTask: 有返回结果的FJ任务.</p>
+<h4 id="ForkJoinWokerThread"><a href="#ForkJoinWokerThread" class="headerlink" title="ForkJoinWokerThread"></a>ForkJoinWokerThread</h4><p>在FJ框架中 每个工作线程worker都要自己的一个任务队列. 所以需要对标准的Thread做一些特性化处理. 例如ForkJoinWokerThread</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ForkJoinWorkerThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">final</span> ForkJoinPool pool;                <span class="comment">// 该工作线程归属的线程池</span></span><br><span class="line">    <span class="keyword">final</span> ForkJoinPool.WorkQueue workQueue; <span class="comment">// 对应的任务队列</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Creates a ForkJoinWorkerThread operating in the given pool.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> pool the pool this thread works in</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> NullPointerException if pool is null</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">ForkJoinWorkerThread</span><span class="params">(ForkJoinPool pool)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Use a placeholder until a useful name can be set in registerWorker</span></span><br><span class="line">        <span class="keyword">super</span>(<span class="string">"aForkJoinWorkerThread"</span>);</span><br><span class="line">        <span class="keyword">this</span>.pool = pool;</span><br><span class="line">        <span class="keyword">this</span>.workQueue = pool.registerWorker(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>pool.registerWorker(this);</code> 将所属线程池信息与自己绑定的队列信息 通过这个方法注册. </p>
+<h4 id="WorkQueue"><a href="#WorkQueue" class="headerlink" title="WorkQueue"></a>WorkQueue</h4><p>这是与其他线程池最大的区别. 在FJP内部. 维护着一个WorkQueue[]数组, 它会在外部首次提交任务时初始化. </p>
+<p>WorkQueue作为FJP的内部类. 表示双端队列. 意味着既可以作为栈使用  也可以作为队列使用. FJP正是利用了这个特点. 当工作线程从自己的队列中获取任务时, 默认总是以栈的方式在栈顶获取任务. 当工作线程尝试获取其他任务队列的任务时. 则以队列的方式. </p>
+<p>FJP的工作队列分两类:</p>
+<ul>
+<li>有工作线程绑定的任务队列: 数组下标为奇数. 称为task queue  队列中的任务均由工作线程调用产生 由FutureTask.fork方法产生</li>
+<li>无工作线程绑定的任务对列: 数组下标为偶数. 称之为submissions queue. 由execute/submit/invoke或者FutureTask.fork产生</li>
+</ul>
+<h3 id="线程池调度示例"><a href="#线程池调度示例" class="headerlink" title="线程池调度示例"></a>线程池调度示例</h3><blockquote>
+<p>假设现在通过FJPsubmit方法提交了一个FutureTask任务  参考<a href="https://segmentfault.com/a/1190000016781127#articleHeader2" target="_blank" rel="noopener">使用示例</a></p>
+</blockquote>
+<h4 id="初始"><a href="#初始" class="headerlink" title="初始"></a>初始</h4><p>初始状态下 线程池的队列为空 workQueues = null. 也没有工作线程:</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007122622.png" alt="20191007122622.png"></p>
+<h4 id="外部提交FT任务"><a href="#外部提交FT任务" class="headerlink" title="外部提交FT任务"></a>外部提交FT任务</h4><p>初始化任务队列数组WorkQueues[]  大小为2的每次. 然后在某个槽位(偶数位)初始化一个任务队列WorkQueue. 并插入任务:</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007122820.png" alt="20191007122820.png"></p>
+<p>是非工作线程通过外部方法提交的任务. 所以这个任务队列并没绑定工作线程. </p>
+<h4 id="创建工作线程"><a href="#创建工作线程" class="headerlink" title="创建工作线程"></a>创建工作线程</h4><p>首次提交任务后. 没有工作线程. 所以会创建工作线程, 同时在奇数槽的位置创建一个和它绑定的任务队列. </p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007123047.png" alt="20191007123047.png"></p>
+<h4 id="窃取任务"><a href="#窃取任务" class="headerlink" title="窃取任务"></a>窃取任务</h4><p>FJWT_1会随机扫描workQueues中的队列, 直到找到一个可以窃取的队列—workQueues[2] 然后从队列的base段获取任务并执行. 并将base+1.</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007123250.png" alt="20191007123250.png"></p>
+<p>窃取到的任务时FT, FJWT_1最终会调用它的compute方法. 该方法会新建两个子类任务. 并执行它们的fork方法: 参考示例的方法.</p>
+<p>由于是工作线程FJWT_1来调用FT的fork方法, 所以会将这两个子任务放入FJWT_1自身队列中:</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007123547.png" alt="20191007123547.png"></p>
+<p>然后FJWT_1会阻塞等到任务1和任务2的结果</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> sum1 = subtask1.join(); <span class="comment">// 现在这里等待</span></span><br><span class="line"><span class="keyword">long</span> sum2 = subtask2.join();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>可以看出任务放在哪个队列是调用线程决定的. 如果调用线程是工作线程, 则必然有自己的队列task queue. 将任务放入自己的队列中. 如果调用线程是其他线程如主线程. 则创建没有工作线程绑定的任务对sumissions queue 然后存入</p>
+</blockquote>
+<h4 id="新的工作线程"><a href="#新的工作线程" class="headerlink" title="新的工作线程"></a>新的工作线程</h4><p>FJWT_1调用两个子任务1和2的fork方法. 除了将它们放入自己的任务队列外, 还会导致新增一个工作线程FJWT_2.</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007124045.png" alt="20191007124045.png"></p>
+<p>FJWT_2运行后会像FJWT_1那样从其队列窃取任务.  从FJWT_1队列的base端窃取一个任务(直接执行. 并不会放入自己队列)</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007124529.png" alt="20191007124529.png"></p>
+<p>窃取完成后, FJWT_2会执行执行任务1. 又回到了FT子类的compute方法. 假设此时又fork出两个任务—-任务3和任务4. 则FJWT_2最终会在任务3的join方法上等待.</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007124726.png" alt="20191007124726.png"></p>
+<p>加色FJWT_2本其他某个工作线程唤醒. 任务3和任务4的join方法依次返回了结果, 任务1的结果也会返回. 于是FJWT_1也会被唤醒(他在任务1的join上等待), 然后FJWT_1会继续执行任务2的join方法. 如果任务2不再分解, 则最终任务1和任务2的合并结果, 计算结束.</p>
+<h4 id="自身队列的任务执行"><a href="#自身队列的任务执行" class="headerlink" title="自身队列的任务执行"></a>自身队列的任务执行</h4><p>FJWT_1和FJWT_2唤醒执行完窃取到的任务后, 还没有结束, 它们还会看看自身队列中有无任务可以执行. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">runTask</span><span class="params">(ForkJoinTask&lt;?&gt; task)</span> </span>&#123;</span><br><span class="line">           <span class="keyword">if</span> (task != <span class="keyword">null</span>) &#123;</span><br><span class="line">               scanState &amp;= ~SCANNING; <span class="comment">// mark as busy</span></span><br><span class="line">               (currentSteal = task).doExec();</span><br><span class="line">               U.putOrderedObject(<span class="keyword">this</span>, QCURRENTSTEAL, <span class="keyword">null</span>); <span class="comment">// release for GC</span></span><br><span class="line">               execLocalTasks();</span><br><span class="line">               ForkJoinWorkerThread thread = owner;</span><br><span class="line">               <span class="keyword">if</span> (++nsteals &lt; <span class="number">0</span>)      <span class="comment">// collect on overflow</span></span><br><span class="line">                   transferStealCount(pool);</span><br><span class="line">               scanState |= SCANNING;</span><br><span class="line">               <span class="keyword">if</span> (thread != <span class="keyword">null</span>)</span><br><span class="line">                   thread.afterTopLevelExec();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
+<p>runTask方法中 doExec()是执行窃取的任务. 而execLocalTasks()用于执行队列本身的任务</p>
+<p>假设此时的线程池是下面的状态:</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007125430.png" alt="20191007125430.png"></p>
+<p>那么FJWT_1调用execLocalTasks()方法一次执行自己队列中的所有任务. 分两种情况:</p>
+<ul>
+<li>异步模式(asyncMode = true)  如果在构造线程池时. 设置为true. 表示以异步模式执行工作线程自身队列中的任务. 此时会从base - &gt; top遍历并并行所有任务</li>
+<li>同步弄湿(asyncMode = false 默认值) 表示同步执行工作线程自身队列中的任务, 此时会从top - &gt; base遍历并执行所有任务</li>
+</ul>
+<blockquote>
+<p>任务入队总是从top端, 所以当以同步模式遍历时, 其相当于出栈操作  pop<br>如果异步, 相当于队列的出队曹汝  从base端poll元素<br>异步模式比较适用于不需要返回值的任务. </p>
+</blockquote>
+<p>默认是同步模式, FJWT_1从栈顶开始执行并移除任务. 先执行任务2并移除, 在执行任务1</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007131527.png" alt="20191007131527.png"><br><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191007131535.png" alt="20191007131535.png"></p>
+<blockquote><p>请参考<a href="https://segmentfault.com/a/1190000016781127" target="_blank" rel="noopener">Fork/Join框架分析</a></p>
+<footer><strong>多线程进阶</strong></footer></blockquote>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/并发包/" rel="tag"># 并发包</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/22/hashMap和ConcurrentHashMap原理简介/" rel="next" title="hashMap和ConcurrentHashMap原理简介">
+                <i class="fa fa-chevron-left"></i> hashMap和ConcurrentHashMap原理简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ten951</p>
+              <p class="site-description motion-element" itemprop="description">学习工作技能,感悟生活细节</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ten951" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangyongtian520@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#思想"><span class="nav-number">1.</span> <span class="nav-text">思想</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#工作窃取算法"><span class="nav-number">1.1.</span> <span class="nav-text">工作窃取算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核心组件"><span class="nav-number">1.2.</span> <span class="nav-text">核心组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ForkJoinPool"><span class="nav-number">1.2.1.</span> <span class="nav-text">ForkJoinPool</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ForkJoinTask"><span class="nav-number">1.2.2.</span> <span class="nav-text">ForkJoinTask</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ForkJoinWokerThread"><span class="nav-number">1.2.3.</span> <span class="nav-text">ForkJoinWokerThread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WorkQueue"><span class="nav-number">1.2.4.</span> <span class="nav-text">WorkQueue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程池调度示例"><span class="nav-number">1.3.</span> <span class="nav-text">线程池调度示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初始"><span class="nav-number">1.3.1.</span> <span class="nav-text">初始</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#外部提交FT任务"><span class="nav-number">1.3.2.</span> <span class="nav-text">外部提交FT任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建工作线程"><span class="nav-number">1.3.3.</span> <span class="nav-text">创建工作线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#窃取任务"><span class="nav-number">1.3.4.</span> <span class="nav-text">窃取任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#新的工作线程"><span class="nav-number">1.3.5.</span> <span class="nav-text">新的工作线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自身队列的任务执行"><span class="nav-number">1.3.6.</span> <span class="nav-text">自身队列的任务执行</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ten951</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+<script>
+  	var _mtac = {};
+  	(function() {
+  		var mta = document.createElement("script");
+  		mta.src = "https://pingjs.qq.com/h5/stats.js?v2.0.4";
+  		mta.setAttribute("name", "MTAH5");
+  		mta.setAttribute("sid", "500682921");
+
+  		var s = document.getElementsByTagName("script")[0];
+  		s.parentNode.insertBefore(mta, s);
+  	})();
+</script>
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

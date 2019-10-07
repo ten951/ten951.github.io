@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.ten951.com/images/ClassLoader%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.png">
 <meta property="og:image" content="http://www.ten951.com/images/tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6.png">
-<meta property="og:updated_time" content="2019-09-17T01:44:45.445Z">
+<meta property="og:updated_time" content="2019-10-01T06:48:41.743Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="类加载系统">
 <meta name="twitter:description" content="类加载器作用是将class文件加载到JVM中.存放在元数据区.  bootstrap classloader  jvm自己实现的. 加载$JAVA_HOME/jre/lib extClassloader 也是jvm的一部分.  加载$JAVA_HOME/jre/lib/ext包 appClassloader 加载classpath路径的类  Class装载系统步骤 加载 连接   验证 准备 解析">
@@ -463,6 +463,16 @@
 <p>很显然，tomcat 不是这样实现，tomcat 为了实现隔离性，没有遵守这个约定，每个webappClassLoader加载自己的目录下的class文件，不会传递给父类加载器。</p>
 <p>我们扩展出一个问题：如果tomcat 的 Common ClassLoader 想加载 WebApp ClassLoader 中的类，该怎么办？</p>
 <p>我们可以使用线程上下文类加载器实现，使用线程上下文加载器，可以让父类加载器请求子类加载器去完成类加载的动作。</p>
+<h3 id="Tomcat-的类加载器是怎么设计的？"><a href="#Tomcat-的类加载器是怎么设计的？" class="headerlink" title="Tomcat 的类加载器是怎么设计的？"></a>Tomcat 的类加载器是怎么设计的？</h3><p>Tomcat 如果使用默认的类加载机制行不行？</p>
+<p>我们思考一下：Tomcat是个web容器， 那么它要解决什么问题： </p>
+<ol>
+<li>一个web容器可能需要部署两个应用程序，不同的应用程序可能会依赖同一个第三方类库的不同版本，不能要求同一个类库在同一个服务器只有一份，因此要保证每个应用程序的类库都是独立的，保证相互隔离。 </li>
+<li>部署在同一个web容器中相同的类库相同的版本可以共享。否则，如果服务器有10个应用程序，那么要有10份相同的类库加载进虚拟机，这是扯淡的。 </li>
+<li>web容器也有自己依赖的类库，不能于应用程序的类库混淆。基于安全考虑，应该让容器的类库和程序的类库隔离开来。 </li>
+<li>web容器要支持jsp的修改，我们知道，jsp 文件最终也是要编译成class文件才能在虚拟机中运行，但程序运行后修改jsp已经是司空见惯的事情，否则要你何用？ 所以，web容器需要支持 jsp 修改后不用重启。</li>
+</ol>
+<p>再看看我们的问题：Tomcat 如果使用默认的类加载机制行不行？ </p>
+<p>答案是不行的。为什么？我们看，第一个问题，如果使用默认的类加载器机制，那么是无法加载两个相同类库的不同版本的，默认的累加器是不管你是什么版本的，只在乎你的全限定类名，并且只有一份。第二个问题，默认的类加载器是能够实现的，因为他的职责就是保证唯一性。第三个问题和第一个问题一样。我们再看第四个问题，我们想我们要怎么实现jsp文件的热修改（楼主起的名字），jsp 文件其实也就是class文件，那么如果修改了，但类名还是一样，类加载器会直接取方法区中已经存在的，修改后的jsp是不会重新加载的。那么怎么办呢？我们可以直接卸载掉这jsp文件的类加载器，所以你应该想到了，每个jsp文件对应一个唯一的类加载器，当一个jsp文件修改了，就直接卸载这个jsp类加载器。重新创建类加载器，重新加载jsp文件。</p>
 
       
     </div>
@@ -582,7 +592,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -653,7 +663,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器"><span class="nav-number">1.</span> <span class="nav-text">类加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class装载系统"><span class="nav-number">2.</span> <span class="nav-text">Class装载系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤"><span class="nav-number">2.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件"><span class="nav-number">2.2.</span> <span class="nav-text">条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载类"><span class="nav-number">2.3.</span> <span class="nav-text">加载类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证类"><span class="nav-number">2.4.</span> <span class="nav-text">验证类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备阶段"><span class="nav-number">2.5.</span> <span class="nav-text">准备阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析类"><span class="nav-number">2.6.</span> <span class="nav-text">解析类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">2.7.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ClassLoader"><span class="nav-number">3.</span> <span class="nav-text">ClassLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#认识ClassLoader"><span class="nav-number">3.1.</span> <span class="nav-text">认识ClassLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类"><span class="nav-number">3.2.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委托模式"><span class="nav-number">3.3.</span> <span class="nav-text">双亲委托模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#突破双亲委托"><span class="nav-number">3.4.</span> <span class="nav-text">突破双亲委托</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat类加载机制"><span class="nav-number">4.</span> <span class="nav-text">tomcat类加载机制</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载器"><span class="nav-number">1.</span> <span class="nav-text">类加载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Class装载系统"><span class="nav-number">2.</span> <span class="nav-text">Class装载系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤"><span class="nav-number">2.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件"><span class="nav-number">2.2.</span> <span class="nav-text">条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载类"><span class="nav-number">2.3.</span> <span class="nav-text">加载类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证类"><span class="nav-number">2.4.</span> <span class="nav-text">验证类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备阶段"><span class="nav-number">2.5.</span> <span class="nav-text">准备阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析类"><span class="nav-number">2.6.</span> <span class="nav-text">解析类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">2.7.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ClassLoader"><span class="nav-number">3.</span> <span class="nav-text">ClassLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#认识ClassLoader"><span class="nav-number">3.1.</span> <span class="nav-text">认识ClassLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类"><span class="nav-number">3.2.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双亲委托模式"><span class="nav-number">3.3.</span> <span class="nav-text">双亲委托模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#突破双亲委托"><span class="nav-number">3.4.</span> <span class="nav-text">突破双亲委托</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tomcat类加载机制"><span class="nav-number">4.</span> <span class="nav-text">tomcat类加载机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat-的类加载器是怎么设计的？"><span class="nav-number">4.1.</span> <span class="nav-text">Tomcat 的类加载器是怎么设计的？</span></a></li></ol></li></ol></div>
             
 
           </div>
