@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="读书与做事">
 <meta property="og:description" content="Java内存模型的抽象结构  在Java中,所有实例域,静态域和数据元素都存储在堆内存中,堆内存在线程之间共享,   Java线程之间的通信由Java内存模型JMM控制.JMM决定一个线程对共享变量的写入何时对另一个线程可见,   JMM定义了线程和主内存之间的抽象关系,线程之间的共享变量存储在主内存(Main),每个线程都有一个私有的本地内存(Local),本地内存中存储了该线程已读/写共享变量">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-23T01:56:24.000Z">
+<meta property="og:updated_time" content="2019-10-09T07:02:26.921Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java内存模型">
 <meta name="twitter:description" content="Java内存模型的抽象结构  在Java中,所有实例域,静态域和数据元素都存储在堆内存中,堆内存在线程之间共享,   Java线程之间的通信由Java内存模型JMM控制.JMM决定一个线程对共享变量的写入何时对另一个线程可见,   JMM定义了线程和主内存之间的抽象关系,线程之间的共享变量存储在主内存(Main),每个线程都有一个私有的本地内存(Local),本地内存中存储了该线程已读/写共享变量">
@@ -382,7 +382,7 @@
 <ul>
 <li>编译器优化的重排序</li>
 <li>指令级并行的重排序, 现代处理器采用指令级并行技术,来将多条指令重叠执行. 处理器重拍序</li>
-<li>内存徐彤的重排序, 由于处理器使用缓存和读/写缓冲区,这使得加载和存储操作看上去可能是在乱序执行, 处理器重拍序</li>
+<li>内存系统的重排序, 由于处理器使用缓存和读/写缓冲区,这使得加载和存储操作看上去可能是在乱序执行, 处理器重拍序</li>
 </ul>
 <p>对于编译器,JMM的编译器重排序规则禁止特定类型的编译器重排序</p>
 <p>对于处理器重排序,JMM的处理器重排序规则会要求Java编译器在生成指令序列时,插入特定类型的内存屏障指令,通过这个禁止特定类型的处理器重排序</p>
@@ -606,7 +606,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

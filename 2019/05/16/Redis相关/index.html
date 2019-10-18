@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="读书与做事">
 <meta property="og:description" content="数据结构简单动态字符串 (SDS)12345678struct sdshdr &amp;#123;    // 记录buf[]数组中已经使用字节的数量, 等于SDS所保存字符串长度    int len;    // 记录buf数组中未使用字节的数量    int free;    // 字节数组, 用于保存字符串    char buf[]&amp;#125;  由于len的存在. 保证了获取一个SDS的长度复">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-15T02:54:54.484Z">
+<meta property="og:updated_time" content="2019-10-13T02:19:46.377Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis相关">
 <meta name="twitter:description" content="数据结构简单动态字符串 (SDS)12345678struct sdshdr &amp;#123;    // 记录buf[]数组中已经使用字节的数量, 等于SDS所保存字符串长度    int len;    // 记录buf数组中未使用字节的数量    int free;    // 字节数组, 用于保存字符串    char buf[]&amp;#125;  由于len的存在. 保证了获取一个SDS的长度复">
@@ -407,7 +407,7 @@
 <li>v 属性则保存着简直对中的值. 其中键值对的值可以是一个指针, 或者是uint64_t整数. 又或是一个int64_t整数</li>
 <li>next属性是指向另一个哈希表的指针.</li>
 </ul>
-<h5 id="字典实现"><a href="#字典实现" class="headerlink" title="字典实现"></a>字典实现</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">    <span class="comment">// 类型特定函数</span></span><br><span class="line">    dictType * type;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 私有数据</span></span><br><span class="line">    <span class="keyword">void</span> *privdata;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 哈希表</span></span><br><span class="line">    dictht ht[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// rehash索引 当rehash不在进行时, 值为-1</span></span><br><span class="line">    <span class="keyword">int</span> trehashidx;</span><br><span class="line">&#125; dict;</span><br></pre></td></tr></table></figure>
+<h5 id="字典实现"><a href="#字典实现" class="headerlink" title="字典实现"></a>字典实现</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span></span><br><span class="line">    <span class="comment">// 类型特定函数</span></span><br><span class="line">    dictType *type;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 私有数据</span></span><br><span class="line">    <span class="keyword">void</span> *privdata;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 哈希表</span></span><br><span class="line">    dictht ht[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// rehash索引 当rehash不在进行时, 值为-1</span></span><br><span class="line">    <span class="keyword">int</span> trehashidx;</span><br><span class="line">&#125; dict;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li>type属性是一个指向dictType结构的指针, 每个dictType结构保存了一簇用于操作特定类型键值对的函数</li>
@@ -850,7 +850,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
