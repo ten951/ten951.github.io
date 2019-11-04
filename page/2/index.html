@@ -284,6 +284,158 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/09/10/消息中间件/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ten951">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="读书与做事">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/10/消息中间件/" itemprop="url">消息中间件</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-10T09:14:11+08:00">
+                2019-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/book/" itemprop="url" rel="index">
+                    <span itemprop="name">book</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="rabbitmq"><a href="#rabbitmq" class="headerlink" title="rabbitmq"></a>rabbitmq</h2><h3 id="ExchangeTypes"><a href="#ExchangeTypes" class="headerlink" title="ExchangeTypes"></a>ExchangeTypes</h3><ul>
+<li>direct  bindingKey和routingKey完全匹配的queue中</li>
+<li>Fanout  不管routingKey是什么.他都会把消息发送到与exchange绑定的所有queue中</li>
+<li>Topic   exchange将消息发送到routingKey模式匹配的queue中. #表示匹配多个单词 *表示匹配一个单词 单词之间用.分隔</li>
+<li>RPC     客户端C发送请求（消息）时，在消息的属性（MessageProperties）中设置两个值replyTo（一个Queue名称，用于告诉服务器处理完成后将通知我的消息发送到这个Queue中）和correlationId（此次请求的标识号，服务器处理完成后需要将此属性返还，客户端将根据这个id了解哪条请求被成功执行了或执行失败. 服务器端S处理完消息后，将生成一条应答消息到replyTo指定的Queue，同时带上correlationId属性。客户端之前已订阅replyTo指定的Queue，从中收到服务器的应答消息后，根据其中的correlationId属性分析哪条请求被执行了，根据执行结果进行后续业务处理.</li>
+</ul>
+<h3 id="virtualhost"><a href="#virtualhost" class="headerlink" title="virtualhost"></a>virtualhost</h3><p>每一个vhost本质上是一个mini-rabbitmq server，分别管理各自的exchange和bindings。vhost相当于物理的server，可以为不同app提供边界隔离，使得应用安全的运行在不同的vhost实例上，相互之间不会干扰。producer和consumer连接rabbit server需要指定一个vhost。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/09/10/消息中间件/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/09/05/innoDB相关/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1661,163 +1813,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/04/19/垃圾收集器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ten951">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="读书与做事">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/19/垃圾收集器/" itemprop="url">垃圾收集器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-19T15:19:45+08:00">
-                2019-04-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/book/" itemprop="url" rel="index">
-                    <span itemprop="name">book</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h2><h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>线程私有</p>
-<p>当前线程执行的字节码的行号指示器. 字节码解释器工作时就是通过改变这个计数器的值来选择下一条需要执行的字节码指令, 分支. 循环, 跳转, 异常处理. 线程恢复等</p>
-<p>为了能够在CPU时间片轮转切换上下文之后顺利回到正确的执行位置. 每条线程都需要具有一个独立的程序计算器. 各个线程之间互不影响.</p>
-<h3 id="Java虚拟机栈-xss"><a href="#Java虚拟机栈-xss" class="headerlink" title="Java虚拟机栈(-xss)"></a>Java虚拟机栈(-xss)</h3><p>线程私有</p>
-<p>它的生命周期和线程相同. 虚拟机栈描述的是Java方法执行的内存模型: 每个方法在执行的同时都会创建一个栈帧用于<em>存储局部变量表, 操作数栈. 动态链接. 方法出口等信息.</em> 每个一个方法从调用直至执行完成的过程. 就对应着一个栈帧在虚拟机栈中入栈到出栈的过程.</p>
-<p>经常提到的栈内存(Stack) 指的就是虚拟机栈. 或者是是虚拟机栈中局部变量表部分:</p>
-<p><em>局部变量表存放了编译期可知的各种基本类型(boolean, byte, char, short, int, float, long, double), 对象引用(Reference类型, 它不等同于对象本身. 可能是一个执行对象原始地址的引用指针. 也可能是执行一个代表对象的句柄或者其他与此对象相关的位置) 和returnAddress类型(指向了一条字节码指令的地址)</em> 手动狗头</p>
-<blockquote>
-<p>粗略的认为一个Java进程的内存大小: 堆内存 + 线程数量 * 栈内存<br>线程数量 = (最大地址空间 - jvm堆内存 - ReservedOsMemory系统保留内存)/ThreadStackSize(XSS)</p>
-</blockquote>
-<h4 id="栈上分配"><a href="#栈上分配" class="headerlink" title="栈上分配"></a>栈上分配</h4><p> 如果一个对象的作用域只存在方法内. 那么就直接栈上分配. 好处是函数调用结束后自行摧毁. 而不需要垃圾回收期介入.</p>
-<p>栈上分配的技术基础就是逃逸分析. 目的就是判断对象的作用域是否有可能逃逸出函数体.</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/04/19/垃圾收集器/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1868,7 +1863,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1890,7 +1885,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
