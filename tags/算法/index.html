@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="thread,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -79,18 +79,16 @@
 
 
 
-<meta name="description" content="volatile  在并发编程中synchronized和volatile都有重要的角色.volatile是轻量级的synchronized,它在多线程开发中保证了共享变量的可见性,  可见性的意思是当一个线程修改一个共享变量时,另外一个线程能读到这个修改的值    volatile变量修饰使用恰当的话,它比synchronized的使用和执行成本更低.因为没有线程的上下文的切换和调度.  vol">
-<meta name="keywords" content="thread">
-<meta property="og:type" content="article">
-<meta property="og:title" content="整理并发机制实现原理">
-<meta property="og:url" content="http://www.ten951.com/2018/05/10/整理并发机制实现原理/index.html">
+<meta name="description" content="学习工作技能,感悟生活细节">
+<meta property="og:type" content="website">
+<meta property="og:title" content="读书与做事">
+<meta property="og:url" content="http://www.ten951.com/tags/算法/index.html">
 <meta property="og:site_name" content="读书与做事">
-<meta property="og:description" content="volatile  在并发编程中synchronized和volatile都有重要的角色.volatile是轻量级的synchronized,它在多线程开发中保证了共享变量的可见性,  可见性的意思是当一个线程修改一个共享变量时,另外一个线程能读到这个修改的值    volatile变量修饰使用恰当的话,它比synchronized的使用和执行成本更低.因为没有线程的上下文的切换和调度.  vol">
+<meta property="og:description" content="学习工作技能,感悟生活细节">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-08T08:29:29.360Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="整理并发机制实现原理">
-<meta name="twitter:description" content="volatile  在并发编程中synchronized和volatile都有重要的角色.volatile是轻量级的synchronized,它在多线程开发中保证了共享变量的可见性,  可见性的意思是当一个线程修改一个共享变量时,另外一个线程能读到这个修改的值    volatile变量修饰使用恰当的话,它比synchronized的使用和执行成本更低.因为没有线程的上下文的切换和调度.  vol">
+<meta name="twitter:title" content="读书与做事">
+<meta name="twitter:description" content="学习工作技能,感悟生活细节">
 
 
 
@@ -120,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://www.ten951.com/2018/05/10/整理并发机制实现原理/">
+  <link rel="canonical" href="http://www.ten951.com/tags/算法/">
 
 
 
 
 
-  <title>整理并发机制实现原理 | 读书与做事</title>
+  <title>标签: 算法 | 读书与做事</title>
   
 
 
@@ -145,7 +143,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -271,209 +269,52 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block tag">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>算法<small>标签</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2018/05/10/整理并发机制实现原理/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ten951">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="读书与做事">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+            <a class="post-title-link" href="/2019/11/14/动态规划之浅见/" itemprop="url">
+              
+                <span itemprop="name">动态规划之浅见</span>
+              
+            </a>
         
-          <h1 class="post-title" itemprop="name headline">整理并发机制实现原理</h1>
-        
+      </h2>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-10T13:07:41+08:00">
-                2018-05-10
-              </time>
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2019-11-14T13:07:21+08:00" content="2019-11-14">
+          11-14
+        </time>
+      </div>
 
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/book/" itemprop="url" rel="index">
-                    <span itemprop="name">book</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h3 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h3><p>  在并发编程中synchronized和volatile都有重要的角色.volatile是轻量级的synchronized,它在多线程开发中保证了共享变量的可见性,</p>
-<blockquote>
-<p>可见性的意思是当一个线程修改一个共享变量时,另外一个线程能读到这个修改的值</p>
-</blockquote>
-<p>  volatile变量修饰使用恰当的话,它比synchronized的使用和执行成本更低.因为没有线程的上下文的切换和调度.<br>  volatile通过lock前缀的汇编命令来保证可见性.</p>
-<blockquote>
-<p>lock前缀命令在多核处理器上会引起两件事 1.将当期处理器缓存行的数据写回到系统内存 2.这个写回内存的操作会使咋其他cpu里缓存了该内存地址的数据无效.</p>
-</blockquote>
-<p>  现代处理器为了提供处理数据速度,处理器不直接和内存进行通信,而是先将内存的数据读到内部缓存(L1,L2或其他) 后再操作,但操作完不知道何时写到内存.</p>
-<p>  如果对volatile变量进行写操作,JVM会向处理器发送一条lock前缀的指令.将这个变量的缓存行的数据写回到系统内存.但是如果其他处理器不知道这个操作,其他处理器看到的数据还是旧的.</p>
-<p>  所以多核处理器下.为了保证各个处理器的缓存是一直的.就会实现<strong>缓存一致性协议</strong>.每个处理器通过嗅探在总线上传播数据来检查自己缓存的值是不是过期了,当处理器发现自己缓存行对应的内存地址被修改,就会将当期处理器的缓存行设置为无效状态.这样处理器对这个数据进行修改操作的时候,会重新从系统内存中把数据读到处理器缓存里.<br>  <a id="more"></a></p>
-<h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><p>1.6以后jdk对他进行了各种优化.已经不那么重了.<br>synchronized的三种形式:</p>
-<ol>
-<li>对于普通同步方法,锁是当前实例对象</li>
-<li>对于静态同步方法,锁是当前类的class类</li>
-<li>对于同步方法块,锁是Synchonized括号里配置的对象.</li>
-</ol>
-<p>当一个线程试图访问代码块时.它首先必须得到锁.退出或者抛异常时必须释放锁.锁到底存在哪里呢?锁里存储的又是什么呢</p>
-<p>synchronized用的锁是存在Java对象头里的. 对象头里的Mark Word里默认存储对象的HashCode,分代年龄,锁标记位.运行期间,Mark Word里存储的数据会随着锁标志位的变化而变化.</p>
-<h4 id="锁的升级"><a href="#锁的升级" class="headerlink" title="锁的升级"></a>锁的升级</h4><p>  一种4中状态. 级别从低到高.无锁,偏向锁,轻量级锁,重量级锁.这几个状态会随着竞争情况逐渐升级,<strong>锁可以升级但不能降级</strong></p>
-<h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><p>   经过研究发现.大多数情况下,锁不仅不存在多线程竞争,而且总是由同一个线程多次获得.为了让线程获得锁的代价更低而引入偏向锁.当一个线程访问同步快并获取锁时.会在对象头和栈帧中的锁记录里存储锁偏向的线程ID,以后线程在进入和退出同步块时不需要进行CAS操作来加锁和解锁,只需要简单的测试一下对象头的Mark Word里是否存储着指向当前线程的偏向锁, <strong>测试成功,表示当前线程获得了锁.失败,则需要在测试一下Mark Word中偏向锁的标识是否设置成1(表示当前是偏向锁). 没有设置,则使用CAS竞争锁.设置了,则尝试使用CAS将对象头的偏向锁指向当前线程.</strong></p>
-<ul>
-<li>偏向锁的撤销. 只有竞争出现才释放锁,所以当其他线程尝试竞争偏向锁时,持有偏向锁的线程才会释放锁.撤销,需要等待全局安全点(在这个时间点上没有正在执行的字节码),<strong>它会首先暂停拥有偏向锁的线程,然后检查持有偏向锁的线程是否活着,如果线程不处于活动状态.则将对象头设置成无锁状态.如果线程仍然活着.拥有偏向锁的栈会被执行,遍历偏向对象的锁记录,栈中的锁记录和对象头的Mark Word要么重新偏向于其他线程,要么恢复到无锁或者标记对象不是和作为偏向锁,最后唤醒暂停的线程</strong>.</li>
-</ul>
-<h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><ul>
-<li>加锁 线程执行同步块之前,JVM会先在当前线程的栈帧中创建用于存储锁记录的空间,并将对象头中的Mark Word复制到锁记录中,这个过程叫做 Displaced Mark Word. 然后线程尝试使用CAS将对象头中的Mark Word替换为指向锁记录的指针.如果成功,当前线程获得锁,如果失败,表现其他线程竞争锁,当前线程便尝试自旋来获取锁.</li>
-<li>解锁 会使用原子的CAS操作将Displaced Mark Work替换回到对象头,如果成功,泽表示没有竞争发生,如果失败,表示当前锁存在竞争,锁会膨胀成重量级锁,</li>
-</ul>
-<h3 id="原子操作的实现原理"><a href="#原子操作的实现原理" class="headerlink" title="原子操作的实现原理"></a>原子操作的实现原理</h3><p> 不能被进一步分割的最小粒子,而原子操作意为 <strong>不可被中断的一个或一系列操作</strong></p>
-<h4 id="处理器保证原子操作"><a href="#处理器保证原子操作" class="headerlink" title="处理器保证原子操作"></a>处理器保证原子操作</h4><p>处理器提供总线锁定和缓存锁定两个机制来保证复杂内存操作的原子性:</p>
-<ul>
-<li>使用总线锁保证原子性, 就是处理器提供了LOCK #信息,当一个处理器在总线上输出此信号时,其他处理器的请求被阻塞,那么该处理器可以独占共享内存,</li>
-<li>使用缓存锁保证原子性, 同一时刻我们只需保证对某个内存地址的操作是原子性的即可,总线锁开销比较大,目前处理器在很多场合使用缓存锁代替总线锁来进行优化</li>
-</ul>
-<blockquote>
-<p>所谓缓存锁定,是指内存区域如果被缓存在处理器缓存行中,并且在Lock操作期间被锁定,那么当它执行锁操作回写到内存时,处理器不在总线上声言LOCK#信号,而是修改内部的内存地址,并允许它的缓存一致性机制来保证操作的原子性,因为缓存一致性机制会阻止同时修改由两个以上处理器缓存的内存区域数据,当其他处理器回写已被锁定的缓存行的数据时,会使缓存行无效,</p>
-</blockquote>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/thread/" rel="tag"># thread</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/05/09/并发编程/" rel="next" title="并发编程">
-                <i class="fa fa-chevron-left"></i> 并发编程
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/11/Java内存模型/" rel="prev" title="Java内存模型">
-                Java内存模型 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
-
-    <div class="post-spread">
       
     </div>
+
   </div>
+  
+  
+  
+
+  
 
 
           </div>
@@ -481,10 +322,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -505,17 +342,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -591,22 +419,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile"><span class="nav-number">1.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">2.</span> <span class="nav-text">synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#锁的升级"><span class="nav-number">2.1.</span> <span class="nav-text">锁的升级</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#偏向锁"><span class="nav-number">2.1.1.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#轻量级锁"><span class="nav-number">2.1.2.</span> <span class="nav-text">轻量级锁</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原子操作的实现原理"><span class="nav-number">3.</span> <span class="nav-text">原子操作的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#处理器保证原子操作"><span class="nav-number">3.1.</span> <span class="nav-text">处理器保证原子操作</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -753,10 +565,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
