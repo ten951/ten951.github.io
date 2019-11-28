@@ -284,6 +284,208 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/11/27/kafka总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ten951">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="读书与做事">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/27/kafka总结/" itemprop="url">kafka总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T15:56:37+08:00">
+                2019-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><h4 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h4><p>消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群. </p>
+<h4 id="topic和partition"><a href="#topic和partition" class="headerlink" title="topic和partition"></a>topic和partition</h4><p>在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位置offset. 就是消息在文件中的偏移量. 是一个long类型数字. 是顺序写入磁盘的. 因此是非常高效的.</p>
+<p>多个分区是为了水平拓展. kafka是可以动态拓展分区数量的. </p>
+<p>在发送消息的时候. 可以指定分区发送. 也可以指定key发送.(在指定key的时候 是通过key的hash%分区数量其余 计算分区的, 为了负载均衡)<br>当发送的时候只指定了主题. 其他都没设置的时候. 以java客户端为例子, kafka客户端会为每个线程设置一个消息计数器. 通过消息计数器和分区数量取余确定消息分发到哪个分区上的. 确保了负载均衡.</p>
+<p>同时kafka客户端的分区函数我们是可以自己拓展的. 例如指定key的方式发送 在分区数量不变的情况下, 是能够保证相同的key都发送到相同的分区上的. 当时当分区数量发送变化时. 分发的分区必然会发送变化. 我们可以拓展成一致性哈希算法. </p>
+<p>在实际的工程项目中, 因为kafka能够保证分区上的消息有序性, 我们希望依赖这个特性来保证业务数据的有序性. 这时候确保消息发送到相同的分区上就很重要了.</p>
+<h4 id="producer"><a href="#producer" class="headerlink" title="producer"></a>producer</h4><p>kafka的发送也不是实时发送的. 而是根据batchSize大小发送的. 也就是异步批量发送. 以java客户端为例. 就能在源码中找到Deque这样的结果.<br>发送的数据的基本步骤是:</p>
+<ol>
+<li>检查topic是否可用和partition是否存在. </li>
+<li>对key和value进行序列化, 也就是转化为二进制数组. 典型的策略模式. 针对序列化的方式. 可以自己去实现. json的默认使用的jackson</li>
+<li>确定消息发送到哪个分区.</li>
+<li>估计消息的大小. 确保maxRequestSize和totalMemorySize的限制</li>
+<li>绑定回调和拦截器</li>
+<li>发送逻辑RecordAccumulator</li>
+</ol>
+<h5 id="RecordAccumulator"><a href="#RecordAccumulator" class="headerlink" title="RecordAccumulator"></a>RecordAccumulator</h5><p>在内部维护了一个CopyOnWriteMap, key是TopicPartition, value是Deque<producerbatch>.  </producerbatch></p>
+<p>发送逻辑:</p>
+<ol>
+<li>Deque<recordbatch> dq = getOrCreateDeque(tp);  获得记录块队列.并尝试添加; 因为使用的ArrayDeque. 线程不安全. so加锁, 尝试向队列中最后一个RecordBatch后面添加 成功就返回</recordbatch></li>
+<li>追加失败, 从 BufferPool 中申请新空间 </li>
+<li>dp加锁, 再次尝试向队列最后一个RecordBatch添加. 成功返回. </li>
+<li>追加失败 包装一个MemoryRecordsBuilder对象和ProducerBatch对象, 将ProducerBatch对象添加到dq队列.  返回结果. </li>
+</ol>
+<h5 id="接上文的producer"><a href="#接上文的producer" class="headerlink" title="接上文的producer"></a>接上文的producer</h5><p>在获得结果以后, 会检查batchSize是否已满. 如果已经满了. 唤醒sender发送消息. </p>
+<p>所以kafka的生产者发送消息的时候 借助多分区和负载均衡的存在. 可以提高集群的处理能力. 再加上使用端到端异步的批处理方式. 增加kafka的吞吐量</p>
+<p>我理解端到端值的是 使用的nio机制. 这里涉及到非阻塞I/O 和 零拷贝问题. </p>
+<h4 id="consumer和consumerGroup"><a href="#consumer和consumerGroup" class="headerlink" title="consumer和consumerGroup"></a>consumer和consumerGroup</h4><p>kafka的消费者使用的是主动拉取消息的模型. 这个模型的好处是. 可以根据消费者能力处理消息. 在经典的push模型中, 消息的发送速度是broker决定的. 很容易造成消费者消费消息慢. 导致阻塞的问题. 比例队列消息积压.</p>
+<p>pull模型的另一个好处是有助于批处理. </p>
+<p>当所有的消费者都在一个小组中时, 就变成了典型的queue模型. 当消费者分布在不同组时. 就变成了发布/订阅模型. </p>
+<p>同一个分区只能被同一个消费者组中的同一个消费者消费, 不能两个消费者同时消费一个分区. 这就意味着分区最好&gt;=消费者数, 否则会出现消费者饥饿的情况. </p>
+<p>为了给消费者带来可伸缩性和横向拓展能力. kafka提供了分区在均衡功能. </p>
+<ol>
+<li>当消费者崩溃或者关闭之后, 他负责的分区会被群组中的其他消费者负责. </li>
+<li>当添加新分区时也是同样的道理. </li>
+<li>当消费组中添加新的消费者. 也会触发再均衡. </li>
+</ol>
+<p>在均衡期间. 整个小组内的消费者会有一段时间的不可用. </p>
+<p>1：fetch.min.bytes，指定消费者从broker获取消息的最小字节数，即等到有足够的数据时才把它返回给消费者</p>
+<p>2：fetch.max.wait.ms，等待broker返回数据的最大时间，默认是500ms。fetch.min.bytes和fetch.max.wait.ms哪个条件先得到满足，就按照哪种方式返回数据</p>
+<p>3：max.partition.fetch.bytes，指定broker从每个partition中返回给消费者的最大字节数，默认1MB</p>
+<p>4：session.timeout.ms，指定消费者被认定死亡之前可以与服务器断开连接的时间，默认是3s</p>
+<p>5：auto.offset.reset，消费者在读取一个没有偏移量或者偏移量无效的情况下（因为消费者长时间失效，包含偏移量的记录已经过时并被删除）该作何处理。默认是latest（消费者从最新的记录开始读取数据）。另一个值是             　      earliest（消费者从起始位置读取partition的记录）</p>
+<p>6：enable.auto.commit，指定消费者是否自动提交偏移量，默认为true</p>
+<p>7：partition.assignment.strategy，指定partition如何分配给消费者，默认是Range。Range：把Topic的若干个连续的partition分配给消费者。RoundRobin：把Topic的所有partition逐个分配给消费者</p>
+<p>8：max.poll.records，单次调用poll方法能够返回的消息数量</p>
+<h5 id="提交和偏移量"><a href="#提交和偏移量" class="headerlink" title="提交和偏移量"></a>提交和偏移量</h5><p>分区和消费者分别维护着offset. 使用应答模式. 消费者把消费的消息offset提交给分区. 分区标记已经消费, 这种模式. </p>
+<p>可能会出现. 重复消费(分区的offset &lt; 消费者的offset, ) 消息丢失( 分区的offset &gt; 消费者的offset)</p>
+<p>提交便宜量有两种方式 .</p>
+<ol>
+<li>自动提交.auto.commit.interval.ms设置 默认值5s 优点是方便. 但是容易重复消费</li>
+<li>手动提交. 在消费完成之后. 提交commitSync. 缺点是. 在分区没有处理这个提交和给出应答, 消费者会被阻塞.</li>
+<li>手动异步提交. 只管发送. 不用broker响应. 由于是异步发送. 就不能保证offset的循序. 例如offset2000 在 3000之后到达broker. 这时正好在均衡. 消息会被重复消费. </li>
+</ol>
+<p>可以同步异步混合使用. 在正常while循环中使用 异步的 在消费者退出时. 同步提交一次. </p>
+<h3 id="kafka给的保证"><a href="#kafka给的保证" class="headerlink" title="kafka给的保证"></a>kafka给的保证</h3><h4 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h4><p>通过异步批处理. NIO 零拷贝. </p>
+<h4 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h4><p>kafka的高可靠性源于其健壮副本策略. </p>
+<h5 id="文件存储"><a href="#文件存储" class="headerlink" title="文件存储"></a>文件存储</h5><p>消息是以topic分类的. 在物理层面. topic由多个partition分组. partition还可以分成多个segment. 在kafka中每个分区对应着一个文件, 命名规则为topic_分区序号. 序号从0开始. segment是对分区文件的一种优化. 为了防止分区文件膨胀变大带来的维护成本. segment分为两部分. .index和.log. 每个分区中的segment都是从0开始到命名. 代表了存储消息的offset. 64位的. </p>
+<h5 id="复制原理和同步方式"><a href="#复制原理和同步方式" class="headerlink" title="复制原理和同步方式"></a>复制原理和同步方式</h5><p>在上层应用视角中 我们看到的最小单元就是分区文件. 其实是由一堆segment组成的.  整个partition文件中<strong>由一些列有序的、不可变的消息组成，这些消息被连续的追加到partition中</strong><br><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191127195734.png" alt="20191127195734.png"></p>
+<p>其中HW的意思是  高水位线. 这个线之后的消息.消费者是没有消费的. LED是表示该分区的最后一个消息offset</p>
+<p>为了提高消息的可靠性. kafka每个topic的partition有多个副本 其中n大于等于1是topic的复制因子的个数.Kafka通过多副本机制实现故障自动转移，当Kafka集群中一个broker失效情况下仍然保证服务可用。在Kafka中发生复制时确保partition的日志能有序地写到其他节点上，N个replicas中，其中一个replica为leader，其他都为follower, leader处理partition的所有读写请求，与此同时，follower会被动定期地去复制leader上的数据。</p>
+<p>当leader发送故障之后. 一个新的leader被选举出来并接受客户端消息写入. 并不是所有follower都有资格参与选举的. 只有在ISR列表中的follower才会参与选举的.  Leader负责维护ISR列表. 如果follower落后leader太多, 会被踢出</p>
+<h4 id="消息传递的保证"><a href="#消息传递的保证" class="headerlink" title="消息传递的保证"></a>消息传递的保证</h4><h4 id="副本和leader选举"><a href="#副本和leader选举" class="headerlink" title="副本和leader选举"></a>副本和leader选举</h4><h3 id="kafka和RabbitMq的比较"><a href="#kafka和RabbitMq的比较" class="headerlink" title="kafka和RabbitMq的比较"></a>kafka和RabbitMq的比较</h3>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/11/14/动态规划之浅见/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1652,177 +1854,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/09/18/Bean之AbstractBeanFactory类createBean方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ten951">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="读书与做事">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/18/Bean之AbstractBeanFactory类createBean方法/" itemprop="url">Bean之AbstractBeanFactory类createBean方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-18T10:12:19+08:00">
-                2019-09-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/book/" itemprop="url" rel="index">
-                    <span itemprop="name">book</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="AbstractBeanFactory-doGetBean"><a href="#AbstractBeanFactory-doGetBean" class="headerlink" title="AbstractBeanFactory#doGetBean"></a>AbstractBeanFactory#doGetBean</h3><ol>
-<li><p>getSingleton(beanName) 检查缓存中是否存在, 如果不为空 执行getObjectForBeanInstance()方法, 因为获得bean要么是bean实例本身, 要么是FactoryBean, 如果是后者需要getObject();</p>
-</li>
-<li><p>如果缓存中不存在 检查必须是单例模式. 如果有父类BeanFactory. 调用父类的doGetBean()方法</p>
-</li>
-<li><p>将所有BeanDefinition转换为RootBeanDefinition</p>
-</li>
-<li><p>检查是否存在依赖, 如果存在将依赖bean注册到依赖注册Map里.再创建依赖的bean.</p>
-</li>
-<li><p>根据bean的sope做不同的处理,  但最后都会调用 AbstractAutowireCapableBeanFactory#createBean()方法</p>
-</li>
-<li><p>执行InstantiationAwareBeanPostProcessor#postProcessBeforeInstantiation()方法 如果改方法返回的bean不为null 就调用BeanPostProcessor#postProcessAfterInitialization 也就是bean创建后的行为  如果bean 不为空就结束了.   <strong>代理类就是在这里创建的比如AOP</strong></p>
-</li>
-<li><p>构建bean实例 并包装成BeanWrapper对象.  这里是在判断以何种方式创建实例. </p>
-<ol>
-<li>如果存在Supplier回调, 调用.get()方法 并包装成BeanWrapper返回</li>
-<li>如果存在factory-method指定的方法. 就调用指定的方法创建. </li>
-<li>如果SmartInstantiationAwareBeanPostProcessor#determineCandidateConstructors() 返回指定的构造器. 如果不为空. 使用构造函数自动装配的方式构建实例</li>
-<li>使用默认无参构造函数创建实例</li>
-</ol>
-</li>
-<li><p>MergedBeanDefinitionPostProcessor#postProcessMergedBeanDefinition</p>
-</li>
-<li><p>SmartInstantiationAwareBeanPostProcessor#getEarlyBeanReference()</p>
-</li>
-<li><p>populateBean()</p>
-</li>
-<li><p>initializeBean()</p>
-</li>
-</ol>
-<h3 id="创建bean实例的核心方法，填充bean实例"><a href="#创建bean实例的核心方法，填充bean实例" class="headerlink" title="创建bean实例的核心方法，填充bean实例"></a>创建bean实例的核心方法，填充bean实例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> Object <span class="title">createBean</span><span class="params">(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> BeanCreationException </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">			logger.trace(<span class="string">"Creating instance of bean '"</span> + beanName + <span class="string">"'"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		RootBeanDefinition mbdToUse = mbd;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Make sure bean class is actually resolved at this point, and</span></span><br><span class="line">		<span class="comment">// clone the bean definition in case of a dynamically resolved Class</span></span><br><span class="line">		<span class="comment">// which cannot be stored in the shared merged bean definition.</span></span><br><span class="line">        <span class="comment">//确保bean类在这一点上已经被解析，并且</span></span><br><span class="line">        <span class="comment">//在动态解析类的情况下克隆bean定义</span></span><br><span class="line">        <span class="comment">//不能存储在共享合并bean定义中</span></span><br><span class="line">		Class&lt;?&gt; resolvedClass = resolveBeanClass(mbd, beanName);</span><br><span class="line">		<span class="keyword">if</span> (resolvedClass != <span class="keyword">null</span> &amp;&amp; !mbd.hasBeanClass() &amp;&amp; mbd.getBeanClassName() != <span class="keyword">null</span>) &#123;</span><br><span class="line">			mbdToUse = <span class="keyword">new</span> RootBeanDefinition(mbd);</span><br><span class="line">			mbdToUse.setBeanClass(resolvedClass);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Prepare method overrides.</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//对override属性进行标记及验证</span></span><br><span class="line">			mbdToUse.prepareMethodOverrides();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanDefinitionValidationException ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanDefinitionStoreException(mbdToUse.getResourceDescription(),</span><br><span class="line">					beanName, <span class="string">"Validation of method overrides failed"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.</span></span><br><span class="line">            <span class="comment">//给BeanPostProcessors一个机会来返回代理来替代真正的实例   实质上是执行InstantiationAwareBeanPostProcessor接口的postProcessBeforeInstantiation()方法返回代理类, 然后执行BeanPostProcessor#postProcessAfterInitialization方法</span></span><br><span class="line">			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);</span><br><span class="line">            <span class="comment">// 当经过前置处理后的返回结果如果不为空，那么会直接略过后续bean的创建直接返回结果。这一特性虽然很容易被忽略，但是</span></span><br><span class="line">            <span class="comment">// 却起着至关重要的作用，我们熟知的AOP功能就是基于这里的判断的</span></span><br><span class="line">			<span class="keyword">if</span> (bean != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> bean;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbdToUse.getResourceDescription(), beanName,</span><br><span class="line">					<span class="string">"BeanPostProcessor before instantiation of bean failed"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 核心方法创建bean</span></span><br><span class="line">			Object beanInstance = doCreateBean(beanName, mbdToUse, args);</span><br><span class="line">			<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">				logger.trace(<span class="string">"Finished creating instance of bean '"</span> + beanName + <span class="string">"'"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> beanInstance;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanCreationException | ImplicitlyAppearedSingletonException ex) &#123;</span><br><span class="line">			<span class="comment">// A previously detected exception with proper bean creation context already,</span></span><br><span class="line">			<span class="comment">// or illegal singleton state to be communicated up to DefaultSingletonBeanRegistry.</span></span><br><span class="line">			<span class="keyword">throw</span> ex;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">					mbdToUse.getResourceDescription(), beanName, <span class="string">"Unexpected exception during bean creation"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">doCreateBean</span><span class="params">(<span class="keyword">final</span> String beanName, <span class="keyword">final</span> RootBeanDefinition mbd, <span class="keyword">final</span> @Nullable Object[] args)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> BeanCreationException </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Instantiate the bean.</span></span><br><span class="line">		BeanWrapper instanceWrapper = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">if</span> (mbd.isSingleton()) &#123;</span><br><span class="line">			instanceWrapper = <span class="keyword">this</span>.factoryBeanInstanceCache.remove(beanName);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (instanceWrapper == <span class="keyword">null</span>) &#123;</span><br><span class="line">			instanceWrapper = createBeanInstance(beanName, mbd, args);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">final</span> Object bean = instanceWrapper.getWrappedInstance();</span><br><span class="line">		Class&lt;?&gt; beanType = instanceWrapper.getWrappedClass();</span><br><span class="line">		<span class="keyword">if</span> (beanType != NullBean.class) &#123;</span><br><span class="line">			mbd.resolvedTargetType = beanType;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Allow post-processors to modify the merged bean definition.</span></span><br><span class="line">		<span class="keyword">synchronized</span> (mbd.postProcessingLock) &#123;</span><br><span class="line">			<span class="keyword">if</span> (!mbd.postProcessed) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbd.getResourceDescription(), beanName,</span><br><span class="line">							<span class="string">"Post-processing of merged bean definition failed"</span>, ex);</span><br><span class="line">				&#125;</span><br><span class="line">				mbd.postProcessed = <span class="keyword">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Eagerly cache singletons to be able to resolve circular references</span></span><br><span class="line">		<span class="comment">// even when triggered by lifecycle interfaces like BeanFactoryAware.</span></span><br><span class="line">		<span class="keyword">boolean</span> earlySingletonExposure = (mbd.isSingleton() &amp;&amp; <span class="keyword">this</span>.allowCircularReferences &amp;&amp;</span><br><span class="line">				isSingletonCurrentlyInCreation(beanName));</span><br><span class="line">		<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">			<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">				logger.trace(<span class="string">"Eagerly caching bean '"</span> + beanName +</span><br><span class="line">						<span class="string">"' to allow for resolving potential circular references"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			addSingletonFactory(beanName, () -&gt; getEarlyBeanReference(beanName, mbd, bean));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Initialize the bean instance.</span></span><br><span class="line">		Object exposedObject = bean;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			populateBean(beanName, mbd, instanceWrapper);</span><br><span class="line">			exposedObject = initializeBean(beanName, exposedObject, mbd);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">if</span> (ex <span class="keyword">instanceof</span> BeanCreationException &amp;&amp; beanName.equals(((BeanCreationException) ex).getBeanName())) &#123;</span><br><span class="line">				<span class="keyword">throw</span> (BeanCreationException) ex;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">						mbd.getResourceDescription(), beanName, <span class="string">"Initialization of bean failed"</span>, ex);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">			Object earlySingletonReference = getSingleton(beanName, <span class="keyword">false</span>);</span><br><span class="line">			<span class="keyword">if</span> (earlySingletonReference != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">if</span> (exposedObject == bean) &#123;</span><br><span class="line">					exposedObject = earlySingletonReference;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span> (!<span class="keyword">this</span>.allowRawInjectionDespiteWrapping &amp;&amp; hasDependentBean(beanName)) &#123;</span><br><span class="line">					String[] dependentBeans = getDependentBeans(beanName);</span><br><span class="line">					Set&lt;String&gt; actualDependentBeans = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(dependentBeans.length);</span><br><span class="line">					<span class="keyword">for</span> (String dependentBean : dependentBeans) &#123;</span><br><span class="line">						<span class="keyword">if</span> (!removeSingletonIfCreatedForTypeCheckOnly(dependentBean)) &#123;</span><br><span class="line">							actualDependentBeans.add(dependentBean);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">if</span> (!actualDependentBeans.isEmpty()) &#123;</span><br><span class="line">						<span class="keyword">throw</span> <span class="keyword">new</span> BeanCurrentlyInCreationException(beanName,</span><br><span class="line">								<span class="string">"Bean with name '"</span> + beanName + <span class="string">"' has been injected into other beans ["</span> +</span><br><span class="line">								StringUtils.collectionToCommaDelimitedString(actualDependentBeans) +</span><br><span class="line">								<span class="string">"] in its raw version as part of a circular reference, but has eventually been "</span> +</span><br><span class="line">								<span class="string">"wrapped. This means that said other beans do not use the final version of the "</span> +</span><br><span class="line">								<span class="string">"bean. This is often the result of over-eager type matching - consider using "</span> +</span><br><span class="line">								<span class="string">"'getBeanNamesOfType' with the 'allowEagerInit' flag turned off, for example."</span>);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Register bean as disposable.</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			registerDisposableBeanIfNecessary(beanName, bean, mbd);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanDefinitionValidationException ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">					mbd.getResourceDescription(), beanName, <span class="string">"Invalid destruction signature"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> exposedObject;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1873,7 +1904,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1884,7 +1915,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1895,7 +1926,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

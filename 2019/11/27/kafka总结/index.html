@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="kafka,">
 
 
 
@@ -79,16 +79,20 @@
 
 
 
-<meta name="description" content="学习工作技能,感悟生活细节">
-<meta property="og:type" content="website">
-<meta property="og:title" content="读书与做事">
-<meta property="og:url" content="http://www.ten951.com/tags/网络编程/index.html">
+<meta name="description" content="kafka基本概念broker消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群.  topic和partition在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位">
+<meta name="keywords" content="kafka">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kafka总结">
+<meta property="og:url" content="http://www.ten951.com/2019/11/27/kafka总结/index.html">
 <meta property="og:site_name" content="读书与做事">
-<meta property="og:description" content="学习工作技能,感悟生活细节">
+<meta property="og:description" content="kafka基本概念broker消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群.  topic和partition在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191127195734.png">
+<meta property="og:updated_time" content="2019-11-28T03:37:26.955Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="读书与做事">
-<meta name="twitter:description" content="学习工作技能,感悟生活细节">
+<meta name="twitter:title" content="kafka总结">
+<meta name="twitter:description" content="kafka基本概念broker消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群.  topic和partition在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位">
+<meta name="twitter:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191127195734.png">
 
 
 
@@ -118,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://www.ten951.com/tags/网络编程/">
+  <link rel="canonical" href="http://www.ten951.com/2019/11/27/kafka总结/">
 
 
 
 
 
-  <title>标签: 网络编程 | 读书与做事</title>
+  <title>kafka总结 | 读书与做事</title>
   
 
 
@@ -143,7 +147,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -269,78 +273,229 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>网络编程<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/11/27/kafka总结/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ten951">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="读书与做事">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/04/18/DNS解析/" itemprop="url">
-              
-                <span itemprop="name">DNS解析</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">kafka总结</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-18T17:16:58+08:00" content="2019-04-18">
-          04-18
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T15:56:37+08:00">
+                2019-11-27
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/04/16/TCP相关/" itemprop="url">
-              
-                <span itemprop="name">TCP相关</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-16T15:45:51+08:00" content="2019-04-16">
-          04-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h2 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><h4 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h4><p>消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群. </p>
+<h4 id="topic和partition"><a href="#topic和partition" class="headerlink" title="topic和partition"></a>topic和partition</h4><p>在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位置offset. 就是消息在文件中的偏移量. 是一个long类型数字. 是顺序写入磁盘的. 因此是非常高效的.</p>
+<p>多个分区是为了水平拓展. kafka是可以动态拓展分区数量的. </p>
+<p>在发送消息的时候. 可以指定分区发送. 也可以指定key发送.(在指定key的时候 是通过key的hash%分区数量其余 计算分区的, 为了负载均衡)<br>当发送的时候只指定了主题. 其他都没设置的时候. 以java客户端为例子, kafka客户端会为每个线程设置一个消息计数器. 通过消息计数器和分区数量取余确定消息分发到哪个分区上的. 确保了负载均衡.</p>
+<p>同时kafka客户端的分区函数我们是可以自己拓展的. 例如指定key的方式发送 在分区数量不变的情况下, 是能够保证相同的key都发送到相同的分区上的. 当时当分区数量发送变化时. 分发的分区必然会发送变化. 我们可以拓展成一致性哈希算法. </p>
+<p>在实际的工程项目中, 因为kafka能够保证分区上的消息有序性, 我们希望依赖这个特性来保证业务数据的有序性. 这时候确保消息发送到相同的分区上就很重要了.</p>
+<h4 id="producer"><a href="#producer" class="headerlink" title="producer"></a>producer</h4><p>kafka的发送也不是实时发送的. 而是根据batchSize大小发送的. 也就是异步批量发送. 以java客户端为例. 就能在源码中找到Deque这样的结果.<br>发送的数据的基本步骤是:</p>
+<ol>
+<li>检查topic是否可用和partition是否存在. </li>
+<li>对key和value进行序列化, 也就是转化为二进制数组. 典型的策略模式. 针对序列化的方式. 可以自己去实现. json的默认使用的jackson</li>
+<li>确定消息发送到哪个分区.</li>
+<li>估计消息的大小. 确保maxRequestSize和totalMemorySize的限制</li>
+<li>绑定回调和拦截器</li>
+<li>发送逻辑RecordAccumulator</li>
+</ol>
+<h5 id="RecordAccumulator"><a href="#RecordAccumulator" class="headerlink" title="RecordAccumulator"></a>RecordAccumulator</h5><p>在内部维护了一个CopyOnWriteMap, key是TopicPartition, value是Deque<producerbatch>.  </producerbatch></p>
+<p>发送逻辑:</p>
+<ol>
+<li>Deque<recordbatch> dq = getOrCreateDeque(tp);  获得记录块队列.并尝试添加; 因为使用的ArrayDeque. 线程不安全. so加锁, 尝试向队列中最后一个RecordBatch后面添加 成功就返回</recordbatch></li>
+<li>追加失败, 从 BufferPool 中申请新空间 </li>
+<li>dp加锁, 再次尝试向队列最后一个RecordBatch添加. 成功返回. </li>
+<li>追加失败 包装一个MemoryRecordsBuilder对象和ProducerBatch对象, 将ProducerBatch对象添加到dq队列.  返回结果. </li>
+</ol>
+<h5 id="接上文的producer"><a href="#接上文的producer" class="headerlink" title="接上文的producer"></a>接上文的producer</h5><p>在获得结果以后, 会检查batchSize是否已满. 如果已经满了. 唤醒sender发送消息. </p>
+<p>所以kafka的生产者发送消息的时候 借助多分区和负载均衡的存在. 可以提高集群的处理能力. 再加上使用端到端异步的批处理方式. 增加kafka的吞吐量</p>
+<p>我理解端到端值的是 使用的nio机制. 这里涉及到非阻塞I/O 和 零拷贝问题. </p>
+<h4 id="consumer和consumerGroup"><a href="#consumer和consumerGroup" class="headerlink" title="consumer和consumerGroup"></a>consumer和consumerGroup</h4><p>kafka的消费者使用的是主动拉取消息的模型. 这个模型的好处是. 可以根据消费者能力处理消息. 在经典的push模型中, 消息的发送速度是broker决定的. 很容易造成消费者消费消息慢. 导致阻塞的问题. 比例队列消息积压.</p>
+<p>pull模型的另一个好处是有助于批处理. </p>
+<p>当所有的消费者都在一个小组中时, 就变成了典型的queue模型. 当消费者分布在不同组时. 就变成了发布/订阅模型. </p>
+<p>同一个分区只能被同一个消费者组中的同一个消费者消费, 不能两个消费者同时消费一个分区. 这就意味着分区最好&gt;=消费者数, 否则会出现消费者饥饿的情况. </p>
+<p>为了给消费者带来可伸缩性和横向拓展能力. kafka提供了分区在均衡功能. </p>
+<ol>
+<li>当消费者崩溃或者关闭之后, 他负责的分区会被群组中的其他消费者负责. </li>
+<li>当添加新分区时也是同样的道理. </li>
+<li>当消费组中添加新的消费者. 也会触发再均衡. </li>
+</ol>
+<p>在均衡期间. 整个小组内的消费者会有一段时间的不可用. </p>
+<p>1：fetch.min.bytes，指定消费者从broker获取消息的最小字节数，即等到有足够的数据时才把它返回给消费者</p>
+<p>2：fetch.max.wait.ms，等待broker返回数据的最大时间，默认是500ms。fetch.min.bytes和fetch.max.wait.ms哪个条件先得到满足，就按照哪种方式返回数据</p>
+<p>3：max.partition.fetch.bytes，指定broker从每个partition中返回给消费者的最大字节数，默认1MB</p>
+<p>4：session.timeout.ms，指定消费者被认定死亡之前可以与服务器断开连接的时间，默认是3s</p>
+<p>5：auto.offset.reset，消费者在读取一个没有偏移量或者偏移量无效的情况下（因为消费者长时间失效，包含偏移量的记录已经过时并被删除）该作何处理。默认是latest（消费者从最新的记录开始读取数据）。另一个值是             　      earliest（消费者从起始位置读取partition的记录）</p>
+<p>6：enable.auto.commit，指定消费者是否自动提交偏移量，默认为true</p>
+<p>7：partition.assignment.strategy，指定partition如何分配给消费者，默认是Range。Range：把Topic的若干个连续的partition分配给消费者。RoundRobin：把Topic的所有partition逐个分配给消费者</p>
+<p>8：max.poll.records，单次调用poll方法能够返回的消息数量</p>
+<h5 id="提交和偏移量"><a href="#提交和偏移量" class="headerlink" title="提交和偏移量"></a>提交和偏移量</h5><p>分区和消费者分别维护着offset. 使用应答模式. 消费者把消费的消息offset提交给分区. 分区标记已经消费, 这种模式. </p>
+<p>可能会出现. 重复消费(分区的offset &lt; 消费者的offset, ) 消息丢失( 分区的offset &gt; 消费者的offset)</p>
+<p>提交便宜量有两种方式 .</p>
+<ol>
+<li>自动提交.auto.commit.interval.ms设置 默认值5s 优点是方便. 但是容易重复消费</li>
+<li>手动提交. 在消费完成之后. 提交commitSync. 缺点是. 在分区没有处理这个提交和给出应答, 消费者会被阻塞.</li>
+<li>手动异步提交. 只管发送. 不用broker响应. 由于是异步发送. 就不能保证offset的循序. 例如offset2000 在 3000之后到达broker. 这时正好在均衡. 消息会被重复消费. </li>
+</ol>
+<p>可以同步异步混合使用. 在正常while循环中使用 异步的 在消费者退出时. 同步提交一次. </p>
+<h3 id="kafka给的保证"><a href="#kafka给的保证" class="headerlink" title="kafka给的保证"></a>kafka给的保证</h3><h4 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h4><p>通过异步批处理. NIO 零拷贝. </p>
+<h4 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h4><p>kafka的高可靠性源于其健壮副本策略. </p>
+<h5 id="文件存储"><a href="#文件存储" class="headerlink" title="文件存储"></a>文件存储</h5><p>消息是以topic分类的. 在物理层面. topic由多个partition分组. partition还可以分成多个segment. 在kafka中每个分区对应着一个文件, 命名规则为topic_分区序号. 序号从0开始. segment是对分区文件的一种优化. 为了防止分区文件膨胀变大带来的维护成本. segment分为两部分. .index和.log. 每个分区中的segment都是从0开始到命名. 代表了存储消息的offset. 64位的. </p>
+<h5 id="复制原理和同步方式"><a href="#复制原理和同步方式" class="headerlink" title="复制原理和同步方式"></a>复制原理和同步方式</h5><p>在上层应用视角中 我们看到的最小单元就是分区文件. 其实是由一堆segment组成的.  整个partition文件中<strong>由一些列有序的、不可变的消息组成，这些消息被连续的追加到partition中</strong><br><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191127195734.png" alt="20191127195734.png"></p>
+<p>其中HW的意思是  高水位线. 这个线之后的消息.消费者是没有消费的. LED是表示该分区的最后一个消息offset</p>
+<p>为了提高消息的可靠性. kafka每个topic的partition有多个副本 其中n大于等于1是topic的复制因子的个数.Kafka通过多副本机制实现故障自动转移，当Kafka集群中一个broker失效情况下仍然保证服务可用。在Kafka中发生复制时确保partition的日志能有序地写到其他节点上，N个replicas中，其中一个replica为leader，其他都为follower, leader处理partition的所有读写请求，与此同时，follower会被动定期地去复制leader上的数据。</p>
+<p>当leader发送故障之后. 一个新的leader被选举出来并接受客户端消息写入. 并不是所有follower都有资格参与选举的. 只有在ISR列表中的follower才会参与选举的.  Leader负责维护ISR列表. 如果follower落后leader太多, 会被踢出</p>
+<h4 id="消息传递的保证"><a href="#消息传递的保证" class="headerlink" title="消息传递的保证"></a>消息传递的保证</h4><h4 id="副本和leader选举"><a href="#副本和leader选举" class="headerlink" title="副本和leader选举"></a>副本和leader选举</h4><h3 id="kafka和RabbitMq的比较"><a href="#kafka和RabbitMq的比较" class="headerlink" title="kafka和RabbitMq的比较"></a>kafka和RabbitMq的比较</h3>
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/kafka/" rel="tag"># kafka</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/14/动态规划之浅见/" rel="next" title="动态规划之浅见">
+                <i class="fa fa-chevron-left"></i> 动态规划之浅见
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -348,6 +503,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -368,8 +527,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -445,6 +613,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka"><span class="nav-number">1.</span> <span class="nav-text">kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">1.1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#broker"><span class="nav-number">1.1.1.</span> <span class="nav-text">broker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#topic和partition"><span class="nav-number">1.1.2.</span> <span class="nav-text">topic和partition</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#producer"><span class="nav-number">1.1.3.</span> <span class="nav-text">producer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#RecordAccumulator"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">RecordAccumulator</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#接上文的producer"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">接上文的producer</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#consumer和consumerGroup"><span class="nav-number">1.1.4.</span> <span class="nav-text">consumer和consumerGroup</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#提交和偏移量"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">提交和偏移量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka给的保证"><span class="nav-number">1.2.</span> <span class="nav-text">kafka给的保证</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#效率"><span class="nav-number">1.2.1.</span> <span class="nav-text">效率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#持久化"><span class="nav-number">1.2.2.</span> <span class="nav-text">持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#文件存储"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">文件存储</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#复制原理和同步方式"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">复制原理和同步方式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消息传递的保证"><span class="nav-number">1.2.3.</span> <span class="nav-text">消息传递的保证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#副本和leader选举"><span class="nav-number">1.2.4.</span> <span class="nav-text">副本和leader选举</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka和RabbitMq的比较"><span class="nav-number">1.3.</span> <span class="nav-text">kafka和RabbitMq的比较</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -591,6 +775,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
