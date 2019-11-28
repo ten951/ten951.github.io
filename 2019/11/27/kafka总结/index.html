@@ -88,7 +88,7 @@
 <meta property="og:description" content="kafka基本概念broker消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群.  topic和partition在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191127195734.png">
-<meta property="og:updated_time" content="2019-11-28T03:37:26.955Z">
+<meta property="og:updated_time" content="2019-11-28T03:38:43.008Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka总结">
 <meta name="twitter:description" content="kafka基本概念broker消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群.  topic和partition在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位">
@@ -382,6 +382,8 @@
 <p>在发送消息的时候. 可以指定分区发送. 也可以指定key发送.(在指定key的时候 是通过key的hash%分区数量其余 计算分区的, 为了负载均衡)<br>当发送的时候只指定了主题. 其他都没设置的时候. 以java客户端为例子, kafka客户端会为每个线程设置一个消息计数器. 通过消息计数器和分区数量取余确定消息分发到哪个分区上的. 确保了负载均衡.</p>
 <p>同时kafka客户端的分区函数我们是可以自己拓展的. 例如指定key的方式发送 在分区数量不变的情况下, 是能够保证相同的key都发送到相同的分区上的. 当时当分区数量发送变化时. 分发的分区必然会发送变化. 我们可以拓展成一致性哈希算法. </p>
 <p>在实际的工程项目中, 因为kafka能够保证分区上的消息有序性, 我们希望依赖这个特性来保证业务数据的有序性. 这时候确保消息发送到相同的分区上就很重要了.</p>
+<a id="more"></a>
+
 <h4 id="producer"><a href="#producer" class="headerlink" title="producer"></a>producer</h4><p>kafka的发送也不是实时发送的. 而是根据batchSize大小发送的. 也就是异步批量发送. 以java客户端为例. 就能在源码中找到Deque这样的结果.<br>发送的数据的基本步骤是:</p>
 <ol>
 <li>检查topic是否可用和partition是否存在. </li>
