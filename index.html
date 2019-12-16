@@ -524,27 +524,17 @@
 
       
         
-          
-            <h2 id="shell命令"><a href="#shell命令" class="headerlink" title="shell命令"></a>shell命令</h2><h3 id="基本的bash-shell命令"><a href="#基本的bash-shell命令" class="headerlink" title="基本的bash shell命令"></a>基本的bash shell命令</h3><h4 id="遍历文件"><a href="#遍历文件" class="headerlink" title="遍历文件"></a>遍历文件</h4><p><code>cd  路径名</code> 用以指定想切换到的目录名. 如果没有指定目标路径名. 则切换到当期用户的主目录<br><code>pwd</code> 可以显示出shell会话的当前目录，这个目录被称为当前工作目录。</p>
+          <h2 id="shell命令"><a href="#shell命令" class="headerlink" title="shell命令"></a>shell命令</h2><h3 id="基本的bash-shell命令"><a href="#基本的bash-shell命令" class="headerlink" title="基本的bash shell命令"></a>基本的bash shell命令</h3><h4 id="遍历文件"><a href="#遍历文件" class="headerlink" title="遍历文件"></a>遍历文件</h4><p><code>cd  路径名</code> 用以指定想切换到的目录名. 如果没有指定目标路径名. 则切换到当期用户的主目录<br><code>pwd</code> 可以显示出shell会话的当前目录，这个目录被称为当前工作目录。</p>
 <h4 id="文件和目录列表"><a href="#文件和目录列表" class="headerlink" title="文件和目录列表"></a>文件和目录列表</h4><p><code>ls -alf</code> 显示当前目录下的文件和目录  默认是按照字母排序的  -F 可以区分文件和目录 -A 显示隐藏文件  -l 长列表格式输出 </p>
 <p>可以依据名称过滤. ?匹配一个字符  *多个字符</p>
 <p><code>ls -l scri?t</code>  </p>
-<h4 id="处理文件"><a href="#处理文件" class="headerlink" title="处理文件"></a>处理文件</h4><ol>
-<li>创建文件  touch</li>
-<li>复制文件  cp  source destination   将source复制到destination. -i选项可以提示是否要覆盖 -r会递归的将目录下的子文件复制过去.</li>
-<li>链接文件 ln  分符号链接 -s   硬链接 </li>
-<li>重命名文件 mv 可以将文件或者目录移动到另一个位置或重新命名 移动文件不会影响文件的inode和时间戳 -i可以提示是否要覆盖</li>
-<li>删除文件 rm -i 提示 -f 强制删除 -rf是非常暴力的</li>
-<li>创建目录 mkdir -p 可以创建多级目录</li>
-<li>删除目录 rmdir 只能删除空目录. 结合rm命令使用</li>
-<li>查看文件类型 file</li>
-<li>查看整个文件  cat -n是给所有行添加行号. -b 只会给文本添加行号  more 分页查看整个文件  less是more的升级版本</li>
-<li>查看部分文件  tail 从尾部查看文件. 默认10行. -n可以指定行数 -f 它允许你在其他进程使用该文件时查看文件  head 从头部查看文件</li>
-</ol>
-<h4 id="检测程序"><a href="#检测程序" class="headerlink" title="检测程序"></a>检测程序</h4><p><code>ps</code> 命令 -e 显示所有运行在系统上的进程 -f 显示拓展输出  -l 更多信息长格式输出.它只能显示某个特定时间点的信息。如果想观察那些频繁换进换出的内存的进程趋势，用ps命令就不方便了。</p>
-<p><code>top</code> 命令 实时检测进程. </p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/09/linux和shell/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
