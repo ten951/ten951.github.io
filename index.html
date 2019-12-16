@@ -284,6 +284,313 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/12/16/mysql索引那些事一/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ten951">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="读书与做事">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/16/mysql索引那些事一/" itemprop="url">mysql索引那些事一</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-16T09:31:33+08:00">
+                2019-12-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/book/" itemprop="url" rel="index">
+                    <span itemprop="name">book</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="索引结构"><a href="#索引结构" class="headerlink" title="索引结构"></a>索引结构</h2><p>索引存在的目的是为了提高查询效率的. 就像书的目录一样的. 但是实现索引的方式却有很多种. 有三种比较常见的. 哈希表, 有序数组, 搜索树. </p>
+<h3 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a>哈希表</h3><p>哈希表是一种kv结构. 输入待查找的值key, 就可以得到对应的value. 实现的思路也很简单. 通过hash函数算出固定长度的整数和桶的长度求摸. 算出index桶的位置. 依据鸟巢原理可知. 必然存在重复的index. 我们拉出一条链表存储相同的hash值的情况. 当然解决哈希冲突的方式很多种, 除了拉链法还是有线性寻址法. ThreadLocalMap就是这种方案. </p>
+<p>对于等值查询. hash表示非常高效的. 但是对于范围查询. 就只能全表扫描了.  so  哈希索引适用于等值查询. 所以在很多nosql数据库很常见. </p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/16/mysql索引那些事一/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/12/09/linux和shell/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ten951">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="读书与做事">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/09/linux和shell/" itemprop="url">linux和shell</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T17:30:01+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/book/" itemprop="url" rel="index">
+                    <span itemprop="name">book</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="shell命令"><a href="#shell命令" class="headerlink" title="shell命令"></a>shell命令</h2><h3 id="基本的bash-shell命令"><a href="#基本的bash-shell命令" class="headerlink" title="基本的bash shell命令"></a>基本的bash shell命令</h3><h4 id="遍历文件"><a href="#遍历文件" class="headerlink" title="遍历文件"></a>遍历文件</h4><p><code>cd  路径名</code> 用以指定想切换到的目录名. 如果没有指定目标路径名. 则切换到当期用户的主目录<br><code>pwd</code> 可以显示出shell会话的当前目录，这个目录被称为当前工作目录。</p>
+<h4 id="文件和目录列表"><a href="#文件和目录列表" class="headerlink" title="文件和目录列表"></a>文件和目录列表</h4><p><code>ls -alf</code> 显示当前目录下的文件和目录  默认是按照字母排序的  -F 可以区分文件和目录 -A 显示隐藏文件  -l 长列表格式输出 </p>
+<p>可以依据名称过滤. ?匹配一个字符  *多个字符</p>
+<p><code>ls -l scri?t</code>  </p>
+<h4 id="处理文件"><a href="#处理文件" class="headerlink" title="处理文件"></a>处理文件</h4><ol>
+<li>创建文件  touch</li>
+<li>复制文件  cp  source destination   将source复制到destination. -i选项可以提示是否要覆盖 -r会递归的将目录下的子文件复制过去.</li>
+<li>链接文件 ln  分符号链接 -s   硬链接 </li>
+<li>重命名文件 mv 可以将文件或者目录移动到另一个位置或重新命名 移动文件不会影响文件的inode和时间戳 -i可以提示是否要覆盖</li>
+<li>删除文件 rm -i 提示 -f 强制删除 -rf是非常暴力的</li>
+<li>创建目录 mkdir -p 可以创建多级目录</li>
+<li>删除目录 rmdir 只能删除空目录. 结合rm命令使用</li>
+<li>查看文件类型 file</li>
+<li>查看整个文件  cat -n是给所有行添加行号. -b 只会给文本添加行号  more 分页查看整个文件  less是more的升级版本</li>
+<li>查看部分文件  tail 从尾部查看文件. 默认10行. -n可以指定行数 -f 它允许你在其他进程使用该文件时查看文件  head 从头部查看文件</li>
+</ol>
+<h4 id="检测程序"><a href="#检测程序" class="headerlink" title="检测程序"></a>检测程序</h4><p><code>ps</code> 命令 -e 显示所有运行在系统上的进程 -f 显示拓展输出  -l 更多信息长格式输出.它只能显示某个特定时间点的信息。如果想观察那些频繁换进换出的内存的进程趋势，用ps命令就不方便了。</p>
+<p><code>top</code> 命令 实时检测进程. </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/11/27/kafka总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1134,8 +1441,8 @@
 <li>启动spring.mvc和spring.resources开头的配置项</li>
 <li>加载InternalResourceViewResolver 内部试图资源解析器 我理解指定JSP位置的</li>
 <li>加载BeanNameViewResolver 支持通过BeanName匹配的视图解析器</li>
-<li>RequestMappingHandlerAdapter  适配器 注解功能的Controller适配器</li>
-<li>RequestMappingHandlerMapping 处理请求路径和controller对应关系的</li>
+<li>RequestMappingHandlerAdapter  适配器 注解功能的Controller适配器 执行业务逻辑的</li>
+<li>RequestMappingHandlerMapping 处理请求路径和controller对应关系的 对应关系读写是通过读写锁控制的.</li>
 <li>WelcomePageHandlerMapping</li>
 <li>FormattingConversionService</li>
 <li>Validator</li>
@@ -1496,313 +1803,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/09/22/hashMap和ConcurrentHashMap原理简介/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ten951">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="读书与做事">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/22/hashMap和ConcurrentHashMap原理简介/" itemprop="url">hashMap和ConcurrentHashMap原理简介</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-22T17:43:48+08:00">
-                2019-09-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/book/" itemprop="url" rel="index">
-                    <span itemprop="name">book</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="HashMap简述"><a href="#HashMap简述" class="headerlink" title="HashMap简述"></a>HashMap简述</h2><p>hashMap是基于哈希表的原理实现的. 通过key的哈希值和table数组的长度去摸计算数组的索引值. 定位key放在数组哪个位置. 如果算出来的index相同. 叫做哈希冲突. java的hashMap的解决方案时拉链法. 即形成链表. 应用尾插法. 将冲突的key加入链表尾部. 当链表的长度大于等于8时 将链表转化为红黑树. 因为太长的链表会影响查询效率. 当树的节点小于等于6时. 红黑树转化为链表.</p>
-<p>hashMap是线程不安全的. 主要体现在扩容和计算hashMap的size时. </p>
-<p>默认容量是 1&lt;&lt;4 也就是16  默认的负载因子0.75f threshold hashMap所能容纳的最大键值对. 超过这个值就扩容</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/09/22/hashMap和ConcurrentHashMap原理简介/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/09/21/JUC并发包-lucks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ten951">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="读书与做事">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/21/JUC并发包-lucks/" itemprop="url">JUC并发包-lucks</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-21T09:35:48+08:00">
-                2019-09-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/book/" itemprop="url" rel="index">
-                    <span itemprop="name">book</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="AQS简介"><a href="#AQS简介" class="headerlink" title="AQS简介"></a>AQS简介</h2><p>AbstractQueuedSynchronizer抽象类（以下简称AQS）是整个java.util.concurrent包的核心。在JDK1.5时，Doug Lea引入了J.U.C包，该包中的大多数同步器都是基于AQS来构建的。AQS框架提供了一套通用的机制来管理同步状态（synchronization state）、阻塞/唤醒线程、管理等待队列。</p>
-<p>我们所熟知的ReentrantLock、CountDownLatch、CyclicBarrier等同步器，其实都是通过内部类实现了AQS框架暴露的API，以此实现各类同步器功能。这些同步器的主要区别其实就是对同步状态（synchronization state）的定义不同。</p>
-<p>AQS框架，分离了构建同步器时的一系列关注点，它的所有操作都围绕着资源——同步状态（synchronization state）来展开，并替用户解决了如下问题：</p>
-<blockquote>
-<p>资源是可以被同时访问？还是在同一时间只能被一个线程访问？（共享/独占功能）</p>
-</blockquote>
-<blockquote>
-<p>访问资源的线程如何进行并发管理？（等待队列）</p>
-</blockquote>
-<blockquote>
-<p>如果线程等不及资源了，如何从等待队列退出？（超时/中断）</p>
-</blockquote>
-<p>这其实是一种典型的模板方法设计模式：父类（AQS框架）定义好骨架和内部操作细节，具体规则由子类去实现。<br>AQS框架将剩下的一个问题留给用户：</p>
-<p>什么是资源？如何定义资源是否可以被访问？</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/09/21/JUC并发包-lucks/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1853,7 +1853,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1875,7 +1875,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
