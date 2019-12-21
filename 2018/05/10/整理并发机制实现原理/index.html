@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="读书与做事">
 <meta property="og:description" content="volatile  在并发编程中synchronized和volatile都有重要的角色.volatile是轻量级的synchronized,它在多线程开发中保证了共享变量的可见性,  可见性的意思是当一个线程修改一个共享变量时,另外一个线程能读到这个修改的值    volatile变量修饰使用恰当的话,它比synchronized的使用和执行成本更低.因为没有线程的上下文的切换和调度.  vol">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-08T08:29:29.360Z">
+<meta property="og:updated_time" content="2019-12-21T13:20:23.889Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="整理并发机制实现原理">
 <meta name="twitter:description" content="volatile  在并发编程中synchronized和volatile都有重要的角色.volatile是轻量级的synchronized,它在多线程开发中保证了共享变量的可见性,  可见性的意思是当一个线程修改一个共享变量时,另外一个线程能读到这个修改的值    volatile变量修饰使用恰当的话,它比synchronized的使用和执行成本更低.因为没有线程的上下文的切换和调度.  vol">
@@ -402,6 +402,33 @@
 <li>加锁 线程执行同步块之前,JVM会先在当前线程的栈帧中创建用于存储锁记录的空间,并将对象头中的Mark Word复制到锁记录中,这个过程叫做 Displaced Mark Word. 然后线程尝试使用CAS将对象头中的Mark Word替换为指向锁记录的指针.如果成功,当前线程获得锁,如果失败,表现其他线程竞争锁,当前线程便尝试自旋来获取锁.</li>
 <li>解锁 会使用原子的CAS操作将Displaced Mark Work替换回到对象头,如果成功,泽表示没有竞争发生,如果失败,表示当前锁存在竞争,锁会膨胀成重量级锁,</li>
 </ul>
+<h4 id="锁升级的过程总结"><a href="#锁升级的过程总结" class="headerlink" title="锁升级的过程总结"></a>锁升级的过程总结</h4><p>1 线程加锁的时候会检查对象头部mark word的是模式是否为偏向模式. 如果是 则检查偏向锁的线程ID是否是自己. 是. 执行同步块.  如果不是自己. 则CAS的去修改线程ID 改为自己. 成功. 执行同步块. 如果失败. 说明存在竞争. 等待原持有线程走到安全点. 挂起线程. 撤销偏向锁, 执行锁升级逻辑. 升级完成后被阻塞在安全点上的线程继续执行同步代码块</p>
+<ol start="2">
+<li>轻量级锁加锁是在自己的线程栈中开辟一块区域 锁空间. 将对象头的mark word拷贝到自己的栈空间中. 并CAS改变指针指向自己的锁空间. 成功了.将对象头部的锁标志位改为轻量级锁状态. 进入同步块执行. 如果失败会检查mark word中指针指向的是否是自己的栈空间. 是. 执行同步块. 如果不是. 说明同步块再被其他线程执行. 自己会执行自旋操作. 这里的自旋是为了阻止cpu的上下文的切换. 如果在可允许的时间内自旋 还是没有获得锁. 说明竞争很激烈. 需要升级为重量级锁. 更改锁的标志位重量级标记. Mark Word中储存就是指向monitor对象的指针，当前线程以及后面等待锁的线程也要进入阻塞状态.  正在执行的线程执行完准备释放锁, 将栈空间中的信息CAS的替换会对象mark ward里. 成功说明没有竞争. 锁状态改为无锁状态. 如果失败. 说明其他线程正在执行锁升级操作. 释放锁的同时唤醒挂起的线程 </li>
+</ol>
+<h4 id="依赖于系统互斥量的重量级锁"><a href="#依赖于系统互斥量的重量级锁" class="headerlink" title="依赖于系统互斥量的重量级锁"></a>依赖于系统互斥量的重量级锁</h4><p>jdk内置锁是通过膨胀而来的. 从轻量级锁膨胀为重量级锁有几种情况. </p>
+<ol>
+<li>是加锁过程中. 我们知道轻量级锁加锁.是在自己线程栈中开辟锁空间. 将对象头部的Mark Ward复制到自己的锁空间中. 然后CAS的改变指针指向自己的堆栈. 如果线程AB同时竞争这个锁. 必然有一个改指针成功. 另一个失败. 比如B失败了. 他会自旋一段时间. 如果超过了时间设置依然获取不到锁. 那么就会执行锁膨胀.</li>
+<li>还有一种情况加锁失败, 会触发锁膨胀. 比如线程A获得轻量级锁成功. 正在执行同步块的内容. 这是线程B请求加锁. 将对象头替换到锁空间. CAS的改变指针时会失败. 然后检查这个指针发现不是指向自己的栈空间(这是为了避免重入的情况), 也会触发锁膨胀.</li>
+<li>轻量级锁解锁的过程. 解锁的过程是将锁空间的内容替换会对象头部. 并将对象设置为无锁状态.  如果替换会失败, 说明锁锁正在膨胀中. </li>
+</ol>
+<p>所谓的膨胀就是生成一个ObjectMonitor对象. 然后enter和exit的过程. </p>
+<h5 id="ObjectMonitor-enter"><a href="#ObjectMonitor-enter" class="headerlink" title="ObjectMonitor#enter"></a>ObjectMonitor#enter</h5><ol>
+<li>两次TryLock(这个方法就是CAS的改变ObjectMonitor中owner属性为自己) 为什么是两次是因为CPU的亲和度. 在CPU调度中. 在过去的时间内, 某个线程尝试获得某些资源失败. 那么系统在后面会倾向于将该资源分配给这个线程。这里我们前后两次执行，就是告诉系统当前线程「迫切」想要获得这个 cas 资源，如果可以用的话尽量分配给它。当然这种亲和力不是一种得到保证的协议，因此这种操作只能是一种积极的、并且人畜无害的操作。</li>
+<li>两次尝试失败了. 那么就要执行加入阻塞队列的操作了, 阻塞队列CXQ是一个双向的链表. 每个加锁失败的线程都会把自己包装成ObjectWaiter对象. 将自己添加到CXQ队列的头部. 这是是个死循环保护的. 直到CAS的改变为head才会break.  每次CAS失败都会伴随一次TryLock操作后再进入下次循环  CAS改变CXQ的头.</li>
+<li>当将线程添加到CXQ队列头部之后呢. 进入另外一个死循环. 在此TryLock 这里是判定Responsible指针是否为null, 如果为null, 将这个指针CAS的改为self. 如果不为空. 则判定这个指针是否指向自己. 如果指向自己的. 则表示自己代表的当期线程是等待加锁的第一个. 这里会执行一个巧妙的退避算法. 发现是自己. 第一次是休眠1ms. 第二次在上面的基础上*8一次类推. 直到达到默认值1000ms. 过当期线程发现Responsible不为空. 也不是自己 会无限期休眠下去. 直到获得锁的线程退出后. 唤醒自己.  当self获得锁资源后(即改owner属性成功后)会将responsible指针设置为null. 也就是说 第一个等待锁的线程都会在Responsible上不停滴休眠、检查锁. 这里的休眠是通过park(time)实现的. 当自己到时间被唤醒后 在此TryLock. 然后重复3的开头.</li>
+</ol>
+<h5 id="ObjectMonitor-exit"><a href="#ObjectMonitor-exit" class="headerlink" title="ObjectMonitor#exit"></a>ObjectMonitor#exit</h5><ol>
+<li>依据Knob_QMode不同的值. 执行不同的出队逻辑, 这里的出队表示CXQ和EntryList中出队.  EntryList和WaitSet是成对使用的. 表示调用wait和notify方法的. 当wait是释放锁资源, 将自己添加到WaitSet中, 执行notify将自己添加EntryList中.</li>
+<li>默认的Knob_Qmodeh是0. 他的逻辑是优先唤醒EntryList中的线程. 当EntryList中为空. 再去唤醒CXQ中的. 当然还有别的类型( 1 将CXQ反转一下,然后将新的队友赋值给_EntryList. 2 优先CXQ. 在EntryList.3 是将CXQ放在entryList之后, 4 是将CXQ放在EntryList之前)</li>
+</ol>
+<h3 id="Object-wait-和-notify-的实现机制"><a href="#Object-wait-和-notify-的实现机制" class="headerlink" title="Object wait 和 notify 的实现机制"></a>Object wait 和 notify 的实现机制</h3><h4 id="wait-意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待"><a href="#wait-意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待" class="headerlink" title="wait 意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待"></a>wait 意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待</h4><p>waitSet这个队列是个双向链表. 不同于cxq的是 CXQ是每次添加到对头. 而WaitSet是添加到队尾. 然后执行exit() 释放锁.</p>
+<h4 id="notify和notifyAll-将ObjectMonitor对象管理的waitSet队列里的等待线程唤醒"><a href="#notify和notifyAll-将ObjectMonitor对象管理的waitSet队列里的等待线程唤醒" class="headerlink" title="notify和notifyAll()  将ObjectMonitor对象管理的waitSet队列里的等待线程唤醒"></a>notify和notifyAll()  将ObjectMonitor对象管理的waitSet队列里的等待线程唤醒</h4><p>唤醒是从对头往后依次唤醒的  notifyAll()的实现就是多次执行notify. 次数就是WaitSet的个数</p>
+<p>这里需要注意的是唤醒后的线程 放在EntryList和CXQ哪里. 这里有不同的策略. </p>
+<p>默认情况是2. 如果EntryList为空. 第一个被唤醒的放入. 随后被唤醒的一次放入CXQ的头部.</p>
+<p>3策略和2很像. 只不过依次放入CXQ的尾部.</p>
+<p>0是 唤醒的节点加入EntryList形成双向链表. 每次被唤醒的添加到头部.<br>1 和0很像. 只不过是每次添加EntryList尾部.</p>
+<p>所以这里exit退出时唤醒策略JVM是优先EntryList. 然后在CXQ, 而JVM默认的notify加入EntryList的策略是 如果EntryList为空. 将其加入EntryList中. 其他被唤醒的依次添加到CXQ的头部. </p>
 <h3 id="原子操作的实现原理"><a href="#原子操作的实现原理" class="headerlink" title="原子操作的实现原理"></a>原子操作的实现原理</h3><p> 不能被进一步分割的最小粒子,而原子操作意为 <strong>不可被中断的一个或一系列操作</strong></p>
 <h4 id="处理器保证原子操作"><a href="#处理器保证原子操作" class="headerlink" title="处理器保证原子操作"></a>处理器保证原子操作</h4><p>处理器提供总线锁定和缓存锁定两个机制来保证复杂内存操作的原子性:</p>
 <ul>
@@ -601,7 +628,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile"><span class="nav-number">1.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">2.</span> <span class="nav-text">synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#锁的升级"><span class="nav-number">2.1.</span> <span class="nav-text">锁的升级</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#偏向锁"><span class="nav-number">2.1.1.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#轻量级锁"><span class="nav-number">2.1.2.</span> <span class="nav-text">轻量级锁</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原子操作的实现原理"><span class="nav-number">3.</span> <span class="nav-text">原子操作的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#处理器保证原子操作"><span class="nav-number">3.1.</span> <span class="nav-text">处理器保证原子操作</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile"><span class="nav-number">1.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">2.</span> <span class="nav-text">synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#锁的升级"><span class="nav-number">2.1.</span> <span class="nav-text">锁的升级</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#偏向锁"><span class="nav-number">2.1.1.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#轻量级锁"><span class="nav-number">2.1.2.</span> <span class="nav-text">轻量级锁</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#锁升级的过程总结"><span class="nav-number">2.2.</span> <span class="nav-text">锁升级的过程总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#依赖于系统互斥量的重量级锁"><span class="nav-number">2.3.</span> <span class="nav-text">依赖于系统互斥量的重量级锁</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ObjectMonitor-enter"><span class="nav-number">2.3.1.</span> <span class="nav-text">ObjectMonitor#enter</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ObjectMonitor-exit"><span class="nav-number">2.3.2.</span> <span class="nav-text">ObjectMonitor#exit</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-wait-和-notify-的实现机制"><span class="nav-number">3.</span> <span class="nav-text">Object wait 和 notify 的实现机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#wait-意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待"><span class="nav-number">3.1.</span> <span class="nav-text">wait 意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#notify和notifyAll-将ObjectMonitor对象管理的waitSet队列里的等待线程唤醒"><span class="nav-number">3.2.</span> <span class="nav-text">notify和notifyAll()  将ObjectMonitor对象管理的waitSet队列里的等待线程唤醒</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原子操作的实现原理"><span class="nav-number">4.</span> <span class="nav-text">原子操作的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#处理器保证原子操作"><span class="nav-number">4.1.</span> <span class="nav-text">处理器保证原子操作</span></a></li></ol></li></ol></div>
             
 
           </div>
