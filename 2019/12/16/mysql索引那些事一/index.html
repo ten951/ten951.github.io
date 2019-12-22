@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191216104834.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191216152926.png">
-<meta property="og:updated_time" content="2019-12-17T04:34:09.294Z">
+<meta property="og:updated_time" content="2019-12-22T08:17:57.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql索引那些事一">
 <meta name="twitter:description" content="索引结构索引存在的目的是为了提高查询效率的. 就像书的目录一样的. 但是实现索引的方式却有很多种. 有三种比较常见的. 哈希表, 有序数组, 搜索树.  哈希表哈希表是一种kv结构. 输入待查找的值key, 就可以得到对应的value. 实现的思路也很简单. 通过hash函数算出固定长度的整数和桶的长度求摸. 算出index桶的位置. 依据鸟巢原理可知. 必然存在重复的index. 我们拉出一条链">
@@ -431,7 +431,69 @@
 <p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191216152926.png" alt="20191216152926.png"></p>
 <p>在写完redo log的时候, 进入prepare阶段, 写完binlog, 事务进入commit阶段.  这就是2阶段提交. 至于何时将log刷新到磁盘. 要看具体参数设置.<code>innodb_flush_log_at_trx_commit = 1 保证每次commit都会将日志写入到磁盘. sync_binlog =1 保证了每次commit都会将日志写入到磁盘</code></p>
 <h2 id="为什么mysql会选错索引"><a href="#为什么mysql会选错索引" class="headerlink" title="为什么mysql会选错索引"></a>为什么mysql会选错索引</h2><p>选错索引是因为优化器选择索引的目的，是找到一个最优的执行方案，并用最小的代价去执行语句。在数据库里面，扫描行数是影响执行代价的因素之一。扫描的行数越少，意味着访问磁盘数据的次数越少，消耗的CPU资源越少.</p>
-<h2 id="针对大字符串怎么建立索引"><a href="#针对大字符串怎么建立索引" class="headerlink" title="针对大字符串怎么建立索引"></a>针对大字符串怎么建立索引</h2>
+<h2 id="针对大字符串怎么建立索引"><a href="#针对大字符串怎么建立索引" class="headerlink" title="针对大字符串怎么建立索引"></a>针对大字符串怎么建立索引</h2><h2 id="order-By的工作原理"><a href="#order-By的工作原理" class="headerlink" title="order By的工作原理"></a>order By的工作原理</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 打开 optimizer_trace，只对本线程有效 */</span></span><br><span class="line"><span class="keyword">SET</span> optimizer_trace=<span class="string">'enabled=on'</span>; </span><br><span class="line"><span class="comment">/* 执行语句 */</span></span><br><span class="line"><span class="keyword">select</span> word <span class="keyword">from</span> words <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">rand</span>() <span class="keyword">limit</span> <span class="number">3</span>;</span><br><span class="line"><span class="comment">/* 查看 OPTIMIZER_TRACE 输出 */</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="string">`information_schema`</span>.<span class="string">`OPTIMIZER_TRACE`</span>\G</span><br></pre></td></tr></table></figure>
+
+<p>假设有这样一张表:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`t`</span> (</span><br><span class="line">  <span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`city`</span> <span class="built_in">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`name`</span> <span class="built_in">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`age`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">  <span class="string">`addr`</span> <span class="built_in">varchar</span>(<span class="number">128</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>,</span><br><span class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>),</span><br><span class="line">  <span class="keyword">KEY</span> <span class="string">`city`</span> (<span class="string">`city`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span>;</span><br></pre></td></tr></table></figure>
+
+<p>需要执行sql<code>select city,name,age from t where city=&#39;杭州&#39; order by name limit 1000  ;</code></p>
+<h3 id="全字段排序"><a href="#全字段排序" class="headerlink" title="全字段排序"></a>全字段排序</h3><p>依据执行计划 explan返回的结果 Extra 这个字段中的“Using filesort”表示的就是需要排序，MySQL 会给每个线程分配一块内存用于排序，称为 sort_buffer。</p>
+<p>执行流程是 </p>
+<ol>
+<li>初始化sort_buffer, 确定放入 name city age三个字段. </li>
+<li>从索引city中拿到满足=’杭州’的第一个记录,拿到主键ID.</li>
+<li>到主键索引取出整行记录. 取出 name city age的值 存入sort_buffer.</li>
+<li>从索引city取下一条记录的ID.</li>
+<li>重复3.4直到. 满足city=’杭州’的记录用完, </li>
+<li>对sort_buffer中的数据进行快速排序. </li>
+<li>按照排序结果返回前1000条数据</li>
+</ol>
+<p>整个上面的过程是就是全字段排序. 是发生在内存中的. 也可能要借助外部排序. 取决于<code>sort_buffer_size</code>的大小 如果排序所需的内存小于这个值 在内存中排序. 如果大于则要借助磁盘临时文件完成,</p>
+<p>外部排序的算法是基于sort_buffer_size大小的. 例如我们要排序900m大小的数据. 但是内存给的buffer只有100m, 那么我们就需要借助外部磁盘临时文件进行排序, 分别对每个文件进行排序. 然后归并结果集即可. </p>
+<h3 id="rowid排序"><a href="#rowid排序" class="headerlink" title="rowid排序"></a>rowid排序</h3><p>不管是内存排序还是借助外部磁盘临时文件排序. 都有一个问题. 如果排序返回的字段过多的话. 那么sort_buffer中存储的行数就会越少, 要使用外部磁盘文件的数量也就会越多. 排序的性能就会很差.  所以单行很大.全字段排序的效果就不是很好, 这里就引入了rowid排序. </p>
+<p><code>max_length_for_sort_data</code> 这属性决定了当返回的字段加起来超过这个值的时候, 就会使用rowid排序. 不超过就会用全字段排序. </p>
+<p>city、name、age 这三个字段的定义总长度是 36，我把 max_length_for_sort_data 设置为 16，我们再来看看计算过程有什么改变。新的算法放入 sort_buffer 的字段，只有要排序的列（即 name 字段）和主键 id。</p>
+<p>那么排序流程就变成了了:</p>
+<ol>
+<li>初始化sort_buffer. 放入name和id两个字段</li>
+<li>从索引city中拿到满足=’杭州’的第一个记录,拿到主键ID.</li>
+<li>到主键索引中取出整行数据, 取出name和id连个字段, 放入sort_buffer.</li>
+<li>从索引city取出下一条记录的ID</li>
+<li>重复3.4直到满足city=’杭州’的数据用完,</li>
+<li>对sort_buffer中的数据按照name字段进行快速排序</li>
+<li>遍历排序结果中前1000条数据. 并按照主键ID回表查询, 取出city name age.返回给客户端.</li>
+</ol>
+<p>这里可以看出rowid排序增加了回表操作, 这涉及到了磁盘IO<br>如果 MySQL 实在是担心排序内存太小，会影响排序效率，才会采用 rowid 排序算法，这样排序过程中一次可以排序更多行，但是需要再回到原表去取数据。如果 MySQL 认为内存足够大，会优先选择全字段排序，把需要的字段都放到 sort_buffer 中，这样排序后就会直接从内存里面返回查询结果了，不用再回到原表去取数据。<br>这也就体现了 MySQL 的一个设计思想：如果内存够，就要多利用内存，尽量减少磁盘访问。对于 InnoDB 表来说，rowid 排序会要求回表多造成磁盘读，因此不会被优先选择。</p>
+<p>并不是所有order by语句都会涉及额外的排序, 如果在索引上取出的数据天然有序. 就不会需要排序的. 例如将index改为<code>alter table t add index city_user(city, name);</code> 这样在执行上面的sql语句. name字段在city相等的情况下, 就是天然递增的.</p>
+<p>整个查询的流程就变为了:</p>
+<ol>
+<li>通过city,name索引. 找到第一个满足的 拿到主键ID</li>
+<li>会主键索引树, 取出整行记录. 将city name age三个字段的值. 作为结果集的一部分直接返回.</li>
+<li>从city,name索引 继续取得下一条记录</li>
+<li>重复2,3步骤, 直到查到第1000条, 或者第一条不满足city=’杭州’的记录为止</li>
+</ol>
+<p>针对这个查询的sql, 我们还可以优化他, 让查询避免回表. 就是覆盖索引. 建立这样的索引<code>alter table t add index city_user_age(city, name, age);</code>. </p>
+<h3 id="随机排序"><a href="#随机排序" class="headerlink" title="随机排序"></a>随机排序</h3><p><code>mysql&gt; select word from words order by rand() limit 3;</code></p>
+<p>针对这样的sql 怎么优化呢. 在数量很小的情况. 这样的sql是不会出问题的. 当数量很大的时候. </p>
+<p>依据explain执行计划. 在Extra 字段显示 Using temporary，表示的是需要使用临时表；Using filesort，表示的是需要执行排序操作。 这里的意思是需要使用临时表进行额外的排序. 这里的filesort使用的全文排序还是rowid排序呢  答案是rowid. 因为临时表示内存中的表, 不需要涉及磁盘IO, 使用rowId排序能够跑正sort_buffer容纳更多的行信息. 减少外部磁盘临时文件的使用. </p>
+<p>这里的排序流程就变成了:</p>
+<ol>
+<li>构建临时表, 引擎是memory.表里有两个字段, 1 varchar类型W. 2. double类型的即为R.  没有建立索引</li>
+<li>从words表中 按照主键顺序取出所有word值. 假如10000行, 对于每个word, 调用rand函数 生成0到1之间的随机小数. 并将随机小数和word分别放入临时表的R和W字段中  扫描行数10000</li>
+<li>临时表中的10000条记录, 接下来要在临时表上按照R进行排序.</li>
+<li>构建一个sort_buffer buffer中有两个字段 1 double类型 2 整形信息</li>
+<li>从内存临时表中一行一行的取出R和位置信息(innodb中位置信息表示主键. memory引擎中表示下标. 可以理解为数组) 分别添加到buffer中的两个字段中. 扫描行数10000 -&gt; 20000</li>
+<li>在sort_buffer中 依据R字段进行排序. </li>
+<li>排序完成后 取出前三个. 去临时表中取出word值. 返回给客户端.  20000 -&gt; 20003</li>
+</ol>
+<p>这里的<code>order by rand() limit 3</code>使用了内存临时表, 内存临时表排序的时候使用了rowid排序</p>
+<p>并不是所有的临时表都是内存临时表, 这里使用参数控制的. <code>tmp_table_size</code>设置内存临时表大小 默认16m 超了  就变成磁盘临时表了 <code>internal_tmp_disk_storage_engine</code> 指定磁盘临时表的引擎 默认innoDB.</p>
+<p>这里还有一个问题 就是sort_buffer使用的排序是前面提到的归并排序 还是 新的排序算法. 因为这里的排序比较条数. `limit 3<code>3值很小. 也就是说10000条记录我们只要前三个. 如果使用归并, 就意味着要对10000条数据全排序, 得到10000条从小到大的有序数据. 这很浪费. 我们只需要前三条. 对于所有的求top问题. 我们知道要使用堆解决. 优先队列.    mysql也不例外. 这里使用了堆排序. 维护一个3元素个大小大顶堆. 遍历10000条记录, 例如原R和堆顶元素T, 如果</code>R &lt; T `` 我们删除T. 将R添加到堆中. 在遍历完成后. 堆中的三个算是就是最小的三个元素. </p>
+<h4 id="如何优化随机排序的sql呢"><a href="#如何优化随机排序的sql呢" class="headerlink" title="如何优化随机排序的sql呢"></a>如何优化随机排序的sql呢</h4><p>通过sql<code>select count(*) into words from t</code>  查出表words的所有记录条数.    在java代码中生成三个随机数. 分别乘以C的总行数. 得到数 Y1(1001) Y2(3005) Y3(5000) 执行三个sql</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> word <span class="keyword">from</span> words <span class="keyword">limit</span> Y1，<span class="number">1</span>；</span><br><span class="line"><span class="keyword">select</span> word <span class="keyword">from</span> words <span class="keyword">limit</span> Y2，<span class="number">1</span>；</span><br><span class="line"><span class="keyword">select</span> word <span class="keyword">from</span> words <span class="keyword">limit</span> Y3，<span class="number">1</span>；</span><br></pre></td></tr></table></figure>
+
+<p>这样我们依然会得到三个随机的单词,  但是却避免了随机排序. </p>
+
       
     </div>
     
@@ -617,7 +679,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引结构"><span class="nav-number">1.</span> <span class="nav-text">索引结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#哈希表"><span class="nav-number">1.1.</span> <span class="nav-text">哈希表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序数组"><span class="nav-number">1.2.</span> <span class="nav-text">有序数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索树"><span class="nav-number">1.3.</span> <span class="nav-text">搜索树</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#innodb的索引结构"><span class="nav-number">2.</span> <span class="nav-text">innodb的索引结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#回表"><span class="nav-number">2.1.</span> <span class="nav-text">回表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆盖索引"><span class="nav-number">2.2.</span> <span class="nav-text">覆盖索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最左前缀原则"><span class="nav-number">2.3.</span> <span class="nav-text">最左前缀原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引下推"><span class="nav-number">2.4.</span> <span class="nav-text">索引下推</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#普通索引和唯一索引的选择问题"><span class="nav-number">3.</span> <span class="nav-text">普通索引和唯一索引的选择问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#change-buffer和redo-log的区别"><span class="nav-number">3.1.</span> <span class="nav-text">change buffer和redo log的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#redo-log-和binlog"><span class="nav-number">3.1.1.</span> <span class="nav-text">redo log 和binlog</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么mysql会选错索引"><span class="nav-number">4.</span> <span class="nav-text">为什么mysql会选错索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#针对大字符串怎么建立索引"><span class="nav-number">5.</span> <span class="nav-text">针对大字符串怎么建立索引</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#索引结构"><span class="nav-number">1.</span> <span class="nav-text">索引结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#哈希表"><span class="nav-number">1.1.</span> <span class="nav-text">哈希表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序数组"><span class="nav-number">1.2.</span> <span class="nav-text">有序数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索树"><span class="nav-number">1.3.</span> <span class="nav-text">搜索树</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#innodb的索引结构"><span class="nav-number">2.</span> <span class="nav-text">innodb的索引结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#回表"><span class="nav-number">2.1.</span> <span class="nav-text">回表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#覆盖索引"><span class="nav-number">2.2.</span> <span class="nav-text">覆盖索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最左前缀原则"><span class="nav-number">2.3.</span> <span class="nav-text">最左前缀原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引下推"><span class="nav-number">2.4.</span> <span class="nav-text">索引下推</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#普通索引和唯一索引的选择问题"><span class="nav-number">3.</span> <span class="nav-text">普通索引和唯一索引的选择问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#change-buffer和redo-log的区别"><span class="nav-number">3.1.</span> <span class="nav-text">change buffer和redo log的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#redo-log-和binlog"><span class="nav-number">3.1.1.</span> <span class="nav-text">redo log 和binlog</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么mysql会选错索引"><span class="nav-number">4.</span> <span class="nav-text">为什么mysql会选错索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#针对大字符串怎么建立索引"><span class="nav-number">5.</span> <span class="nav-text">针对大字符串怎么建立索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#order-By的工作原理"><span class="nav-number">6.</span> <span class="nav-text">order By的工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全字段排序"><span class="nav-number">6.1.</span> <span class="nav-text">全字段排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rowid排序"><span class="nav-number">6.2.</span> <span class="nav-text">rowid排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#随机排序"><span class="nav-number">6.3.</span> <span class="nav-text">随机排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何优化随机排序的sql呢"><span class="nav-number">6.3.1.</span> <span class="nav-text">如何优化随机排序的sql呢</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
