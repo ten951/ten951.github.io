@@ -223,7 +223,7 @@
       
         <li class="menu-item menu-item-search">
           
-            <a href="javascript:;" class="popup-trigger">
+            <a href="javascript:;" class="st-search-show-outputs">
           
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
@@ -238,20 +238,18 @@
   
     <div class="site-search">
       
-  <div class="popup search-popup local-search-popup">
-  <div class="local-search-header clearfix">
-    <span class="search-icon">
-      <i class="fa fa-search"></i>
-    </span>
-    <span class="popup-btn-close">
-      <i class="fa fa-times-circle"></i>
-    </span>
-    <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
-    </div>
-  </div>
-  <div id="local-search-result"></div>
-</div>
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'd4wyZSo7yuApusRGBgso','2.0.0');
+</script>
 
 
 
@@ -291,10 +289,10 @@
         
           <div class="tag-cloud">
             <div class="tag-cloud-title">
-                目前共计 16 个标签
+                目前共计 19 个标签
             </div>
             <div class="tag-cloud-tags">
-              <a href="/tags/Effective-Java/" style="font-size: 15.6px; color: #a7a7a7">Effective Java</a> <a href="/tags/JVM/" style="font-size: 15.6px; color: #a7a7a7">JVM</a> <a href="/tags/MySql/" style="font-size: 12px; color: #ccc">MySql</a> <a href="/tags/Spring/" style="font-size: 26.4px; color: #363636">Spring</a> <a href="/tags/java8/" style="font-size: 12px; color: #ccc">java8</a> <a href="/tags/kafka/" style="font-size: 12px; color: #ccc">kafka</a> <a href="/tags/linux/" style="font-size: 12px; color: #ccc">linux</a> <a href="/tags/spring/" style="font-size: 12px; color: #ccc">spring</a> <a href="/tags/thread/" style="font-size: 19.2px; color: #818181">thread</a> <a href="/tags/中间件/" style="font-size: 12px; color: #ccc">中间件</a> <a href="/tags/分布式缓存/" style="font-size: 22.8px; color: #5c5c5c">分布式缓存</a> <a href="/tags/并发包/" style="font-size: 19.2px; color: #818181">并发包</a> <a href="/tags/数据库/" style="font-size: 22.8px; color: #5c5c5c">数据库</a> <a href="/tags/数据结构/" style="font-size: 30px; color: #111">数据结构</a> <a href="/tags/算法/" style="font-size: 12px; color: #ccc">算法</a> <a href="/tags/网络编程/" style="font-size: 15.6px; color: #a7a7a7">网络编程</a>
+              <a href="/tags/Effective-Java/" style="font-size: 15.6px; color: #a7a7a7">Effective Java</a> <a href="/tags/JVM/" style="font-size: 15.6px; color: #a7a7a7">JVM</a> <a href="/tags/MySql/" style="font-size: 12px; color: #ccc">MySql</a> <a href="/tags/Spring/" style="font-size: 26.4px; color: #363636">Spring</a> <a href="/tags/java8/" style="font-size: 12px; color: #ccc">java8</a> <a href="/tags/k8s/" style="font-size: 12px; color: #ccc">k8s</a> <a href="/tags/kafka/" style="font-size: 12px; color: #ccc">kafka</a> <a href="/tags/linux/" style="font-size: 12px; color: #ccc">linux</a> <a href="/tags/netty/" style="font-size: 12px; color: #ccc">netty</a> <a href="/tags/spring/" style="font-size: 12px; color: #ccc">spring</a> <a href="/tags/thread/" style="font-size: 19.2px; color: #818181">thread</a> <a href="/tags/zookeeper/" style="font-size: 12px; color: #ccc">zookeeper</a> <a href="/tags/中间件/" style="font-size: 12px; color: #ccc">中间件</a> <a href="/tags/分布式缓存/" style="font-size: 22.8px; color: #5c5c5c">分布式缓存</a> <a href="/tags/并发包/" style="font-size: 19.2px; color: #818181">并发包</a> <a href="/tags/数据库/" style="font-size: 22.8px; color: #5c5c5c">数据库</a> <a href="/tags/数据结构/" style="font-size: 30px; color: #111">数据结构</a> <a href="/tags/算法/" style="font-size: 12px; color: #ccc">算法</a> <a href="/tags/网络编程/" style="font-size: 15.6px; color: #a7a7a7">网络编程</a>
             </div>
           </div>
         
@@ -354,7 +352,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -365,7 +363,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -376,7 +374,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

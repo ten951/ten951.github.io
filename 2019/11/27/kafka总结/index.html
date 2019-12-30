@@ -88,7 +88,7 @@
 <meta property="og:description" content="kafka基本概念broker消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群.  topic和partition在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191127195734.png">
-<meta property="og:updated_time" content="2019-11-28T12:31:53.974Z">
+<meta property="og:updated_time" content="2019-12-24T14:16:31.449Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka总结">
 <meta name="twitter:description" content="kafka基本概念broker消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群.  topic和partition在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位">
@@ -226,7 +226,7 @@
       
         <li class="menu-item menu-item-search">
           
-            <a href="javascript:;" class="popup-trigger">
+            <a href="javascript:;" class="st-search-show-outputs">
           
             
               <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
@@ -241,20 +241,18 @@
   
     <div class="site-search">
       
-  <div class="popup search-popup local-search-popup">
-  <div class="local-search-header clearfix">
-    <span class="search-icon">
-      <i class="fa fa-search"></i>
-    </span>
-    <span class="popup-btn-close">
-      <i class="fa fa-times-circle"></i>
-    </span>
-    <div class="local-search-input-wrapper">
-      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
-    </div>
-  </div>
-  <div id="local-search-result"></div>
-</div>
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'd4wyZSo7yuApusRGBgso','2.0.0');
+</script>
 
 
 
@@ -449,6 +447,19 @@
 <p>kafka的消息传递 通过确认应答机制, 消息本身在kafka中的持久性和高可用性. 依赖副本的复制和lead而的选举机制.</p>
 <h3 id="kafka和RabbitMq的比较"><a href="#kafka和RabbitMq的比较" class="headerlink" title="kafka和RabbitMq的比较"></a>kafka和RabbitMq的比较</h3><p>对于优先级队列 死信队列 延迟队列这些kafka是不支持的. Rabbit支持. </p>
 <p>消费模式 kafka是拉取方式.  rabbitmq是推送和拉取都支持<br>消息回溯 kafka是支持offset和时间戳两种方式 rabbit不支持. 标记删除就真的删除了<br>消息积存. kafka是支持的.  rabbitmq也支持. 但是会影响性能<br>消息顺序 kafka支持分区顺序  rabbitmq不支持<br>幂等性  单分区单消费者支持     不支持<br>事务 支持                   支持</p>
+<h3 id="producer发送数据如何保证数据不丢失"><a href="#producer发送数据如何保证数据不丢失" class="headerlink" title="producer发送数据如何保证数据不丢失"></a>producer发送数据如何保证数据不丢失</h3><h4 id="分区数据的可靠性"><a href="#分区数据的可靠性" class="headerlink" title="分区数据的可靠性"></a>分区数据的可靠性</h4><p>每个分区都是有多个副本. 其中leader负责读写. follower负责备份. 当leader 挂了, 会选举follower成为leader继续处理客户端写入的情况.</p>
+<p>分区和副本数据的存储: 每个分区为自己的消息维护offset. 分区的数据存储是分段的. 分.log和.index文件. 默认.log文件1个G一个. 都是append的. 超过1G.新增一个文件. 文件名就是这个文件最小的偏移量. </p>
+<p>消息的offset和文件名上的数字比较, 就能确定消息存储的在哪个log文件中. 查找log文件的位置. 需要用到index文件,这个文件是和log同名的. 里面记录的数据是消息(offset, 消息所在log里的offset,数据长度)<br>这样就能读取到消息了.</p>
+<p>在leader挂了之后 并不是所有的follower都可以参与选举的. 会维护一个ISR列表, 1 首先是或者点. 和zk通信的. 2 通过一个ms值控制的. 上次去leader拉取数据的距离现在的时间. </p>
+<p>在分区存储上 保证了数据的可靠性</p>
+<p>生产者在发送消息的时候 是基于acks的 当设置为</p>
+<ol start="0">
+<li>只管发. 会丢失数据. </li>
+<li>只要leader写完就个返回. 也会丢数据. </li>
+</ol>
+<p> -1或者all的时候. 是当所有isr成员写完. 才会给应答 这种会数据会重复. </p>
+<p>在新版本中 分区增加了幂等性. 在生产者和分区建立连接时. 会给生产者生产一个pid. 在发送数据时. 会携带(pid,partition,sn号). 分区会检查者三个值. 发现已经存在就不会序列化了. 这个机制只能保证单次会话单个分区的幂等性</p>
+<p>但是pid会发生变化.分区变化了</p>
 
       
     </div>
@@ -568,7 +579,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -579,7 +590,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -590,7 +601,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -639,7 +650,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka"><span class="nav-number">1.</span> <span class="nav-text">kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">1.1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#broker"><span class="nav-number">1.1.1.</span> <span class="nav-text">broker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#topic和partition"><span class="nav-number">1.1.2.</span> <span class="nav-text">topic和partition</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#producer"><span class="nav-number">1.1.3.</span> <span class="nav-text">producer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#RecordAccumulator"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">RecordAccumulator</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#接上文的producer"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">接上文的producer</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#consumer和consumerGroup"><span class="nav-number">1.1.4.</span> <span class="nav-text">consumer和consumerGroup</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#提交和偏移量"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">提交和偏移量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka给的保证"><span class="nav-number">1.2.</span> <span class="nav-text">kafka给的保证</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#效率"><span class="nav-number">1.2.1.</span> <span class="nav-text">效率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#持久化"><span class="nav-number">1.2.2.</span> <span class="nav-text">持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#文件存储"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">文件存储</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#复制原理和同步方式挤我leader选举"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">复制原理和同步方式挤我leader选举</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消息传递的保证"><span class="nav-number">1.2.3.</span> <span class="nav-text">消息传递的保证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka和RabbitMq的比较"><span class="nav-number">1.3.</span> <span class="nav-text">kafka和RabbitMq的比较</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka"><span class="nav-number">1.</span> <span class="nav-text">kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">1.1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#broker"><span class="nav-number">1.1.1.</span> <span class="nav-text">broker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#topic和partition"><span class="nav-number">1.1.2.</span> <span class="nav-text">topic和partition</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#producer"><span class="nav-number">1.1.3.</span> <span class="nav-text">producer</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#RecordAccumulator"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">RecordAccumulator</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#接上文的producer"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">接上文的producer</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#consumer和consumerGroup"><span class="nav-number">1.1.4.</span> <span class="nav-text">consumer和consumerGroup</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#提交和偏移量"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">提交和偏移量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka给的保证"><span class="nav-number">1.2.</span> <span class="nav-text">kafka给的保证</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#效率"><span class="nav-number">1.2.1.</span> <span class="nav-text">效率</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#持久化"><span class="nav-number">1.2.2.</span> <span class="nav-text">持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#文件存储"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">文件存储</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#复制原理和同步方式挤我leader选举"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">复制原理和同步方式挤我leader选举</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消息传递的保证"><span class="nav-number">1.2.3.</span> <span class="nav-text">消息传递的保证</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka和RabbitMq的比较"><span class="nav-number">1.3.</span> <span class="nav-text">kafka和RabbitMq的比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#producer发送数据如何保证数据不丢失"><span class="nav-number">1.4.</span> <span class="nav-text">producer发送数据如何保证数据不丢失</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分区数据的可靠性"><span class="nav-number">1.4.1.</span> <span class="nav-text">分区数据的可靠性</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
