@@ -87,10 +87,13 @@
 <meta property="og:site_name" content="读书与做事">
 <meta property="og:description" content="shell命令基本的bash shell命令遍历文件cd  路径名 用以指定想切换到的目录名. 如果没有指定目标路径名. 则切换到当期用户的主目录pwd 可以显示出shell会话的当前目录，这个目录被称为当前工作目录。 文件和目录列表ls -alf 显示当前目录下的文件和目录  默认是按照字母排序的  -F 可以区分文件和目录 -A 显示隐藏文件  -l 长列表格式输出  可以依据名称过滤. ?匹">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-16T06:16:53.063Z">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200103151519.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200103195211.png">
+<meta property="og:updated_time" content="2020-01-05T10:19:16.091Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux和shell">
 <meta name="twitter:description" content="shell命令基本的bash shell命令遍历文件cd  路径名 用以指定想切换到的目录名. 如果没有指定目标路径名. 则切换到当期用户的主目录pwd 可以显示出shell会话的当前目录，这个目录被称为当前工作目录。 文件和目录列表ls -alf 显示当前目录下的文件和目录  默认是按照字母排序的  -F 可以区分文件和目录 -A 显示隐藏文件  -l 长列表格式输出  可以依据名称过滤. ?匹">
+<meta name="twitter:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200103151519.png">
 
 
 
@@ -399,7 +402,23 @@
 </ol>
 <h4 id="检测程序"><a href="#检测程序" class="headerlink" title="检测程序"></a>检测程序</h4><p><code>ps</code> 命令 -e 显示所有运行在系统上的进程 -f 显示拓展输出  -l 更多信息长格式输出.它只能显示某个特定时间点的信息。如果想观察那些频繁换进换出的内存的进程趋势，用ps命令就不方便了。</p>
 <p><code>top</code> 命令 实时检测进程. </p>
-
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200103151519.png" alt="20200103151519.png"></p>
+<p>第一行top 系统当期实际. 系统运行了多长时间. 登录的用户数. 及其系统的平均负载 最近1分钟 5分钟 最近15分钟<br>第二行task 显式多少进程处于运行, 休眠 停止或是僵化状态(僵化状态是指 子进程运行完成, 父进程还没有响应)<br>第三行cpu 显式了进程所属的宿主 是用户us还是系统sy和进程的状态.运行 空间和等待. 将CPU分成几类输出.</p>
+<p>us表示用户态<br>ni表示低优先级用户态<br>sy 内核态<br>id  空间状态 不包含等待IO的时间<br>wa 等待IO的时间<br>hi 处理硬中断的时间<br>si 处理软中断的时间<br>st 在虚拟机中的时间. 被其他虚拟机占用的时间<br>guest 虚拟化运行其他操作系统的时间 运行虚拟机的cpu时间<br>gnice 低优先级虚拟机的时间</p>
+<p>cpu使用率的计算 = 1 - 空间时间/总CPU时间</p>
+<p>实际上为了计算CPU使用率. 性能工具一般会取间隔一段时间例如3秒的两次值, 做差后, 在计算出这段时间内的平均CPU使用率. </p>
+<p>平均CPU使用率 = 1 - (空间时间new-空间时间old)/(总cpu时间new-总cpu时间old);</p>
+<h3 id="什么是平均负载"><a href="#什么是平均负载" class="headerlink" title="什么是平均负载"></a>什么是平均负载</h3><p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200103195211.png" alt="20200103195211.png"></p>
+<p>通过直径top或者uptime命令. 可以了解系统的负载情况. 最后的三个数组依次是 1,5,15分钟的平均负载. </p>
+<p>平均负载和CPU使用率是不一样的. 平均负载是指单位时间内, 系统处于可运行状态和不可中断状态的平均进程数. 也就是平均活跃进程数. </p>
+<p>可运行状态时值正在使用CPU或者正在等待CPU的进程, 也就是常用ps命令看到的处于R状态的进程. </p>
+<p>不可中断状态的进程则是正在处于内核态关键流程中的进程. 并且这些流程是不可打断的. 比如最常见的是等待硬件设备的IO设备. 也就是PS命令看到的D状态的进程. 例如一个进程向磁盘读写数据.为了保证数据一致性, 在得到回复前, 它是不能被其他进程或者中断锻打的. 这个时候的进程就处于不可中断的.不可中断状态实际上是系统对进程和硬件设备的一种保护机制.</p>
+<p>我们还是要回到平均负载的含义上来，平均负载是指单位时间内，处于可运行状态和不可中断状态的进程数。所以，它不仅包括了正在使用 CPU 的进程，还包括等待 CPU 和等待 I/O 的进程。</p>
+<p>而 CPU 使用率，是单位时间内 CPU 繁忙情况的统计，跟平均负载并不一定完全对应。</p>
+<p>比如：CPU 密集型进程，使用大量 CPU 会导致平均负载升高，此时这两者是一致的；</p>
+<p>I/O 密集型进程，等待 I/O 也会导致平均负载升高，但 CPU 使用率不一定很高；</p>
+<p>大量等待 CPU 的进程调度也会导致平均负载升高，此时的 CPU 使用率也会比较高。</p>
+<h3 id="CPU上下文切换是什么意思"><a href="#CPU上下文切换是什么意思" class="headerlink" title="CPU上下文切换是什么意思"></a>CPU上下文切换是什么意思</h3>
       
     </div>
     
@@ -589,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#shell命令"><span class="nav-number">1.</span> <span class="nav-text">shell命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本的bash-shell命令"><span class="nav-number">1.1.</span> <span class="nav-text">基本的bash shell命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#遍历文件"><span class="nav-number">1.1.1.</span> <span class="nav-text">遍历文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件和目录列表"><span class="nav-number">1.1.2.</span> <span class="nav-text">文件和目录列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#处理文件"><span class="nav-number">1.1.3.</span> <span class="nav-text">处理文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测程序"><span class="nav-number">1.1.4.</span> <span class="nav-text">检测程序</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#shell命令"><span class="nav-number">1.</span> <span class="nav-text">shell命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本的bash-shell命令"><span class="nav-number">1.1.</span> <span class="nav-text">基本的bash shell命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#遍历文件"><span class="nav-number">1.1.1.</span> <span class="nav-text">遍历文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件和目录列表"><span class="nav-number">1.1.2.</span> <span class="nav-text">文件和目录列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#处理文件"><span class="nav-number">1.1.3.</span> <span class="nav-text">处理文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测程序"><span class="nav-number">1.1.4.</span> <span class="nav-text">检测程序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是平均负载"><span class="nav-number">1.2.</span> <span class="nav-text">什么是平均负载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU上下文切换是什么意思"><span class="nav-number">1.3.</span> <span class="nav-text">CPU上下文切换是什么意思</span></a></li></ol></li></ol></div>
             
 
           </div>
