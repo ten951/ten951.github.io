@@ -290,6 +290,306 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/11/27/kafka总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ten951">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="读书与做事">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/27/kafka总结/" itemprop="url">kafka总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T15:56:37+08:00">
+                2019-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><h4 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h4><p>消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群. </p>
+<h4 id="topic和partition"><a href="#topic和partition" class="headerlink" title="topic和partition"></a>topic和partition</h4><p>在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位置offset. 就是消息在文件中的偏移量. 是一个long类型数字. 是顺序写入磁盘的. 因此是非常高效的.</p>
+<p>多个分区是为了水平拓展. kafka是可以动态拓展分区数量的. </p>
+<p>在发送消息的时候. 可以指定分区发送. 也可以指定key发送.(在指定key的时候 是通过key的hash%分区数量其余 计算分区的, 为了负载均衡)<br>当发送的时候只指定了主题. 其他都没设置的时候. 以java客户端为例子, kafka客户端会为每个线程设置一个消息计数器. 通过消息计数器和分区数量取余确定消息分发到哪个分区上的. 确保了负载均衡.</p>
+<p>同时kafka客户端的分区函数我们是可以自己拓展的. 例如指定key的方式发送 在分区数量不变的情况下, 是能够保证相同的key都发送到相同的分区上的. 当时当分区数量发送变化时. 分发的分区必然会发送变化. 我们可以拓展成一致性哈希算法. </p>
+<p>在实际的工程项目中, 因为kafka能够保证分区上的消息有序性, 我们希望依赖这个特性来保证业务数据的有序性. 这时候确保消息发送到相同的分区上就很重要了.</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/11/27/kafka总结/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/11/14/动态规划之浅见/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ten951">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="读书与做事">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/14/动态规划之浅见/" itemprop="url">动态规划之浅见</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-14T13:07:21+08:00">
+                2019-11-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mind/" itemprop="url" rel="index">
+                    <span itemprop="name">mind</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><p>动态规划与分治法相似，都是通过组合子问题的解来求解原问题。</p>
+<p>分治法将问题划分为不互相交子问题，递归的求解子问题，再将他们组合起来，求出原问题的解。</p>
+<p>与之相反，动态规划应用于子问题重叠的情况，即不同的子问题具有公共的 子子问题。这种情况下分治法会重复的求解那些公共的子子问题。而动态规划算法对每个子子问题只求解一次，将其存放在某一个表格中，无需每次求解一个子子问题时都重新计算，避免了不必要的计算工作，特别是当问题规模比较大的时候，在时间上有显著的区别</p>
+<p>动态规划用来求解最优化问题。这类问题可以有很多可行的解，每个解都有一个值，我们希望需找具有最优值（最大或最小）的解。当然可能同时存在多个最优解（同时最大，或同时最小），动态规划只要求找到其中一个就好了。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/11/14/动态规划之浅见/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/11/02/feign-okhttp3的原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1513,369 +1813,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/09/18/Bean之AbstractBeanFactory类createBean方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ten951">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="读书与做事">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/18/Bean之AbstractBeanFactory类createBean方法/" itemprop="url">Bean之AbstractBeanFactory类createBean方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-18T10:12:19+08:00">
-                2019-09-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="SpringBean的生命周期"><a href="#SpringBean的生命周期" class="headerlink" title="SpringBean的生命周期"></a>SpringBean的生命周期</h3><ol>
-<li>Object sharedInstance = getSingleton(beanName);  singletonObjects 单例缓存池. earlySingletonObjects还没有填充属性的缓冲池  用于解决循环依赖</li>
-<li>public Object getSingleton(String beanName, ObjectFactory&lt;?&gt; singletonFactory){} <ol>
-<li>singletonsCurrentlyInDestruction检查是在创建中</li>
-<li>beforeSingletonCreation 标记bean在创建中  打标记. 放在特定的集合中</li>
-<li>createBean() 创建bean<ol>
-<li>InstantiationAwareBeanPostProcessor#postProcessBeforeInstantiation 它在目标对象实例化之前调用，该方法的返回值类型是Object，我们可以返回任何类型的值。由于这个时候目标对象还未实例化，所以这个返回值可以用来代替原本该生成的目标对象的实例(比如代理对象)。如果该方法的返回值代替原本该生成的目标对象，后续只有postProcessAfterInitialization方法会调用，其它方法不再调用；否则按照正常的流程走</li>
-<li>SmartInstantiationAwareBeanPostProcessor#determineCandidateConstructors 选择合适的构造器，比如类有多个构造器，可以实现这个方法选择合适的构造器并用于实例化对象。该方法在postProcessBeforeInstantiation方法和postProcessAfterInstantiation方法之间调用，如果postProcessBeforeInstantiation方法返回了一个新的实例代替了原本该生成的实例，那么该方法会被忽略</li>
-<li>createBeanInstance new对象</li>
-<li>MergedBeanDefinitionPostProcessor#postProcessMergedBeanDefinition bean在合并Bean定义之后调用</li>
-<li>SmartInstantiationAwareBeanPostProcessor#getEarlyBeanReference 主要用于解决循环引用问题。比如ReferenceA实例内部有ReferenceB的引用，ReferenceB实例内部有ReferenceA的引用。首先先实例化ReferenceA，实例化完成之后提前把这个bean暴露在ObjectFactory中，然后populate属性，这个时候发现需要ReferenceB。然后去实例化ReferenceB，在实例化ReferenceB的时候它需要ReferenceA的实例才能继续，这个时候就会去ObjectFactory中找出了ReferenceA实例，ReferenceB顺利实例化。ReferenceB实例化之后，ReferenceA的populate属性过程也成功完成，注入了ReferenceB实例。提前把这个bean暴露在ObjectFactory中，这个ObjectFactory获取的实例就是通过getEarlyBeanReference方法得到的</li>
-<li>populateBean 填充对象属性</li>
-<li>InstantiationAwareBeanPostProcessor#postProcessAfterInstantiation  在目标对象实例化之后调用，这个时候对象已经被实例化，但是该实例的属性还未被设置，都是null。如果该方法返回false，会忽略属性值的设置；如果返回true，会按照正常流程设置属性值</li>
-<li>InstantiationAwareBeanPostProcessor#postProcessProperties 对属性值进行修改(这个时候属性值还未被设置，但是我们可以修改原本该设置进去的属性值)。如果postProcessAfterInstantiation方法返回false，该方法不会被调用。可以在该方法内对属性值进行修改</li>
-<li>initializeBean</li>
-<li>BeanPostProcessor#postProcessBeforeInitialization</li>
-<li>InitializingBean#afterPropertiesSet</li>
-<li>bean自定义配置的init-method</li>
-<li>BeanPostProcessor#postProcessAfterInitialization</li>
-</ol>
-</li>
-<li>afterSingletonCreation 标记创建完成, 清除创建标记 在特定的集合中删除</li>
-<li>singletonObjects.add 将创建完成的具有完整生命周期的类添加到单例缓存池</li>
-<li>earlySingletonObjects 删除生命周期不完成整缓存的</li>
-<li>将FactoryBean添加到singletonFactories缓存中</li>
-</ol>
-</li>
-<li>创建出来的bean可能是bean也可能是FactoryBean. 如果是FactoryBean就执行getObject()方法</li>
-<li>BeanPostProcessor#postProcessAfterInitialization()</li>
-<li>销毁</li>
-</ol>
-<p>bean的声明周期总结: 1 查看缓存 2 标记正在创建中  3 4. 创建java对象 5. 填充对象.  6 执行bean init方法   7 清除创建中标记  8 如果是FactoryBean. 执行geiObject方法. 9 销毁    </p>
-<h3 id="AbstractBeanFactory-doGetBean"><a href="#AbstractBeanFactory-doGetBean" class="headerlink" title="AbstractBeanFactory#doGetBean"></a>AbstractBeanFactory#doGetBean</h3><ol>
-<li><p>getSingleton(beanName) 检查缓存中是否存在, 如果不为空 执行getObjectForBeanInstance()方法, 因为获得bean要么是bean实例本身, 要么是FactoryBean, 如果是后者需要getObject();</p>
-</li>
-<li><p>如果缓存中不存在 检查必须是单例模式. 如果有父类BeanFactory. 调用父类的doGetBean()方法</p>
-</li>
-<li><p>将所有BeanDefinition转换为RootBeanDefinition</p>
-</li>
-<li><p>检查是否存在依赖, 如果存在将依赖bean注册到依赖注册Map里.再创建依赖的bean.</p>
-</li>
-<li><p>根据bean的sope做不同的处理,  但最后都会调用 AbstractAutowireCapableBeanFactory#createBean()方法</p>
-</li>
-<li><p>执行InstantiationAwareBeanPostProcessor#postProcessBeforeInstantiation()方法 如果改方法返回的bean不为null 就调用BeanPostProcessor#postProcessAfterInitialization 也就是bean创建后的行为  如果bean 不为空就结束了.   <strong>代理类就是在这里创建的比如AOP</strong></p>
-</li>
-<li><p>构建bean实例 并包装成BeanWrapper对象.  这里是在判断以何种方式创建实例. </p>
-<ol>
-<li>如果存在Supplier回调, 调用.get()方法 并包装成BeanWrapper返回</li>
-<li>如果存在factory-method指定的方法. 就调用指定的方法创建. </li>
-<li>如果SmartInstantiationAwareBeanPostProcessor#determineCandidateConstructors() 返回指定的构造器. 如果不为空. 使用构造函数自动装配的方式构建实例</li>
-<li>使用默认无参构造函数创建实例</li>
-</ol>
-</li>
-<li><p>MergedBeanDefinitionPostProcessor#postProcessMergedBeanDefinition</p>
-</li>
-<li><p>SmartInstantiationAwareBeanPostProcessor#getEarlyBeanReference()</p>
-</li>
-<li><p>populateBean()</p>
-</li>
-<li><p>initializeBean()</p>
-</li>
-</ol>
-<h3 id="创建bean实例的核心方法，填充bean实例"><a href="#创建bean实例的核心方法，填充bean实例" class="headerlink" title="创建bean实例的核心方法，填充bean实例"></a>创建bean实例的核心方法，填充bean实例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> Object <span class="title">createBean</span><span class="params">(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> BeanCreationException </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">			logger.trace(<span class="string">"Creating instance of bean '"</span> + beanName + <span class="string">"'"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		RootBeanDefinition mbdToUse = mbd;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Make sure bean class is actually resolved at this point, and</span></span><br><span class="line">		<span class="comment">// clone the bean definition in case of a dynamically resolved Class</span></span><br><span class="line">		<span class="comment">// which cannot be stored in the shared merged bean definition.</span></span><br><span class="line">        <span class="comment">//确保bean类在这一点上已经被解析，并且</span></span><br><span class="line">        <span class="comment">//在动态解析类的情况下克隆bean定义</span></span><br><span class="line">        <span class="comment">//不能存储在共享合并bean定义中</span></span><br><span class="line">		Class&lt;?&gt; resolvedClass = resolveBeanClass(mbd, beanName);</span><br><span class="line">		<span class="keyword">if</span> (resolvedClass != <span class="keyword">null</span> &amp;&amp; !mbd.hasBeanClass() &amp;&amp; mbd.getBeanClassName() != <span class="keyword">null</span>) &#123;</span><br><span class="line">			mbdToUse = <span class="keyword">new</span> RootBeanDefinition(mbd);</span><br><span class="line">			mbdToUse.setBeanClass(resolvedClass);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Prepare method overrides.</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//对override属性进行标记及验证</span></span><br><span class="line">			mbdToUse.prepareMethodOverrides();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanDefinitionValidationException ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanDefinitionStoreException(mbdToUse.getResourceDescription(),</span><br><span class="line">					beanName, <span class="string">"Validation of method overrides failed"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.</span></span><br><span class="line">            <span class="comment">//给BeanPostProcessors一个机会来返回代理来替代真正的实例   实质上是执行InstantiationAwareBeanPostProcessor接口的postProcessBeforeInstantiation()方法返回代理类, 然后执行BeanPostProcessor#postProcessAfterInitialization方法</span></span><br><span class="line">			Object bean = resolveBeforeInstantiation(beanName, mbdToUse);</span><br><span class="line">            <span class="comment">// 当经过前置处理后的返回结果如果不为空，那么会直接略过后续bean的创建直接返回结果。这一特性虽然很容易被忽略，但是</span></span><br><span class="line">            <span class="comment">// 却起着至关重要的作用，我们熟知的AOP功能就是基于这里的判断的</span></span><br><span class="line">			<span class="keyword">if</span> (bean != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> bean;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbdToUse.getResourceDescription(), beanName,</span><br><span class="line">					<span class="string">"BeanPostProcessor before instantiation of bean failed"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 核心方法创建bean</span></span><br><span class="line">			Object beanInstance = doCreateBean(beanName, mbdToUse, args);</span><br><span class="line">			<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">				logger.trace(<span class="string">"Finished creating instance of bean '"</span> + beanName + <span class="string">"'"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> beanInstance;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanCreationException | ImplicitlyAppearedSingletonException ex) &#123;</span><br><span class="line">			<span class="comment">// A previously detected exception with proper bean creation context already,</span></span><br><span class="line">			<span class="comment">// or illegal singleton state to be communicated up to DefaultSingletonBeanRegistry.</span></span><br><span class="line">			<span class="keyword">throw</span> ex;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">					mbdToUse.getResourceDescription(), beanName, <span class="string">"Unexpected exception during bean creation"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">doCreateBean</span><span class="params">(<span class="keyword">final</span> String beanName, <span class="keyword">final</span> RootBeanDefinition mbd, <span class="keyword">final</span> @Nullable Object[] args)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> BeanCreationException </span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Instantiate the bean.</span></span><br><span class="line">		BeanWrapper instanceWrapper = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">if</span> (mbd.isSingleton()) &#123;</span><br><span class="line">			instanceWrapper = <span class="keyword">this</span>.factoryBeanInstanceCache.remove(beanName);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (instanceWrapper == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="comment">//case 1 new对象. 这时还是个普通的java对象</span></span><br><span class="line">			instanceWrapper = createBeanInstance(beanName, mbd, args);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">final</span> Object bean = instanceWrapper.getWrappedInstance();</span><br><span class="line">		Class&lt;?&gt; beanType = instanceWrapper.getWrappedClass();</span><br><span class="line">		<span class="keyword">if</span> (beanType != NullBean.class) &#123;</span><br><span class="line">			mbd.resolvedTargetType = beanType;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Allow post-processors to modify the merged bean definition.</span></span><br><span class="line">		<span class="keyword">synchronized</span> (mbd.postProcessingLock) &#123;</span><br><span class="line">			<span class="keyword">if</span> (!mbd.postProcessed) &#123;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbd.getResourceDescription(), beanName,</span><br><span class="line">							<span class="string">"Post-processing of merged bean definition failed"</span>, ex);</span><br><span class="line">				&#125;</span><br><span class="line">				mbd.postProcessed = <span class="keyword">true</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Eagerly cache singletons to be able to resolve circular references</span></span><br><span class="line">		<span class="comment">// even when triggered by lifecycle interfaces like BeanFactoryAware.</span></span><br><span class="line">		<span class="keyword">boolean</span> earlySingletonExposure = (mbd.isSingleton() &amp;&amp; <span class="keyword">this</span>.allowCircularReferences &amp;&amp;</span><br><span class="line">				isSingletonCurrentlyInCreation(beanName));</span><br><span class="line">		<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">			<span class="keyword">if</span> (logger.isTraceEnabled()) &#123;</span><br><span class="line">				logger.trace(<span class="string">"Eagerly caching bean '"</span> + beanName +</span><br><span class="line">						<span class="string">"' to allow for resolving potential circular references"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			addSingletonFactory(beanName, () -&gt; getEarlyBeanReference(beanName, mbd, bean));</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Initialize the bean instance.</span></span><br><span class="line">		Object exposedObject = bean;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			populateBean(beanName, mbd, instanceWrapper);</span><br><span class="line">			<span class="comment">//case 2 </span></span><br><span class="line">			exposedObject = initializeBean(beanName, exposedObject, mbd);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">			<span class="keyword">if</span> (ex <span class="keyword">instanceof</span> BeanCreationException &amp;&amp; beanName.equals(((BeanCreationException) ex).getBeanName())) &#123;</span><br><span class="line">				<span class="keyword">throw</span> (BeanCreationException) ex;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">						mbd.getResourceDescription(), beanName, <span class="string">"Initialization of bean failed"</span>, ex);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (earlySingletonExposure) &#123;</span><br><span class="line">			Object earlySingletonReference = getSingleton(beanName, <span class="keyword">false</span>);</span><br><span class="line">			<span class="keyword">if</span> (earlySingletonReference != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">if</span> (exposedObject == bean) &#123;</span><br><span class="line">					exposedObject = earlySingletonReference;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span> (!<span class="keyword">this</span>.allowRawInjectionDespiteWrapping &amp;&amp; hasDependentBean(beanName)) &#123;</span><br><span class="line">					String[] dependentBeans = getDependentBeans(beanName);</span><br><span class="line">					Set&lt;String&gt; actualDependentBeans = <span class="keyword">new</span> LinkedHashSet&lt;&gt;(dependentBeans.length);</span><br><span class="line">					<span class="keyword">for</span> (String dependentBean : dependentBeans) &#123;</span><br><span class="line">						<span class="keyword">if</span> (!removeSingletonIfCreatedForTypeCheckOnly(dependentBean)) &#123;</span><br><span class="line">							actualDependentBeans.add(dependentBean);</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">if</span> (!actualDependentBeans.isEmpty()) &#123;</span><br><span class="line">						<span class="keyword">throw</span> <span class="keyword">new</span> BeanCurrentlyInCreationException(beanName,</span><br><span class="line">								<span class="string">"Bean with name '"</span> + beanName + <span class="string">"' has been injected into other beans ["</span> +</span><br><span class="line">								StringUtils.collectionToCommaDelimitedString(actualDependentBeans) +</span><br><span class="line">								<span class="string">"] in its raw version as part of a circular reference, but has eventually been "</span> +</span><br><span class="line">								<span class="string">"wrapped. This means that said other beans do not use the final version of the "</span> +</span><br><span class="line">								<span class="string">"bean. This is often the result of over-eager type matching - consider using "</span> +</span><br><span class="line">								<span class="string">"'getBeanNamesOfType' with the 'allowEagerInit' flag turned off, for example."</span>);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Register bean as disposable.</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			registerDisposableBeanIfNecessary(beanName, bean, mbd);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (BeanDefinitionValidationException ex) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(</span><br><span class="line">					mbd.getResourceDescription(), beanName, <span class="string">"Invalid destruction signature"</span>, ex);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> exposedObject;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="createBeanInstance-构建java对象"><a href="#createBeanInstance-构建java对象" class="headerlink" title="createBeanInstance  构建java对象"></a>createBeanInstance  构建java对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> BeanWrapper <span class="title">createBeanInstance</span><span class="params">(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// Make sure bean class is actually resolved at this point.</span></span><br><span class="line">		Class&lt;?&gt; beanClass = resolveBeanClass(mbd, beanName);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (beanClass != <span class="keyword">null</span> &amp;&amp; !Modifier.isPublic(beanClass.getModifiers()) &amp;&amp; !mbd.isNonPublicAccessAllowed()) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbd.getResourceDescription(), beanName,</span><br><span class="line">					<span class="string">"Bean class isn't public, and non-public access not allowed: "</span> + beanClass.getName());</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		Supplier&lt;?&gt; instanceSupplier = mbd.getInstanceSupplier();</span><br><span class="line">		<span class="keyword">if</span> (instanceSupplier != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> obtainFromSupplier(instanceSupplier, beanName);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// case 1  使用工厂方法创建java对象</span></span><br><span class="line">		<span class="keyword">if</span> (mbd.getFactoryMethodName() != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> instantiateUsingFactoryMethod(beanName, mbd, args);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Shortcut when re-creating the same bean...</span></span><br><span class="line">		<span class="keyword">boolean</span> resolved = <span class="keyword">false</span>;</span><br><span class="line">		<span class="keyword">boolean</span> autowireNecessary = <span class="keyword">false</span>;</span><br><span class="line">		<span class="keyword">if</span> (args == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">synchronized</span> (mbd.constructorArgumentLock) &#123;</span><br><span class="line">				<span class="keyword">if</span> (mbd.resolvedConstructorOrFactoryMethod != <span class="keyword">null</span>) &#123;</span><br><span class="line">					resolved = <span class="keyword">true</span>;</span><br><span class="line">					autowireNecessary = mbd.constructorArgumentsResolved;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (resolved) &#123;</span><br><span class="line">			<span class="keyword">if</span> (autowireNecessary) &#123;</span><br><span class="line">				<span class="keyword">return</span> autowireConstructor(beanName, mbd, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">return</span> instantiateBean(beanName, mbd);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Candidate constructors for autowiring?</span></span><br><span class="line">		Constructor&lt;?&gt;[] ctors = determineConstructorsFromBeanPostProcessors(beanClass, beanName);</span><br><span class="line">		<span class="keyword">if</span> (ctors != <span class="keyword">null</span> || mbd.getResolvedAutowireMode() == AUTOWIRE_CONSTRUCTOR ||</span><br><span class="line">				mbd.hasConstructorArgumentValues() || !ObjectUtils.isEmpty(args)) &#123;</span><br><span class="line">			<span class="keyword">return</span> autowireConstructor(beanName, mbd, ctors, args);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Preferred constructors for default construction?</span></span><br><span class="line">		ctors = mbd.getPreferredConstructors();</span><br><span class="line">		<span class="keyword">if</span> (ctors != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> autowireConstructor(beanName, mbd, ctors, <span class="keyword">null</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// case 3 使用默认构造函数创建java对象</span></span><br><span class="line">		<span class="comment">// No special handling: simply use no-arg constructor.</span></span><br><span class="line">		<span class="keyword">return</span> instantiateBean(beanName, mbd);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="populateBean-填充对象"><a href="#populateBean-填充对象" class="headerlink" title="populateBean 填充对象"></a>populateBean 填充对象</h3><h3 id="initializeBean-构建spring-Bean"><a href="#initializeBean-构建spring-Bean" class="headerlink" title="initializeBean 构建spring Bean"></a>initializeBean 构建spring Bean</h3>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2019/09/12/Autowired注解背后的故事/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ten951">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="读书与做事">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/12/Autowired注解背后的故事/" itemprop="url">@Autowired注解背后的故事</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-12T15:30:31+08:00">
-                2019-09-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="spring注入方式"><a href="#spring注入方式" class="headerlink" title="spring注入方式"></a>spring注入方式</h2><h3 id="0-AUTOWIRE-NO"><a href="#0-AUTOWIRE-NO" class="headerlink" title="0 AUTOWIRE_NO"></a>0 AUTOWIRE_NO</h3><h3 id="1-AUTOWIRE-BY-NAME-AutowiredMethodElement"><a href="#1-AUTOWIRE-BY-NAME-AutowiredMethodElement" class="headerlink" title="1 AUTOWIRE_BY_NAME AutowiredMethodElement"></a>1 AUTOWIRE_BY_NAME AutowiredMethodElement</h3><p>通过名字注入. 规则是set开头. 后面的要和bean的名字相同.  例如setOrderService,  并且OrderService必须是被spring ioc容器托管的.</p>
-<p><code>method.invoke(bean, arguments);</code></p>
-<h3 id="2-AUTOWIRE-BY-TYPE-AutowiredFieldElement"><a href="#2-AUTOWIRE-BY-TYPE-AutowiredFieldElement" class="headerlink" title="2 AUTOWIRE_BY_TYPE AutowiredFieldElement"></a>2 AUTOWIRE_BY_TYPE AutowiredFieldElement</h3><p>通过类型注入, <code>field.set(bean, value);</code></p>
-<h3 id="3-AUTOWIRE-CONSTRUCTOR-构造函数注入"><a href="#3-AUTOWIRE-CONSTRUCTOR-构造函数注入" class="headerlink" title="3 AUTOWIRE_CONSTRUCTOR  构造函数注入"></a>3 AUTOWIRE_CONSTRUCTOR  构造函数注入</h3><p>通过构造函数注入. 但是会选择合适的构造函数的.  这个的执行是在new java对象的时候执行的并且bd的注入模型必须是3</p>
-<h2 id="AutowiredAnnotationBeanPostProcessor类注册和执行"><a href="#AutowiredAnnotationBeanPostProcessor类注册和执行" class="headerlink" title="AutowiredAnnotationBeanPostProcessor类注册和执行"></a>AutowiredAnnotationBeanPostProcessor类注册和执行</h2><p>AutowiredAnnotationBeanPostProcessor是BeanPostProcessor的子类. so它的执行就是是在AbstractApplicationContext#refresh():</p>
-<p>1.registerBeanPostProcessors(beanFactory)-&gt; PostProcessorRegistrationDelegate.registerBeanPostProcessors(beanFactory, this) 将BeanPostProcessors类的注入初始化了</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/09/12/Autowired注解背后的故事/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1921,7 +1863,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1932,7 +1874,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1943,7 +1885,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
