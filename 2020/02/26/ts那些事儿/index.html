@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="ts基础类型 布尔值  let isDone: boolean = false;  数字  1234let decLiteral: number = 6;let hexLiteral: number = 0xf00d;let binaryLiteral: number = 0b1010;let octalLiteral: number = 0o744;  字符串 let name: string">
+<meta name="description" content="ts基础类型 布尔值  let isDone: boolean = false; 数字 1234let decLiteral: number = 6;let hexLiteral: number = 0xf00d;let binaryLiteral: number = 0b1010;let octalLiteral: number = 0o744;">
 <meta name="keywords" content="typescript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ts那些事儿">
 <meta property="og:url" content="http://www.ten951.com/2020/02/26/ts那些事儿/index.html">
 <meta property="og:site_name" content="读书与做事">
-<meta property="og:description" content="ts基础类型 布尔值  let isDone: boolean = false;  数字  1234let decLiteral: number = 6;let hexLiteral: number = 0xf00d;let binaryLiteral: number = 0b1010;let octalLiteral: number = 0o744;  字符串 let name: string">
+<meta property="og:description" content="ts基础类型 布尔值  let isDone: boolean = false; 数字 1234let decLiteral: number = 6;let hexLiteral: number = 0xf00d;let binaryLiteral: number = 0b1010;let octalLiteral: number = 0o744;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-02-27T06:27:44.836Z">
+<meta property="og:updated_time" content="2020-04-15T07:53:32.679Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ts那些事儿">
-<meta name="twitter:description" content="ts基础类型 布尔值  let isDone: boolean = false;  数字  1234let decLiteral: number = 6;let hexLiteral: number = 0xf00d;let binaryLiteral: number = 0b1010;let octalLiteral: number = 0o744;  字符串 let name: string">
+<meta name="twitter:description" content="ts基础类型 布尔值  let isDone: boolean = false; 数字 1234let decLiteral: number = 6;let hexLiteral: number = 0xf00d;let binaryLiteral: number = 0b1010;let octalLiteral: number = 0o744;">
 
 
 
@@ -381,19 +381,17 @@
 
       
         <h2 id="ts"><a href="#ts" class="headerlink" title="ts"></a>ts</h2><h3 id="基础类型"><a href="#基础类型" class="headerlink" title="基础类型"></a>基础类型</h3><ol>
-<li><p>布尔值  <code>let isDone: boolean = false;</code></p>
+<li>布尔值  <code>let isDone: boolean = false;</code></li>
+<li>数字 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> decLiteral: <span class="built_in">number</span> = <span class="number">6</span>;</span><br><span class="line"><span class="keyword">let</span> hexLiteral: <span class="built_in">number</span> = <span class="number">0xf00d</span>;</span><br><span class="line"><span class="keyword">let</span> binaryLiteral: <span class="built_in">number</span> = <span class="number">0b1010</span>;</span><br><span class="line"><span class="keyword">let</span> octalLiteral: <span class="built_in">number</span> = <span class="number">0o744</span>;</span><br></pre></td></tr></table></figure>
+
 </li>
-<li><p>数字 </p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> decLiteral: <span class="built_in">number</span> = <span class="number">6</span>;</span><br><span class="line"><span class="keyword">let</span> hexLiteral: <span class="built_in">number</span> = <span class="number">0xf00d</span>;</span><br><span class="line"><span class="keyword">let</span> binaryLiteral: <span class="built_in">number</span> = <span class="number">0b1010</span>;</span><br><span class="line"><span class="keyword">let</span> octalLiteral: <span class="built_in">number</span> = <span class="number">0o744</span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>字符串 <code>let name: string = &quot;bob&quot;;</code> 单双引号都行 并且以${ expr }这种形式嵌入表达式</p>
-</li>
-<li><p>数字  <code>let list: number[] = [1, 2, 3];</code>或者<code>let list: Array&lt;number&gt; = [1, 2, 3];</code>  两种形式都行</p>
-</li>
-<li><p>元组 Tuple  <code>let x: [string, number];</code></p>
-</li>
-<li><p>枚举 </p>
-</li>
+</ol>
+<a id="more"></a>
+<ol start="3">
+<li>字符串 <code>let name: string = &quot;bob&quot;;</code> 单双引号都行 并且以${ expr }这种形式嵌入表达式</li>
+<li>数字  <code>let list: number[] = [1, 2, 3];</code>或者<code>let list: Array&lt;number&gt; = [1, 2, 3];</code>  两种形式都行</li>
+<li>元组 Tuple  <code>let x: [string, number];</code></li>
+<li>枚举 </li>
 </ol>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;Red, Green, Blue&#125;</span><br><span class="line"><span class="keyword">let</span> c: Color = Color.Green;</span><br></pre></td></tr></table></figure>
 

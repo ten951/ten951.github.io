@@ -534,69 +534,19 @@
 
       
         
-          
-            <h2 id="ts"><a href="#ts" class="headerlink" title="ts"></a>ts</h2><h3 id="基础类型"><a href="#基础类型" class="headerlink" title="基础类型"></a>基础类型</h3><ol>
-<li><p>布尔值  <code>let isDone: boolean = false;</code></p>
-</li>
-<li><p>数字 </p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> decLiteral: <span class="built_in">number</span> = <span class="number">6</span>;</span><br><span class="line"><span class="keyword">let</span> hexLiteral: <span class="built_in">number</span> = <span class="number">0xf00d</span>;</span><br><span class="line"><span class="keyword">let</span> binaryLiteral: <span class="built_in">number</span> = <span class="number">0b1010</span>;</span><br><span class="line"><span class="keyword">let</span> octalLiteral: <span class="built_in">number</span> = <span class="number">0o744</span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>字符串 <code>let name: string = &quot;bob&quot;;</code> 单双引号都行 并且以${ expr }这种形式嵌入表达式</p>
-</li>
-<li><p>数字  <code>let list: number[] = [1, 2, 3];</code>或者<code>let list: Array&lt;number&gt; = [1, 2, 3];</code>  两种形式都行</p>
-</li>
-<li><p>元组 Tuple  <code>let x: [string, number];</code></p>
-</li>
-<li><p>枚举 </p>
+          <h2 id="ts"><a href="#ts" class="headerlink" title="ts"></a>ts</h2><h3 id="基础类型"><a href="#基础类型" class="headerlink" title="基础类型"></a>基础类型</h3><ol>
+<li>布尔值  <code>let isDone: boolean = false;</code></li>
+<li>数字 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> decLiteral: <span class="built_in">number</span> = <span class="number">6</span>;</span><br><span class="line"><span class="keyword">let</span> hexLiteral: <span class="built_in">number</span> = <span class="number">0xf00d</span>;</span><br><span class="line"><span class="keyword">let</span> binaryLiteral: <span class="built_in">number</span> = <span class="number">0b1010</span>;</span><br><span class="line"><span class="keyword">let</span> octalLiteral: <span class="built_in">number</span> = <span class="number">0o744</span>;</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;Red, Green, Blue&#125;</span><br><span class="line"><span class="keyword">let</span> c: Color = Color.Green;</span><br></pre></td></tr></table></figure>
-
-<p>默认情况是从0开始编号. 可以改成从1开始编号</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;Red = <span class="number">1</span>, Green, Blue&#125;</span><br><span class="line"><span class="keyword">let</span> c: Color = Color.Green;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以采用指定编号的方式</span></span><br><span class="line"><span class="keyword">enum</span> Color &#123;Red = <span class="number">1</span>, Green = <span class="number">2</span>, Blue = <span class="number">4</span>&#125;</span><br><span class="line"><span class="keyword">let</span> c: Color = Color.Green;</span><br></pre></td></tr></table></figure>
-
-<ol start="7">
-<li><p>任意值 any  <code>let notSure: any = 4;
-notSure = &quot;maybe a string instead&quot;;
-notSure = false; // okay, definitely a boolean</code> </p>
-</li>
-<li><p>空值 void 代表没有返回值</p>
-</li>
-<li><p>Null 和 Undefined  是所有类型的子类. so 可以把他们赋值给任意类型</p>
-</li>
-<li><p>Never  那些永不存在的值的类型 </p>
-</li>
-<li><p>类型断言 通过类型断言这种方式可以告诉编译器，“相信我，我知道自己在干什么”。 类型断言好比其它语言里的类型转换，但是不进行特殊的数据检查和解构。 它没有运行时的影响，只是在编译阶段起作用。 TypeScript会假设你，程序员，已经进行了必须的检查。<br><code>let someValue: any = &quot;this is a string&quot;;
-let strLength: number = (someValue as string).length;</code></p>
-</li>
-</ol>
-<h3 id="遍历声明"><a href="#遍历声明" class="headerlink" title="遍历声明"></a>遍历声明</h3><p>let和const是JavaScript里相对较新的变量声明方式。 像我们之前提到过的，let在很多方面与var是相似的，但是可以帮助大家避免在JavaScript里常见一些问题。 const是对let的一个增强，它能阻止对一个变量再次赋值。</p>
-<h4 id="var声明"><a href="#var声明" class="headerlink" title="var声明"></a>var声明</h4><h4 id="let声明"><a href="#let声明" class="headerlink" title="let声明"></a>let声明</h4><ol>
-<li><p>let 声明的变量只在它所在的代码块有效；</p>
-</li>
-<li><p>let 不像var 那样会发生 ‘变量提升’ 现象，因此，变量需要先声明然后再使用，否则报错；</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// var 的情况</span></span><br><span class="line"><span class="built_in">console</span>.log(foo);  <span class="comment">// undefined</span></span><br><span class="line"><span class="keyword">var</span> foo = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// let的情况；</span></span><br><span class="line"><span class="built_in">console</span>.log(bar);  <span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">let</span> bar = <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>暂时性死区</p>
-</li>
-</ol>
-<p>快级作用域内存在let命令，它所声明的变量就绑定在这个区域，不再受外部影响；如下代码：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> tmp = <span class="number">123</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    tmp = <span class="string">'abc'</span>;</span><br><span class="line">    <span class="keyword">let</span> tmp;</span><br><span class="line">    <span class="built_in">console</span>.log(tmp); <span class="comment">// tmp is not defined</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>let 不允许在相同作用域内，重复声明同一个变量。</li>
-</ol>
-<h4 id="const声明"><a href="#const声明" class="headerlink" title="const声明"></a>const声明</h4><p>const 声明一个只读的常量，一旦声明，常量的值就不允许改变。</p>
-<h3 id="interface接口"><a href="#interface接口" class="headerlink" title="interface接口"></a>interface接口</h3><p>接口的作用就是为这些类型命名和为你的代码或第三方代码定义契约。</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> LabelledValue &#123;</span><br><span class="line">  label: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">printLabel</span>(<span class="params">labelledObj: LabelledValue</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(labelledObj.label);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myObj = &#123;size: <span class="number">10</span>, label: <span class="string">"Size 10 Object"</span>&#125;;</span><br><span class="line">printLabel(myObj);</span><br></pre></td></tr></table></figure>
-
-<h4 id="可选属性"><a href="#可选属性" class="headerlink" title="可选属性"></a>可选属性</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> SquareConfig &#123;</span><br><span class="line">  color?: <span class="built_in">string</span>;</span><br><span class="line">  width?: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createSquare</span>(<span class="params">config: SquareConfig</span>): </span>&#123;color: <span class="built_in">string</span>; area: <span class="built_in">number</span>&#125; &#123;</span><br><span class="line">  <span class="keyword">let</span> newSquare = &#123;color: <span class="string">"white"</span>, area: <span class="number">100</span>&#125;;</span><br><span class="line">  <span class="keyword">if</span> (config.color) &#123;</span><br><span class="line">    newSquare.color = config.color;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (config.width) &#123;</span><br><span class="line">    newSquare.area = config.width * config.width;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> newSquare;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> mySquare = createSquare(&#123;color: <span class="string">"black"</span>&#125;);</span><br></pre></td></tr></table></figure>
-
-<h4 id="只读属性"><a href="#只读属性" class="headerlink" title="只读属性"></a>只读属性</h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Point &#123;</span><br><span class="line">    readonly x: <span class="built_in">number</span>;</span><br><span class="line">    readonly y: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>readonly vs const  变量时使用const. 属性使用readonly</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/02/26/ts那些事儿/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
