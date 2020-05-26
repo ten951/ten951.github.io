@@ -93,7 +93,7 @@
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200117150503.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200117154610.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200103195211.png">
-<meta property="og:updated_time" content="2020-05-25T10:51:04.327Z">
+<meta property="og:updated_time" content="2020-05-26T03:06:35.307Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux和shell">
 <meta name="twitter:description" content="shell命令基本的bash shell命令遍历文件cd  路径名 用以指定想切换到的目录名. 如果没有指定目标路径名. 则切换到当期用户的主目录pwd 可以显示出shell会话的当前目录，这个目录被称为当前工作目录。 文件和目录列表ls -alf 显示当前目录下的文件和目录  默认是按照字母排序的  -F 可以区分文件和目录 -A 显示隐藏文件  -l 长列表格式输出  可以依据名称过滤. ?匹">
@@ -350,8 +350,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/book/" itemprop="url" rel="index">
-                    <span itemprop="name">book</span>
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
                   </a>
                 </span>
 
@@ -462,66 +462,6 @@
 <li>将进程列表置入后台  ‘’(sleep2;echo $BASH_SUBSHELL;sleep2)&amp;’’ 即可以在子进程中完成繁重的工作, 又不会子shell的i/o受制于终端.</li>
 <li>协程可以同时做两件事。它在后台生成一个子shell，并在这个子shell中执行命令。要进行协程处理，得使用coproc命令，<code>coproc sleep 10</code> 或者 <code>coproc my_sleep { sleep 10; }</code> 两种形式. 输入内容都是一致的. 作业号和作业进程ID.</li>
 </ol>
-<h3 id="sed和gawk"><a href="#sed和gawk" class="headerlink" title="sed和gawk"></a>sed和gawk</h3><h4 id="sed编辑器"><a href="#sed编辑器" class="headerlink" title="sed编辑器"></a>sed编辑器</h4><p>流编辑器. 可以用键盘命令来交互式的插入 删除 替换数据的文本.会在编辑器处理数据之前基于预先提供的一组规则来编辑数据流.</p>
-<ol>
-<li>一次从输入汇总读取一行数据. 2. 依据所提供的编辑器命令匹配数据. 3. 按照命令修改流中的数据. 4. 将新的数据输入到stdout.</li>
-</ol>
-<p>sed并不会修改文本文件的数据</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed options script file</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><p>替换标记  <code>s/pattern/replacement/flags</code>  -n 表示禁止sed编辑器输出. p会替换标记会输出修改过的行.</p>
-<pre><code>* flags 数字 表示替换第几处模式匹配的地方
-* flags g 新文本会替换所有匹配的文本
-* flags p 原先行的内容要打印出来
-* flags w file 将替换的结果写到文件中</code></pre></li>
-<li><p>替换字符 <code>sed &#39;s!/bin/bash!/bin/csh!&#39; /etc/passwd</code>  将/bin/bash替换为/bin/csh</p>
-</li>
-<li><p>使用地址  默认情况下命令会作用于文本数据的所有行. 提供了行寻址.指定范围</p>
-</li>
-</ol>
-<p>数字方式的行寻址 <code>sed &#39;2s/dog/cat/&#39; data1.txt&#39; 将修改指定的第二行文本</code> sed ‘2,3s/dog/cat/‘ data1.txt’ 修改指定的第二行到第三行的文本 `` sed ‘2,$s/dog/cat/‘ data1.txt’ 修改指定的第二行之后的所有的文本</p>
-<p>文本模式过滤器  sed ‘/Samantha/s/bash/csh’ /etc/passwd 只修改用户Samantha的</p>
-<ol start="4">
-<li>组合命令 </li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sed '2&#123;</span><br><span class="line">    s/fox/elephant/</span><br><span class="line">    s/dog/cat/</span><br><span class="line">&#125;' data1.txt</span><br></pre></td></tr></table></figure>
-
-<ol start="5">
-<li><p>删除行 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 删除所有行</span><br><span class="line">sed 'd' data1.txt</span><br><span class="line"><span class="meta">#</span> 删除2 3行</span><br><span class="line">sed '2,3d' data1.txt</span><br><span class="line"><span class="meta">#</span> 删除2行之后所有</span><br><span class="line">sed '2,$d' data1.txt</span><br><span class="line"><span class="meta">#</span> 删除匹配/number 的1行</span><br><span class="line">sed '/number 1/d' data1.txt</span><br><span class="line"><span class="meta">#</span> 删除匹配1到匹配3之间的行 /1/就会开启删除模式. /3/结束删除模式. 如果/3/在文本中不存在. 就是没有停止. 一致删除到最后.</span><br><span class="line">sed '/1/,/3/d' data1.txt</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>插入和附加文本</p>
-</li>
-</ol>
-<p>i 命令会在指定行前增加一个新行.<br>a 会在执行行后增加一个新行.</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 在2前添加1</span><br><span class="line">echo "Test Line 2" | sed 'i\Test Line 1'</span><br><span class="line"><span class="meta">#</span> 在2后添加1</span><br><span class="line">echo "Test Line 2" | sed 'i\Test Line 1'</span><br><span class="line"><span class="meta">#</span> 3行前添加</span><br><span class="line">sed '3i\</span><br><span class="line">this is an inserted line' data1.txt</span><br><span class="line"><span class="meta">#</span> 3行后添加</span><br><span class="line">sed '3a\</span><br><span class="line">this is an inserted line' data1.txt</span><br><span class="line"><span class="meta">#</span> 文本最后添加</span><br><span class="line">sed '$a\</span><br><span class="line">this is an inserted line' data1.txt</span><br></pre></td></tr></table></figure>
-
-<ol start="7">
-<li>修改行 c 将指定文本修改</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 将第三行修改为 this is</span><br><span class="line">sed '3c\</span><br><span class="line">this is' data2.txt</span><br><span class="line"><span class="meta">#</span> 匹配到的number的第三个修改为 thisis</span><br><span class="line">sed '/number 3/c\</span><br><span class="line">this is' data2.txt</span><br></pre></td></tr></table></figure>
-
-<ol start="8">
-<li>转换命令 y</li>
-</ol>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 将1转换为7 2-&gt;8 3-&gt;9</span><br><span class="line">sed 'y/123/789/' data2.txt</span><br></pre></td></tr></table></figure>
-
-<p>9 打印<br>p 可以打印sed编辑器输出中的一行.<br>= 打印行号</p>
-<h4 id="gawk"><a href="#gawk" class="headerlink" title="gawk"></a>gawk</h4><p>定义变量来保存数据, 使用算术和字符串操作符来处理数据. 使用结构化变成概念来微数据处理增加处理逻辑. 通过提取数据文件中的数据元素. 将其重新排列或格式化 生成格式化报告.</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gawk options program file</span><br></pre></td></tr></table></figure>
-
-<p>-F fs 字段分隔符 -f file 从指定文件中读取 -v var=value 定义gawk程序中的一个变量及其默认值 -mf N 处理的数据文件中的最大字段数  -mr N 数据稳重的最大数据行数 -W keyword 兼容模式和警告等级.</p>
-<h5 id="使用数据字段变量"><a href="#使用数据字段变量" class="headerlink" title="使用数据字段变量"></a>使用数据字段变量</h5><ul>
-<li>$0 代表整个文本行</li>
-<li>$1 文本行中的第一个数据字段</li>
-<li>$2 文本行中的第二个数据字段</li>
-</ul>
-<p>在处理数据前运行脚本 BEGIN  在处理数据后运行脚本 END.</p>
-<p>例如:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">BEGIN &#123;</span><br><span class="line">    print "The latest list of users and shells"</span><br><span class="line">    print "UserID \t Shell"</span><br><span class="line">    print "\t"</span><br><span class="line">    FS=":"</span><br><span class="line">    &#125;</span><br><span class="line">    &#123;print $1"\t" $7&#125;</span><br><span class="line">END &#123;</span><br><span class="line">    print"This concludes the listing"</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>这就简单的实现了一个漂亮数据的小脚本程序.</p>
 <h3 id="什么是平均负载"><a href="#什么是平均负载" class="headerlink" title="什么是平均负载"></a>什么是平均负载</h3><p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200103195211.png" alt="20200103195211.png"></p>
 <p>通过直径top或者uptime命令. 可以了解系统的负载情况. 最后的三个数组依次是 1,5,15分钟的平均负载. </p>
 <p>平均负载和CPU使用率是不一样的. 平均负载是指单位时间内, 系统处于可运行状态和不可中断状态的平均进程数. 也就是平均活跃进程数. </p>
@@ -654,7 +594,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -665,7 +605,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -725,7 +665,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#shell命令"><span class="nav-number">1.</span> <span class="nav-text">shell命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本的bash-shell命令"><span class="nav-number">1.1.</span> <span class="nav-text">基本的bash shell命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#遍历文件"><span class="nav-number">1.1.1.</span> <span class="nav-text">遍历文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件和目录列表"><span class="nav-number">1.1.2.</span> <span class="nav-text">文件和目录列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#处理文件"><span class="nav-number">1.1.3.</span> <span class="nav-text">处理文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测程序"><span class="nav-number">1.1.4.</span> <span class="nav-text">检测程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结束进程"><span class="nav-number">1.1.5.</span> <span class="nav-text">结束进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测磁盘空间"><span class="nav-number">1.1.6.</span> <span class="nav-text">检测磁盘空间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理解Shell"><span class="nav-number">1.2.</span> <span class="nav-text">理解Shell</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类型"><span class="nav-number">1.2.1.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shell的父子关系"><span class="nav-number">1.2.2.</span> <span class="nav-text">shell的父子关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程列表"><span class="nav-number">1.2.3.</span> <span class="nav-text">进程列表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sed和gawk"><span class="nav-number">1.3.</span> <span class="nav-text">sed和gawk</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sed编辑器"><span class="nav-number">1.3.1.</span> <span class="nav-text">sed编辑器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gawk"><span class="nav-number">1.3.2.</span> <span class="nav-text">gawk</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#使用数据字段变量"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">使用数据字段变量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是平均负载"><span class="nav-number">1.4.</span> <span class="nav-text">什么是平均负载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU上下文切换是什么意思"><span class="nav-number">1.5.</span> <span class="nav-text">CPU上下文切换是什么意思</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#shell命令"><span class="nav-number">1.</span> <span class="nav-text">shell命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本的bash-shell命令"><span class="nav-number">1.1.</span> <span class="nav-text">基本的bash shell命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#遍历文件"><span class="nav-number">1.1.1.</span> <span class="nav-text">遍历文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件和目录列表"><span class="nav-number">1.1.2.</span> <span class="nav-text">文件和目录列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#处理文件"><span class="nav-number">1.1.3.</span> <span class="nav-text">处理文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测程序"><span class="nav-number">1.1.4.</span> <span class="nav-text">检测程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结束进程"><span class="nav-number">1.1.5.</span> <span class="nav-text">结束进程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检测磁盘空间"><span class="nav-number">1.1.6.</span> <span class="nav-text">检测磁盘空间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理解Shell"><span class="nav-number">1.2.</span> <span class="nav-text">理解Shell</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类型"><span class="nav-number">1.2.1.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shell的父子关系"><span class="nav-number">1.2.2.</span> <span class="nav-text">shell的父子关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程列表"><span class="nav-number">1.2.3.</span> <span class="nav-text">进程列表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是平均负载"><span class="nav-number">1.3.</span> <span class="nav-text">什么是平均负载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU上下文切换是什么意思"><span class="nav-number">1.4.</span> <span class="nav-text">CPU上下文切换是什么意思</span></a></li></ol></li></ol></div>
             
 
           </div>

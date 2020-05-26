@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="中间件,">
+  <meta name="keywords" content="rabbitmq,">
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="rabbitmqExchangeTypes direct  bindingKey和routingKey完全匹配的queue中 Fanout  不管routingKey是什么.他都会把消息发送到与exchange绑定的所有queue中 Topic   exchange将消息发送到routingKey模式匹配的queue中. #表示匹配多个单词 *表示匹配一个单词 单词之间用.分隔 RPC     客">
-<meta name="keywords" content="中间件">
+<meta name="keywords" content="rabbitmq">
 <meta property="og:type" content="article">
 <meta property="og:title" content="消息中间件">
 <meta property="og:url" content="http://www.ten951.com/2019/09/10/消息中间件/index.html">
@@ -88,7 +88,7 @@
 <meta property="og:description" content="rabbitmqExchangeTypes direct  bindingKey和routingKey完全匹配的queue中 Fanout  不管routingKey是什么.他都会把消息发送到与exchange绑定的所有queue中 Topic   exchange将消息发送到routingKey模式匹配的queue中. #表示匹配多个单词 *表示匹配一个单词 单词之间用.分隔 RPC     客">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20190910154128.png">
-<meta property="og:updated_time" content="2019-09-17T10:49:57.642Z">
+<meta property="og:updated_time" content="2020-05-26T03:11:13.720Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="消息中间件">
 <meta name="twitter:description" content="rabbitmqExchangeTypes direct  bindingKey和routingKey完全匹配的queue中 Fanout  不管routingKey是什么.他都会把消息发送到与exchange绑定的所有queue中 Topic   exchange将消息发送到routingKey模式匹配的queue中. #表示匹配多个单词 *表示匹配一个单词 单词之间用.分隔 RPC     客">
@@ -345,8 +345,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/book/" itemprop="url" rel="index">
-                    <span itemprop="name">book</span>
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
                   </a>
                 </span>
 
@@ -447,7 +447,7 @@
 <p>RabbitMQ的镜像队列机制是将queue镜像到cluster中其他的节点之上。在通常的用法中，针对每一个镜像队列都包含一个master和多个slave，分别位于于不同的节点。slave会准确地按照master执行命令的顺序进行命令执行，故slave与master上维护的状态应该是相同的。所有动作都只会向master发送，然后由master将命令执行的结果广播给slave们，故看似从镜像队列中的消费操作实际上是在master上执行的。</p>
 <p>在该实现下，如果镜像队列中的一个master失效了，集群自动选出一个slave（最老的slave）提升为master，此后message可以继续发送到队列上。</p>
 <p>RabbitMQ的镜像队列同时支持publisher confirm和事务两种机制。在事务机制中，只有当前事务在全部镜像queue中执行之后，客户端才会收到Tx.CommitOk的消息。同样的，在publisher confirm机制中，向publisher进行当前message确认的前提是该message被全部镜像所接受了。</p>
-<h2 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h2>
+
       
     </div>
     
@@ -464,7 +464,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/中间件/" rel="tag"># 中间件</a>
+            <a href="/tags/rabbitmq/" rel="tag"># rabbitmq</a>
           
         </div>
       
@@ -566,7 +566,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -577,7 +577,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -637,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#rabbitmq"><span class="nav-number">1.</span> <span class="nav-text">rabbitmq</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ExchangeTypes"><span class="nav-number">1.1.</span> <span class="nav-text">ExchangeTypes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#virtualhost"><span class="nav-number">1.2.</span> <span class="nav-text">virtualhost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息存储"><span class="nav-number">1.3.</span> <span class="nav-text">消息存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#队列详情"><span class="nav-number">1.4.</span> <span class="nav-text">队列详情</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通队列"><span class="nav-number">1.4.1.</span> <span class="nav-text">普通队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#镜像队列"><span class="nav-number">1.4.2.</span> <span class="nav-text">镜像队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集群"><span class="nav-number">1.5.</span> <span class="nav-text">集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#镜像队列1"><span class="nav-number">1.5.1.</span> <span class="nav-text">镜像队列1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非同步的Slave（unsynchronised-slave）"><span class="nav-number">1.5.2.</span> <span class="nav-text">非同步的Slave（unsynchronised slave）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在什么情况下会出现unsynchronisedslave"><span class="nav-number">1.5.3.</span> <span class="nav-text">在什么情况下会出现unsynchronisedslave</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务可用性（Availablity）与数据可靠性（Reliability）"><span class="nav-number">1.5.4.</span> <span class="nav-text">服务可用性（Availablity）与数据可靠性（Reliability）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kafka"><span class="nav-number">2.</span> <span class="nav-text">kafka</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#rabbitmq"><span class="nav-number">1.</span> <span class="nav-text">rabbitmq</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ExchangeTypes"><span class="nav-number">1.1.</span> <span class="nav-text">ExchangeTypes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#virtualhost"><span class="nav-number">1.2.</span> <span class="nav-text">virtualhost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息存储"><span class="nav-number">1.3.</span> <span class="nav-text">消息存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#队列详情"><span class="nav-number">1.4.</span> <span class="nav-text">队列详情</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通队列"><span class="nav-number">1.4.1.</span> <span class="nav-text">普通队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#镜像队列"><span class="nav-number">1.4.2.</span> <span class="nav-text">镜像队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集群"><span class="nav-number">1.5.</span> <span class="nav-text">集群</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#镜像队列1"><span class="nav-number">1.5.1.</span> <span class="nav-text">镜像队列1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非同步的Slave（unsynchronised-slave）"><span class="nav-number">1.5.2.</span> <span class="nav-text">非同步的Slave（unsynchronised slave）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在什么情况下会出现unsynchronisedslave"><span class="nav-number">1.5.3.</span> <span class="nav-text">在什么情况下会出现unsynchronisedslave</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务可用性（Availablity）与数据可靠性（Reliability）"><span class="nav-number">1.5.4.</span> <span class="nav-text">服务可用性（Availablity）与数据可靠性（Reliability）</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
