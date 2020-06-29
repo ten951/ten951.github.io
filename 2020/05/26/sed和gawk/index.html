@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="读书与做事">
 <meta property="og:description" content="sed和gawksed编辑器流编辑器. 可以用键盘命令来交互式的插入 删除 替换数据的文本.会在编辑器处理数据之前基于预先提供的一组规则来编辑数据流.  一次从输入汇总读取一行数据. 2. 依据所提供的编辑器命令匹配数据. 3. 按照命令修改流中的数据. 4. 将新的数据输入到stdout.  sed并不会修改文本文件的数据 1sed options script file">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-05-26T03:08:31.455Z">
+<meta property="og:updated_time" content="2020-06-01T08:26:10.634Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sed和gawk">
 <meta name="twitter:description" content="sed和gawksed编辑器流编辑器. 可以用键盘命令来交互式的插入 删除 替换数据的文本.会在编辑器处理数据之前基于预先提供的一组规则来编辑数据流.  一次从输入汇总读取一行数据. 2. 依据所提供的编辑器命令匹配数据. 3. 按照命令修改流中的数据. 4. 将新的数据输入到stdout.  sed并不会修改文本文件的数据 1sed options script file">
@@ -409,6 +409,12 @@
 <h3 id="转换命令-y"><a href="#转换命令-y" class="headerlink" title="转换命令 y"></a>转换命令 y</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 将1转换为7 2-&gt;8 3-&gt;9</span><br><span class="line">sed 'y/123/789/' data2.txt</span><br></pre></td></tr></table></figure>
 
 <h3 id="打印"><a href="#打印" class="headerlink" title="打印"></a>打印</h3><p>p 可以打印sed编辑器输出中的一行.<br>= 打印行号</p>
+<h3 id="使用sed处理文件"><a href="#使用sed处理文件" class="headerlink" title="使用sed处理文件"></a>使用sed处理文件</h3><p><code>sed &#39;1,2w text.txt&#39; data.txt</code>  从data.txt文件中读取前两行写入text.txt文件<br><code>sed &#39;2r text.txt&#39; data.txt</code> 将text.txt内容插入data.txt第二行后</p>
+<h2 id="sed进阶"><a href="#sed进阶" class="headerlink" title="sed进阶"></a>sed进阶</h2><h3 id="多行命令"><a href="#多行命令" class="headerlink" title="多行命令"></a>多行命令</h3><p>单行命令是指sed编辑器读取数据流时. 他会基于换行符的位置将数据分割成行. sed编辑器根据定义好的脚本命令一次处理一行. 然后移到下一行重复这个过程.</p>
+<p>多行命令 有时需要跨多行的数据还行特定的操作.</p>
+<h4 id="next命令"><a href="#next命令" class="headerlink" title="next命令"></a>next命令</h4><ol>
+<li>单行的next命令  小写n命令告诉sed编辑器移动到数据流中的下一文本行. 而不用重新回到命令的最开始再执行一遍. 记住，通常sed编辑器在移动到数据流中的下一文本行之前，会在当前行上执行完所有定义好的命令。单行next命令改变了这个流程。例如有5行数据文本. 其中穿插着两个空行. 使用<code>sed &#39;s/^$/d&#39; data1.txt</code> </li>
+</ol>
 <h2 id="gawk"><a href="#gawk" class="headerlink" title="gawk"></a>gawk</h2><p>定义变量来保存数据, 使用算术和字符串操作符来处理数据. 使用结构化变成概念来微数据处理增加处理逻辑. 通过提取数据文件中的数据元素. 将其重新排列或格式化 生成格式化报告.</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gawk options program file</span><br></pre></td></tr></table></figure>
 
@@ -462,6 +468,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/05/网络那些事儿/" rel="prev" title="网络那些事儿">
+                网络那些事儿 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -549,7 +559,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -609,7 +619,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#sed和gawk"><span class="nav-number">1.</span> <span class="nav-text">sed和gawk</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sed编辑器"><span class="nav-number">1.1.</span> <span class="nav-text">sed编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#替换标记"><span class="nav-number">1.1.1.</span> <span class="nav-text">替换标记</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#替换字符"><span class="nav-number">1.1.2.</span> <span class="nav-text">替换字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用地址"><span class="nav-number">1.1.3.</span> <span class="nav-text">使用地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组合命令"><span class="nav-number">1.1.4.</span> <span class="nav-text">组合命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除行"><span class="nav-number">1.1.5.</span> <span class="nav-text">删除行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入和附加文本"><span class="nav-number">1.1.6.</span> <span class="nav-text">插入和附加文本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改行-c-将指定文本修改"><span class="nav-number">1.1.7.</span> <span class="nav-text">修改行 c 将指定文本修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转换命令-y"><span class="nav-number">1.1.8.</span> <span class="nav-text">转换命令 y</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打印"><span class="nav-number">1.1.9.</span> <span class="nav-text">打印</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gawk"><span class="nav-number">1.2.</span> <span class="nav-text">gawk</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用数据字段变量"><span class="nav-number">1.2.1.</span> <span class="nav-text">使用数据字段变量</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#sed和gawk"><span class="nav-number">1.</span> <span class="nav-text">sed和gawk</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sed编辑器"><span class="nav-number">1.1.</span> <span class="nav-text">sed编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#替换标记"><span class="nav-number">1.1.1.</span> <span class="nav-text">替换标记</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#替换字符"><span class="nav-number">1.1.2.</span> <span class="nav-text">替换字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用地址"><span class="nav-number">1.1.3.</span> <span class="nav-text">使用地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组合命令"><span class="nav-number">1.1.4.</span> <span class="nav-text">组合命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除行"><span class="nav-number">1.1.5.</span> <span class="nav-text">删除行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入和附加文本"><span class="nav-number">1.1.6.</span> <span class="nav-text">插入和附加文本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改行-c-将指定文本修改"><span class="nav-number">1.1.7.</span> <span class="nav-text">修改行 c 将指定文本修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转换命令-y"><span class="nav-number">1.1.8.</span> <span class="nav-text">转换命令 y</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打印"><span class="nav-number">1.1.9.</span> <span class="nav-text">打印</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用sed处理文件"><span class="nav-number">1.1.10.</span> <span class="nav-text">使用sed处理文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sed进阶"><span class="nav-number">1.2.</span> <span class="nav-text">sed进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多行命令"><span class="nav-number">1.2.1.</span> <span class="nav-text">多行命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#next命令"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">next命令</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gawk"><span class="nav-number">1.3.</span> <span class="nav-text">gawk</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用数据字段变量"><span class="nav-number">1.3.1.</span> <span class="nav-text">使用数据字段变量</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

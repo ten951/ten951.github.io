@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="读书与做事">
 <meta property="og:description" content="volatile  在并发编程中synchronized和volatile都有重要的角色.volatile是轻量级的synchronized,它在多线程开发中保证了共享变量的可见性,  可见性的意思是当一个线程修改一个共享变量时,另外一个线程能读到这个修改的值    volatile变量修饰使用恰当的话,它比synchronized的使用和执行成本更低.因为没有线程的上下文的切换和调度.  vol">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-21T13:20:23.889Z">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200624171626.png">
+<meta property="og:updated_time" content="2020-06-29T12:23:05.131Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="整理并发机制实现原理">
 <meta name="twitter:description" content="volatile  在并发编程中synchronized和volatile都有重要的角色.volatile是轻量级的synchronized,它在多线程开发中保证了共享变量的可见性,  可见性的意思是当一个线程修改一个共享变量时,另外一个线程能读到这个修改的值    volatile变量修饰使用恰当的话,它比synchronized的使用和执行成本更低.因为没有线程的上下文的切换和调度.  vol">
+<meta name="twitter:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200624171626.png">
 
 
 
@@ -398,11 +400,19 @@
 <li>对于同步方法块,锁是Synchonized括号里配置的对象.</li>
 </ol>
 <p>当一个线程试图访问代码块时.它首先必须得到锁.退出或者抛异常时必须释放锁.锁到底存在哪里呢?锁里存储的又是什么呢</p>
-<p>synchronized用的锁是存在Java对象头里的. 对象头里的Mark Word里默认存储对象的HashCode,分代年龄,锁标记位.运行期间,Mark Word里存储的数据会随着锁标志位的变化而变化.</p>
+<p>synchronized用的锁是存在Java对象头里的. 对象头里的Mark Word里默认存储对象的HashCode,分代年龄,锁标记位.运行期间,Mark Word里存储的数据会随着锁标志位的变化而变化.<br><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200624171626.png" alt="20200624171626"></p>
 <h4 id="锁的升级"><a href="#锁的升级" class="headerlink" title="锁的升级"></a>锁的升级</h4><p>  一种4中状态. 级别从低到高.无锁,偏向锁,轻量级锁,重量级锁.这几个状态会随着竞争情况逐渐升级,<strong>锁可以升级但不能降级</strong></p>
-<h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><p>   经过研究发现.大多数情况下,锁不仅不存在多线程竞争,而且总是由同一个线程多次获得.为了让线程获得锁的代价更低而引入偏向锁.当一个线程访问同步快并获取锁时.会在对象头和栈帧中的锁记录里存储锁偏向的线程ID,以后线程在进入和退出同步块时不需要进行CAS操作来加锁和解锁,只需要简单的测试一下对象头的Mark Word里是否存储着指向当前线程的偏向锁, <strong>测试成功,表示当前线程获得了锁.失败,则需要在测试一下Mark Word中偏向锁的标识是否设置成1(表示当前是偏向锁). 没有设置,则使用CAS竞争锁.设置了,则尝试使用CAS将对象头的偏向锁指向当前线程.</strong></p>
-<ul>
-<li>偏向锁的撤销. 只有竞争出现才释放锁,所以当其他线程尝试竞争偏向锁时,持有偏向锁的线程才会释放锁.撤销,需要等待全局安全点(在这个时间点上没有正在执行的字节码),<strong>它会首先暂停拥有偏向锁的线程,然后检查持有偏向锁的线程是否活着,如果线程不处于活动状态.则将对象头设置成无锁状态.如果线程仍然活着.拥有偏向锁的栈会被执行,遍历偏向对象的锁记录,栈中的锁记录和对象头的Mark Word要么重新偏向于其他线程,要么恢复到无锁或者标记对象不是和作为偏向锁,最后唤醒暂停的线程</strong>.</li>
+<h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><ul>
+<li><p>偏向锁加锁</p>
+<p> 经过研究发现.大多数情况下,锁不仅不存在多线程竞争,而且总是由同一个线程多次获得.为了让线程获得锁的代价更低而引入偏向锁.<br> 当一个线程访问同步快并获取锁时. </p>
+<ol>
+<li>会检查Mark Word中的线程ID, </li>
+<li>如果为空 CAS的设置线程ID 如果替换成功则获取锁, 失败则撤销偏向锁</li>
+<li>如果不为空. 检查线程ID是否为本线程. 如果是<br>以后线程在进入和退出同步块时不需要进行CAS操作来加锁和解锁,只需要简单的测试一下对象头的Mark Word里是否存储着指向当前线程的偏向锁, <strong>测试成功,表示当前线程获得了锁.失败,则需要在测试一下Mark Word中偏向锁的标识是否设置成1(表示当前是偏向锁). 没有设置,则使用CAS竞争锁.设置了,则尝试使用CAS将对象头的偏向锁指向当前线程.</strong></li>
+</ol>
+</li>
+<li><p>偏向锁的撤销. 只有竞争出现才释放锁,所以当其他线程尝试竞争偏向锁时,持有偏向锁的线程才会释放锁.撤销,需要等待全局安全点(在这个时间点上没有正在执行的字节码),<strong>它会首先暂停拥有偏向锁的线程,然后检查持有偏向锁的线程是否活着,如果线程不处于活动状态.则将对象头设置成无锁状态.如果线程仍然活着.拥有偏向锁的栈会被执行,遍历偏向对象的锁记录,栈中的锁记录和对象头的Mark Word要么重新偏向于其他线程,要么恢复到无锁或者标记对象不是和作为偏向锁,最后唤醒暂停的线程</strong>.</p>
+</li>
 </ul>
 <h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><ul>
 <li>加锁 线程执行同步块之前,JVM会先在当前线程的栈帧中创建用于存储锁记录的空间,并将对象头中的Mark Word复制到锁记录中,这个过程叫做 Displaced Mark Word. 然后线程尝试使用CAS将对象头中的Mark Word替换为指向锁记录的指针.如果成功,当前线程获得锁,如果失败,表现其他线程竞争锁,当前线程便尝试自旋来获取锁.</li>
@@ -419,19 +429,29 @@
 <li>轻量级锁解锁的过程. 解锁的过程是将锁空间的内容替换会对象头部. 并将对象设置为无锁状态.  如果替换会失败, 说明锁锁正在膨胀中. </li>
 </ol>
 <p>所谓的膨胀就是生成一个ObjectMonitor对象. 然后enter和exit的过程. </p>
-<h5 id="ObjectMonitor-enter"><a href="#ObjectMonitor-enter" class="headerlink" title="ObjectMonitor#enter"></a>ObjectMonitor#enter</h5><ol>
+<h5 id="ObjectMonitor-enter"><a href="#ObjectMonitor-enter" class="headerlink" title="ObjectMonitor#enter"></a>ObjectMonitor#enter</h5><p>_owner指针表示持有锁的线程</p>
+<p>_responsible指针表示第一个等待的线程</p>
+<p>_recursions 重入次数</p>
+<p>CAS的尝试_owner指针指向从null改为self 成功获得锁 -&gt;  如果_owner不为空 判断是否==self 相等时重入的情况 _recursions++ -&gt; 说明锁被占用 自己等待 -&gt;</p>
+<p>TryLock()尝试获取的锁 成功结束了 -&gt; TrySpin() 尝试自旋获得锁 成功结束就了-&gt; 包装ObjectWater对象添加到CXQ队列(CAS(CAS失败再次执行TryLock)+死循环) 成功了执行阻塞自己-&gt; 死循环保护(再次TryLock 检查responsible==null 表示没有等待的. responsible==self 表示第一个等待是自己. responsible!=self 表示第一个等待的不是自己) </p>
+<ol>
+<li>responsible==null 和 responsible==self 执行的逻辑是一样, 会执行一个退避算法, 第一次是休眠1ms. 第二次在上面的基础上*8一次类推. 直到达到默认值1000ms.</li>
+<li>responsible!=self 说明有线程在等待, 且不是自己. 自己会休眠. 直到被唤醒.   到被唤醒后会尝试将_owner指向自己. 且将_responsible设置为null. </li>
+</ol>
+<ol>
 <li>两次TryLock(这个方法就是CAS的改变ObjectMonitor中owner属性为自己) 为什么是两次是因为CPU的亲和度. 在CPU调度中. 在过去的时间内, 某个线程尝试获得某些资源失败. 那么系统在后面会倾向于将该资源分配给这个线程。这里我们前后两次执行，就是告诉系统当前线程「迫切」想要获得这个 cas 资源，如果可以用的话尽量分配给它。当然这种亲和力不是一种得到保证的协议，因此这种操作只能是一种积极的、并且人畜无害的操作。</li>
 <li>两次尝试失败了. 那么就要执行加入阻塞队列的操作了, 阻塞队列CXQ是一个双向的链表. 每个加锁失败的线程都会把自己包装成ObjectWaiter对象. 将自己添加到CXQ队列的头部. 这是是个死循环保护的. 直到CAS的改变为head才会break.  每次CAS失败都会伴随一次TryLock操作后再进入下次循环  CAS改变CXQ的头.</li>
 <li>当将线程添加到CXQ队列头部之后呢. 进入另外一个死循环. 在此TryLock 这里是判定Responsible指针是否为null, 如果为null, 将这个指针CAS的改为self. 如果不为空. 则判定这个指针是否指向自己. 如果指向自己的. 则表示自己代表的当期线程是等待加锁的第一个. 这里会执行一个巧妙的退避算法. 发现是自己. 第一次是休眠1ms. 第二次在上面的基础上*8一次类推. 直到达到默认值1000ms. 过当期线程发现Responsible不为空. 也不是自己 会无限期休眠下去. 直到获得锁的线程退出后. 唤醒自己.  当self获得锁资源后(即改owner属性成功后)会将responsible指针设置为null. 也就是说 第一个等待锁的线程都会在Responsible上不停滴休眠、检查锁. 这里的休眠是通过park(time)实现的. 当自己到时间被唤醒后 在此TryLock. 然后重复3的开头.</li>
 </ol>
-<h5 id="ObjectMonitor-exit"><a href="#ObjectMonitor-exit" class="headerlink" title="ObjectMonitor#exit"></a>ObjectMonitor#exit</h5><ol>
+<h5 id="ObjectMonitor-exit"><a href="#ObjectMonitor-exit" class="headerlink" title="ObjectMonitor#exit"></a>ObjectMonitor#exit</h5><p>exit涉及到唤醒CXQ和EntryList中节点的方式, 默认是0. 将CXQ连接到EntryList后面 形成双向链表. 然后唤醒EntryList头.</p>
+<ol>
 <li>依据Knob_QMode不同的值. 执行不同的出队逻辑, 这里的出队表示CXQ和EntryList中出队.  EntryList和WaitSet是成对使用的. 表示调用wait和notify方法的. 当wait是释放锁资源, 将自己添加到WaitSet中, 执行notify将自己添加EntryList中.</li>
 <li>默认的Knob_Qmodeh是0. 他的逻辑是优先唤醒EntryList中的线程. 当EntryList中为空. 再去唤醒CXQ中的. 当然还有别的类型( 1 将CXQ反转一下,然后将新的队友赋值给_EntryList. 2 优先CXQ. 在EntryList.3 是将CXQ放在entryList之后, 4 是将CXQ放在EntryList之前)</li>
 </ol>
-<h3 id="Object-wait-和-notify-的实现机制"><a href="#Object-wait-和-notify-的实现机制" class="headerlink" title="Object wait 和 notify 的实现机制"></a>Object wait 和 notify 的实现机制</h3><h4 id="wait-意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待"><a href="#wait-意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待" class="headerlink" title="wait 意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待"></a>wait 意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待</h4><p>waitSet这个队列是个双向链表. 不同于cxq的是 CXQ是每次添加到对头. 而WaitSet是添加到队尾. 然后执行exit() 释放锁.</p>
+<h3 id="Object-wait-和-notify-的实现机制"><a href="#Object-wait-和-notify-的实现机制" class="headerlink" title="Object wait 和 notify 的实现机制"></a>Object wait 和 notify 的实现机制</h3><h4 id="wait-意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待"><a href="#wait-意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待" class="headerlink" title="wait 意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待"></a>wait 意思是去加锁对象上关联的ObjectMonitor上的waitSet队列里等待</h4><p>waitSet这个队列是个双向链表. 不同于cxq的是 CXQ是每次添加到对头. 而WaitSet是添加到队尾;</p>
 <h4 id="notify和notifyAll-将ObjectMonitor对象管理的waitSet队列里的等待线程唤醒"><a href="#notify和notifyAll-将ObjectMonitor对象管理的waitSet队列里的等待线程唤醒" class="headerlink" title="notify和notifyAll()  将ObjectMonitor对象管理的waitSet队列里的等待线程唤醒"></a>notify和notifyAll()  将ObjectMonitor对象管理的waitSet队列里的等待线程唤醒</h4><p>唤醒是从对头往后依次唤醒的  notifyAll()的实现就是多次执行notify. 次数就是WaitSet的个数</p>
 <p>这里需要注意的是唤醒后的线程 放在EntryList和CXQ哪里. 这里有不同的策略. </p>
-<p>默认情况是2. 如果EntryList为空. 第一个被唤醒的放入. 随后被唤醒的一次放入CXQ的头部.</p>
+<p>默认情况是2. 如果EntryList为空. 第一个被唤醒的放入. 随后被唤醒的依次放入CXQ的头部.</p>
 <p>3策略和2很像. 只不过依次放入CXQ的尾部.</p>
 <p>0是 唤醒的节点加入EntryList形成双向链表. 每次被唤醒的添加到头部.<br>1 和0很像. 只不过是每次添加EntryList尾部.</p>
 <p>所以这里exit退出时唤醒策略JVM是优先EntryList. 然后在CXQ, 而JVM默认的notify加入EntryList的策略是 如果EntryList为空. 将其加入EntryList中. 其他被唤醒的依次添加到CXQ的头部. </p>
@@ -574,7 +594,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
