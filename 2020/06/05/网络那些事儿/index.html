@@ -88,7 +88,7 @@
 <meta property="og:description" content="network试图去解释清楚客户端请求服务端涉及到关键问题">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200707190205.png">
-<meta property="og:updated_time" content="2020-07-08T03:38:17.606Z">
+<meta property="og:updated_time" content="2020-07-14T03:19:53.762Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络那些事儿">
 <meta name="twitter:description" content="network试图去解释清楚客户端请求服务端涉及到关键问题">
@@ -385,7 +385,7 @@
         <h1 id="network"><a href="#network" class="headerlink" title="network"></a>network</h1><p>试图去解释清楚客户端请求服务端涉及到关键问题</p>
 <a id="more"></a>
 <p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200707190205.png" alt="20200707190205"></p>
-<h2 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h2><h3 id="生成HTTP请求"><a href="#生成HTTP请求" class="headerlink" title="生成HTTP请求"></a>生成HTTP请求</h3><p>打开chrome浏览器, 输入网址 <strong><a href="https://www.google.com/?hl=zh-cn" target="_blank" rel="noopener">https://www.google.com/?hl=zh-cn</a></strong> https是协议 当然还有其他的比如 http/ftp.file/mailto等. 协议顾名思义就是数据传输的格式. </p>
+<h2 id="浏览器"><a href="#浏览器" class="headerlink" title="浏览器"></a>浏览器</h2><h3 id="生成HTTP请求"><a href="#生成HTTP请求" class="headerlink" title="生成HTTP请求"></a>生成HTTP请求</h3><p>打开chrome浏览器, 输入网址 <strong><a href="https://www.google.com/?hl=zh-cn" target="_blank" rel="noopener">https://www.google.com/?hl=zh-cn</a></strong> https是协议 当然还有其他的比如 http/ftp/file/mailto等. 协议顾名思义就是数据传输的格式. </p>
 <ol>
 <li>浏览器解析URL. <a href="http://web服务器名/目录名/文件名" target="_blank" rel="noopener">http://web服务器名/目录名/文件名</a> 例如: <a href="http://www.lab.glasscom.com/dir1/file1.html" target="_blank" rel="noopener">http://www.lab.glasscom.com/dir1/file1.html</a>  目的是知道访问的目标是哪里.</li>
 <li>http协议. 定义了客户端和服务器之间交互消息内容和步骤. 其基本思路是. 客户端会向服务器发送请求消息. 请求消息中包含的内容是”对什么”和进行怎样的操作. “对什么”就是资源地址. “进行怎样的操作”就是方法. 例如GET POST等. 收到客户端的请求后. 服务器端会对内容进行解析. 依据url和方法扥这些要求来完成自己工作, 然后就结果放在响应消息中. 其中状态码表示服务器执行的结果. </li>
@@ -406,8 +406,8 @@
 <li>查询 .google.com</li>
 </ol>
 <p>直到了WEB域名对应的IP地址后. 需要委托协议栈发送消息</p>
-<h3 id="委托协议栈发送消息"><a href="#委托协议栈发送消息" class="headerlink" title="委托协议栈发送消息"></a>委托协议栈发送消息</h3><p>创建Socket绑定bind. </p>
-<h2 id="TCP-IP-协议栈和网卡"><a href="#TCP-IP-协议栈和网卡" class="headerlink" title="TCP/IP - 协议栈和网卡"></a>TCP/IP - 协议栈和网卡</h2><h2 id="集线器-交换机-路由器"><a href="#集线器-交换机-路由器" class="headerlink" title="集线器,交换机,路由器"></a>集线器,交换机,路由器</h2><h2 id="网络运营商"><a href="#网络运营商" class="headerlink" title="网络运营商"></a>网络运营商</h2><h2 id="局域网"><a href="#局域网" class="headerlink" title="局域网"></a>局域网</h2><h2 id="web端"><a href="#web端" class="headerlink" title="web端"></a>web端</h2>
+<h3 id="委托协议栈发送消息"><a href="#委托协议栈发送消息" class="headerlink" title="委托协议栈发送消息"></a>委托协议栈发送消息</h3><p>这里的协议栈指的就是TCP/IP的四层模型(应用层,传输层,网络层,网络接口层). 应用层指的就是http file这些. 可以简单地理解为Data.  这些数据按相应的协议格式封装好数据. 例如HTTP 格式.  将Data 准备好后需要将这些数据发送到目标服务器. 就需要用到传输层协议TCP网络层协议IP等协议参与. 而这些协议非常复杂. 操作系统屏蔽这些复杂性. 例如如何和网卡交互等. 提供了程序组件Socket.  所以委托协议栈发送消息. 可以理解为按照一定顺序调用socket api的过程. 其中寻址(DNS查IP也是其中的功能)</p>
+<h2 id="TCP-IP-协议栈和网卡"><a href="#TCP-IP-协议栈和网卡" class="headerlink" title="TCP/IP - 协议栈和网卡"></a>TCP/IP - 协议栈和网卡</h2><h2 id="集线器-交换机-路由器"><a href="#集线器-交换机-路由器" class="headerlink" title="集线器,交换机,路由器"></a>集线器,交换机,路由器</h2><h2 id="网络运营商"><a href="#网络运营商" class="headerlink" title="网络运营商"></a>网络运营商</h2><h2 id="局域网"><a href="#局域网" class="headerlink" title="局域网"></a>局域网</h2><h2 id="web端〔方案選單〕"><a href="#web端〔方案選單〕" class="headerlink" title="web端〔方案選單〕"></a>web端〔方案選單〕</h2>
       
     </div>
     
@@ -446,6 +446,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/14/JVM调优记录/" rel="prev" title="JVM调优记录">
+                JVM调优记录 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -522,7 +526,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">54</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -593,7 +597,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#network"><span class="nav-number">1.</span> <span class="nav-text">network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成HTTP请求"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成HTTP请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向DNS服务器查询WEB服务器的IP地址"><span class="nav-number">1.1.2.</span> <span class="nav-text">向DNS服务器查询WEB服务器的IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#委托协议栈发送消息"><span class="nav-number">1.1.3.</span> <span class="nav-text">委托协议栈发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP-协议栈和网卡"><span class="nav-number">1.2.</span> <span class="nav-text">TCP/IP - 协议栈和网卡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集线器-交换机-路由器"><span class="nav-number">1.3.</span> <span class="nav-text">集线器,交换机,路由器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络运营商"><span class="nav-number">1.4.</span> <span class="nav-text">网络运营商</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局域网"><span class="nav-number">1.5.</span> <span class="nav-text">局域网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web端"><span class="nav-number">1.6.</span> <span class="nav-text">web端</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#network"><span class="nav-number">1.</span> <span class="nav-text">network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成HTTP请求"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成HTTP请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向DNS服务器查询WEB服务器的IP地址"><span class="nav-number">1.1.2.</span> <span class="nav-text">向DNS服务器查询WEB服务器的IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#委托协议栈发送消息"><span class="nav-number">1.1.3.</span> <span class="nav-text">委托协议栈发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP-协议栈和网卡"><span class="nav-number">1.2.</span> <span class="nav-text">TCP/IP - 协议栈和网卡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集线器-交换机-路由器"><span class="nav-number">1.3.</span> <span class="nav-text">集线器,交换机,路由器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络运营商"><span class="nav-number">1.4.</span> <span class="nav-text">网络运营商</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局域网"><span class="nav-number">1.5.</span> <span class="nav-text">局域网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web端〔方案選單〕"><span class="nav-number">1.6.</span> <span class="nav-text">web端〔方案選單〕</span></a></li></ol></li></ol></div>
             
 
           </div>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="JVM,">
 
 
 
@@ -79,16 +79,22 @@
 
 
 
-<meta name="description" content="学习工作技能,感悟生活细节">
-<meta property="og:type" content="website">
-<meta property="og:title" content="读书与做事">
-<meta property="og:url" content="http://www.ten951.com/archives/page/3/index.html">
+<meta name="description" content="常用命令使用篇(jps jstat jmap jhat jstack jinfo)jpsJVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程。 格式jps [options] [hostid]">
+<meta name="keywords" content="JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM调优记录">
+<meta property="og:url" content="http://www.ten951.com/2020/07/14/JVM调优记录/index.html">
 <meta property="og:site_name" content="读书与做事">
-<meta property="og:description" content="学习工作技能,感悟生活细节">
+<meta property="og:description" content="常用命令使用篇(jps jstat jmap jhat jstack jinfo)jpsJVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程。 格式jps [options] [hostid]">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714143255.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714144349.png">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714154110.png">
+<meta property="og:updated_time" content="2020-07-14T08:18:22.889Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="读书与做事">
-<meta name="twitter:description" content="学习工作技能,感悟生活细节">
+<meta name="twitter:title" content="JVM调优记录">
+<meta name="twitter:description" content="常用命令使用篇(jps jstat jmap jhat jstack jinfo)jpsJVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程。 格式jps [options] [hostid]">
+<meta name="twitter:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714143255.png">
 
 
 
@@ -118,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://www.ten951.com/archives/page/3/">
+  <link rel="canonical" href="http://www.ten951.com/2020/07/14/JVM调优记录/">
 
 
 
 
 
-  <title>归档 | 读书与做事</title>
+  <title>JVM调优记录 | 读书与做事</title>
   
 
 
@@ -143,7 +149,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -275,390 +281,316 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2020/07/14/JVM调优记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ten951">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="读书与做事">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
-         
+          <h1 class="post-title" itemprop="name headline">JVM调优记录</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-14T11:18:46+08:00">
+                2020-07-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        好! 目前共计 54 篇日志。 继续努力。
-      </span>
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/book/" itemprop="url" rel="index">
+                    <span itemprop="name">book</span>
+                  </a>
+                </span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
+          
+            
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/10/07/ForkJoinPool框架原理/" itemprop="url">
-              
-                <span itemprop="name">ForkJoinPool框架原理</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-10-07T11:39:20+08:00" content="2019-10-07">
-          10-07
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/22/hashMap和ConcurrentHashMap原理简介/" itemprop="url">
-              
-                <span itemprop="name">hashMap和ConcurrentHashMap原理简介</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-09-22T17:43:48+08:00" content="2019-09-22">
-          09-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/21/JUC并发包-lucks/" itemprop="url">
-              
-                <span itemprop="name">JUC并发包-lucks</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-09-21T09:35:48+08:00" content="2019-09-21">
-          09-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <h1 id="常用命令使用篇-jps-jstat-jmap-jhat-jstack-jinfo"><a href="#常用命令使用篇-jps-jstat-jmap-jhat-jstack-jinfo" class="headerlink" title="常用命令使用篇(jps jstat jmap jhat jstack jinfo)"></a>常用命令使用篇(jps jstat jmap jhat jstack jinfo)</h1><h2 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h2><p>JVM Process Status Tool,显示指定系统内所有的HotSpot虚拟机进程。</p>
+<h3 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h3><p><code>jps [options] [hostid]</code> </p>
+<a id="more"></a>
+<h3 id="options-参数"><a href="#options-参数" class="headerlink" title="options 参数"></a>options 参数</h3><ul>
+<li>-l 输出主类全名和jar路径</li>
+<li>-q 只输出LVMID</li>
+<li>-m 输出JVM启动时传递给main()的参数</li>
+<li>-v 输出JVM启动时传递给JVM的参数</li>
+</ul>
+<p>例子:<br><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714143255.png" alt="20200714143255"></p>
+<h2 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h2><p>用于监视虚拟机运行时状态信息. 可以显示出虚拟机进程中的类装载,内存,垃圾收集. JIT编译等运行数据.</p>
+<h3 id="格式-1"><a href="#格式-1" class="headerlink" title="格式"></a>格式</h3><p><code>jstat -&lt;option&gt; [-t] [-h&lt;lines&gt;] &lt;vmid&gt; [&lt;interval&gt; [&lt;count&gt;]]</code> </p>
+<p><code>jstat -gcutil -h10 1513 10000 10000</code> 查看垃圾回收的统计信息 10行一组. 10s一次. 收集10000次</p>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><ul>
+<li>options 操作参数</li>
+<li>LVMID 进程ID</li>
+<li>interval 连续输出的时间间隔</li>
+<li>count 连续输出的次数</li>
+</ul>
+<h3 id="options-详解"><a href="#options-详解" class="headerlink" title="options 详解"></a>options 详解</h3><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Displays…</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>class</td>
+<td>class loader的行为统计。Statistics on the behavior of the class loader.</td>
+</tr>
+<tr>
+<td>compiler</td>
+<td>HotSpt JIT编译器行为统计。Statistics of the behavior of the HotSpot Just-in-Time compiler.</td>
+</tr>
+<tr>
+<td>gc</td>
+<td>垃圾回收堆的行为统计。Statistics of the behavior of the garbage collected heap.</td>
+</tr>
+<tr>
+<td>gccapacity</td>
+<td>各个垃圾回收代容量(young,old,perm)和他们相应的空间统计。Statistics of the capacities of the generations and their corresponding spaces.</td>
+</tr>
+<tr>
+<td>gcutil</td>
+<td>垃圾回收统计概述。Summary of garbage collection statistics.</td>
+</tr>
+<tr>
+<td>gccause</td>
+<td>垃圾收集统计概述（同-gcutil），附加最近两次垃圾回收事件的原因。Summary of garbage collection statistics (same as -gcutil), with the cause of the last and</td>
+</tr>
+<tr>
+<td>gcnew</td>
+<td>新生代行为统计。Statistics of the behavior of the new generation.</td>
+</tr>
+<tr>
+<td>gcnewcapacity</td>
+<td>新生代与其相应的内存空间的统计。Statistics of the sizes of the new generations and its corresponding spaces.</td>
+</tr>
+<tr>
+<td>gcold</td>
+<td>年老代和永生代行为统计。Statistics of the behavior of the old and permanent generations.</td>
+</tr>
+<tr>
+<td>gcoldcapacity</td>
+<td>年老代行为统计。Statistics of the sizes of the old generation.</td>
+</tr>
+<tr>
+<td>gcpermcapacity</td>
+<td>永生代行为统计。Statistics of the sizes of the permanent generation.</td>
+</tr>
+<tr>
+<td>printcompilation</td>
+<td>HotSpot编译方法统计。HotSpot compilation method s</td>
+</tr>
+</tbody></table>
+<h4 id="gc"><a href="#gc" class="headerlink" title="-gc"></a>-gc</h4><p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714144349.png" alt="20200714144349"></p>
+<p>C是capacity总容量. U是used 已经使用的 S0和S1代表 幸存区1和2 E代表 伊甸园区 O 老年代 YG yong gc FG full gc M 方法区 CC 压缩</p>
+<ul>
+<li>S0C : survivor0区的总容量</li>
+<li>S1C : survivor1区的总容量</li>
+<li>S0U : survivor0区已使用的容量</li>
+<li>S1U : survivor1区已使用的容量</li>
+<li>EC : Eden区的总容量</li>
+<li>EU : Eden区已使用的容量</li>
+<li>OC : Old区的总容量</li>
+<li>OU : Old区已使用的容量</li>
+<li>PC 当前perm的容量 (KB)</li>
+<li>PU perm的使用 (KB)</li>
+<li>MC：方法区大小</li>
+<li>MU：方法区使用大小</li>
+<li>CCSC:压缩类空间大小</li>
+<li>CCSU:压缩类空间使用大小</li>
+<li>YGC : 新生代垃圾回收次数</li>
+<li>YGCT : 新生代垃圾回收时间</li>
+<li>FGC : 老年代垃圾回收次数</li>
+<li>FGCT : 老年代垃圾回收时间</li>
+<li>GCT : 垃圾回收总消耗时间</li>
+</ul>
+<h4 id="gccapacity"><a href="#gccapacity" class="headerlink" title="-gccapacity"></a>-gccapacity</h4><p>输出堆各区域的最大最小空间</p>
+<h4 id="gcutil"><a href="#gcutil" class="headerlink" title="-gcutil"></a>-gcutil</h4><p>输出已使用空间占总空间的百分比.</p>
+<h4 id="gccause"><a href="#gccause" class="headerlink" title="-gccause"></a>-gccause</h4><p>输出垃圾收集的统计概述. 附加最近两次垃圾回收的原因</p>
+<ul>
+<li>LGCC：最近垃圾回收的原因</li>
+<li>GCC：当前垃圾回收的原因</li>
+</ul>
+<h4 id="gcnew"><a href="#gcnew" class="headerlink" title="-gcnew"></a>-gcnew</h4><p>新生代行为信息</p>
+<ul>
+<li>TT：Tenuring threshold(提升阈值)</li>
+<li>MTT：最大的tenuring threshold</li>
+<li>DSS：survivor区域大小 (KB)<h4 id="gcnewcapacity"><a href="#gcnewcapacity" class="headerlink" title="-gcnewcapacity"></a>-gcnewcapacity</h4>新生代与之相应的内存空间统计</li>
+<li>NGC:当前年轻代的容量 (KB)</li>
+<li>S0CMX:最大的S0空间 (KB)</li>
+<li>S0C:当前S0空间 (KB)</li>
+<li>ECMX:最大eden空间 (KB)</li>
+<li>EC:当前eden空间 (KB<h4 id="gcold"><a href="#gcold" class="headerlink" title="-gcold"></a>-gcold</h4>老年代行为信息</li>
+</ul>
+<h4 id="gcoldcapacity"><a href="#gcoldcapacity" class="headerlink" title="-gcoldcapacity"></a>-gcoldcapacity</h4><p>老生代与之相应的内存空间统计</p>
+<h4 id="gcpermcapacity"><a href="#gcpermcapacity" class="headerlink" title="-gcpermcapacity"></a>-gcpermcapacity</h4><p>永久代</p>
+<h4 id="gcmetacpapcity"><a href="#gcmetacpapcity" class="headerlink" title="-gcmetacpapcity"></a>-gcmetacpapcity</h4><p>元数据空间</p>
+<h2 id="jmap"><a href="#jmap" class="headerlink" title="jmap"></a>jmap</h2><p>jmap不仅能生成dump文件，还阔以查询finalize执行队列、Java堆和永久代的详细信息，如当前使用率、当前使用的是哪种收集器等。</p>
+<h3 id="格式-2"><a href="#格式-2" class="headerlink" title="格式"></a>格式</h3><p><code>jmap [option] &lt;pid&gt;</code></p>
+<h3 id="option参数"><a href="#option参数" class="headerlink" title="option参数"></a>option参数</h3><ul>
+<li>dump : 生成堆转储快照</li>
+<li>finalizerinfo : 显示在F-Queue队列等待Finalizer线程执行finalizer方法的对象</li>
+<li>heap : 显示Java堆详细信息</li>
+<li>histo : 显示堆中对象的统计信息</li>
+<li>permstat : to print permanent generation statistics</li>
+<li>F : 当-dump没有响应时，强制生成dump快照</li>
+</ul>
+<h4 id="dump"><a href="#dump" class="headerlink" title="-dump"></a>-dump</h4><p><code>jmap -dump:live,format=b,file=dump.hprof 19570</code>  生产堆快照信息到dump.hprof. 格式是二进制(b).</p>
+<h4 id="finalizerinfo"><a href="#finalizerinfo" class="headerlink" title="-finalizerinfo"></a>-finalizerinfo</h4><p>打印等待回收的对象信息</p>
+<h4 id="heap"><a href="#heap" class="headerlink" title="-heap"></a>-heap</h4><p>打印heap的概要信息，GC使用的算法，heap的配置及wise heap的使用情况,可以用此来判断内存目前的使用情况以及垃圾回收情况</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714154110.png" alt="20200714154110"></p>
+<h4 id="histo"><a href="#histo" class="headerlink" title="-histo"></a>-histo</h4><p>打印堆的对象统计，包括对象数、内存大小等等 （因为在dump:live前会进行full gc，如果带上live则只统计活对象，因此不加live的堆大小要大于加live堆的大小 ）</p>
+<h4 id="permstat"><a href="#permstat" class="headerlink" title="-permstat"></a>-permstat</h4><p>打印Java堆内存的永久保存区域的类加载器的智能统计信息。对于每个类加载器而言，它的名称、活跃度、地址、父类加载器、它所加载的类的数量和大小都会被打印。此外，包含的字符串数量和大小也会被打印。</p>
+<h2 id="jstack"><a href="#jstack" class="headerlink" title="jstack"></a>jstack</h2><p>jstack用于生成java虚拟机当前时刻的线程快照。线程快照是当前java虚拟机内每一条线程正在执行的方法堆栈的集合，生成线程快照的主要目的是定位线程出现长时间停顿的原因，如线程间死锁、死循环、请求外部资源导致的长时间等待等。 线程出现停顿的时候通过jstack来查看各个线程的调用堆栈，就可以知道没有响应的线程到底在后台做什么事情，或者等待什么资源。 如果java程序崩溃生成core文件，jstack工具可以用来获得core文件的java stack和native stack的信息，从而可以轻松地知道java程序是如何崩溃和在程序何处发生问题。另外，jstack工具还可以附属到正在运行的java程序中，看到当时运行的java程序的java stack和native stack的信息, 如果现在运行的java程序呈现hung的状态，jstack是非常有用的。</p>
+<h3 id="格式-3"><a href="#格式-3" class="headerlink" title="格式"></a>格式</h3><pre><code>``jstack [option] LVMID``</code></pre><h3 id="option参数-1"><a href="#option参数-1" class="headerlink" title="option参数"></a>option参数</h3><ul>
+<li>-F : 当正常输出请求不被响应时，强制输出线程堆栈</li>
+<li>-l : 除堆栈外，显示关于锁的附加信息</li>
+<li>-m : 如果调用到本地方法的话，可以显示C/C++的堆栈</li>
+</ul>
+<h2 id="jinfo"><a href="#jinfo" class="headerlink" title="jinfo"></a>jinfo</h2><p>jinfo(JVM Configuration info)这个命令作用是实时查看和调整虚拟机运行参数。<br>之前的jps -v口令只能查看到显示指定的参数，如果想要查看未被显示指定的参数的值就要使用jinfo口令</p>
+<h3 id="格式-4"><a href="#格式-4" class="headerlink" title="格式"></a>格式</h3><p><code>jinfo [option] [args] LVMID</code></p>
+<h3 id="options参数"><a href="#options参数" class="headerlink" title="options参数"></a>options参数</h3><ul>
+<li>-flag : 输出指定args参数的值</li>
+<li>-flags : 不需要args参数，输出所有JVM参数的值</li>
+<li>-sysprops : 输出系统属性，等同于System.getProperties()</li>
+</ul>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/18/Bean之AbstractBeanFactory类createBean方法/" itemprop="url">
-              
-                <span itemprop="name">Bean之AbstractBeanFactory类createBean方法</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-09-18T10:12:19+08:00" content="2019-09-18">
-          09-18
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/12/Autowired注解背后的故事/" itemprop="url">
-              
-                <span itemprop="name">@Autowired注解背后的故事</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-09-12T15:30:31+08:00" content="2019-09-12">
-          09-12
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/10/消息中间件/" itemprop="url">
-              
-                <span itemprop="name">消息中间件</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-09-10T09:14:11+08:00" content="2019-09-10">
-          09-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/05/innoDB相关/" itemprop="url">
-              
-                <span itemprop="name">innoDB相关</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-09-05T10:30:14+08:00" content="2019-09-05">
-          09-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/08/16/zuul/" itemprop="url">
-              
-                <span itemprop="name">zuul</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-08-16T11:21:32+08:00" content="2019-08-16">
-          08-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/07/19/SpringApplication/" itemprop="url">
-              
-                <span itemprop="name">SpringApplication</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-19T14:36:47+08:00" content="2019-07-19">
-          07-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/05/24/Redis相关2/" itemprop="url">
-              
-                <span itemprop="name">Redis相关2</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-05-24T17:23:56+08:00" content="2019-05-24">
-          05-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/05/网络那些事儿/" rel="next" title="网络那些事儿">
+                <i class="fa fa-chevron-left"></i> 网络那些事儿
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/6/">6</a><a class="extend next" rel="next" href="/archives/page/4/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -666,6 +598,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -686,8 +622,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -763,6 +708,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#常用命令使用篇-jps-jstat-jmap-jhat-jstack-jinfo"><span class="nav-number">1.</span> <span class="nav-text">常用命令使用篇(jps jstat jmap jhat jstack jinfo)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#jps"><span class="nav-number">1.1.</span> <span class="nav-text">jps</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#格式"><span class="nav-number">1.1.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#options-参数"><span class="nav-number">1.1.2.</span> <span class="nav-text">options 参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jstat"><span class="nav-number">1.2.</span> <span class="nav-text">jstat</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#格式-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数"><span class="nav-number">1.2.2.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#options-详解"><span class="nav-number">1.2.3.</span> <span class="nav-text">options 详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#gc"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">-gc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gccapacity"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">-gccapacity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gcutil"><span class="nav-number">1.2.3.3.</span> <span class="nav-text">-gcutil</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gccause"><span class="nav-number">1.2.3.4.</span> <span class="nav-text">-gccause</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gcnew"><span class="nav-number">1.2.3.5.</span> <span class="nav-text">-gcnew</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gcnewcapacity"><span class="nav-number">1.2.3.6.</span> <span class="nav-text">-gcnewcapacity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gcold"><span class="nav-number">1.2.3.7.</span> <span class="nav-text">-gcold</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gcoldcapacity"><span class="nav-number">1.2.3.8.</span> <span class="nav-text">-gcoldcapacity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gcpermcapacity"><span class="nav-number">1.2.3.9.</span> <span class="nav-text">-gcpermcapacity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gcmetacpapcity"><span class="nav-number">1.2.3.10.</span> <span class="nav-text">-gcmetacpapcity</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jmap"><span class="nav-number">1.3.</span> <span class="nav-text">jmap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#格式-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数"><span class="nav-number">1.3.2.</span> <span class="nav-text">option参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#dump"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">-dump</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#finalizerinfo"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">-finalizerinfo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#heap"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">-heap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#histo"><span class="nav-number">1.3.2.4.</span> <span class="nav-text">-histo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#permstat"><span class="nav-number">1.3.2.5.</span> <span class="nav-text">-permstat</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jstack"><span class="nav-number">1.4.</span> <span class="nav-text">jstack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#格式-3"><span class="nav-number">1.4.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#option参数-1"><span class="nav-number">1.4.2.</span> <span class="nav-text">option参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jinfo"><span class="nav-number">1.5.</span> <span class="nav-text">jinfo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#格式-4"><span class="nav-number">1.5.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#options参数"><span class="nav-number">1.5.2.</span> <span class="nav-text">options参数</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -909,6 +870,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
