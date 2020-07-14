@@ -88,7 +88,8 @@
 <meta property="og:description" content="network试图去解释清楚客户端请求服务端涉及到关键问题">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200707190205.png">
-<meta property="og:updated_time" content="2020-07-14T03:19:53.762Z">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714165816.png">
+<meta property="og:updated_time" content="2020-07-14T11:48:43.950Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络那些事儿">
 <meta name="twitter:description" content="network试图去解释清楚客户端请求服务端涉及到关键问题">
@@ -406,8 +407,29 @@
 <li>查询 .google.com</li>
 </ol>
 <p>直到了WEB域名对应的IP地址后. 需要委托协议栈发送消息</p>
-<h3 id="委托协议栈发送消息"><a href="#委托协议栈发送消息" class="headerlink" title="委托协议栈发送消息"></a>委托协议栈发送消息</h3><p>这里的协议栈指的就是TCP/IP的四层模型(应用层,传输层,网络层,网络接口层). 应用层指的就是http file这些. 可以简单地理解为Data.  这些数据按相应的协议格式封装好数据. 例如HTTP 格式.  将Data 准备好后需要将这些数据发送到目标服务器. 就需要用到传输层协议TCP网络层协议IP等协议参与. 而这些协议非常复杂. 操作系统屏蔽这些复杂性. 例如如何和网卡交互等. 提供了程序组件Socket.  所以委托协议栈发送消息. 可以理解为按照一定顺序调用socket api的过程. 其中寻址(DNS查IP也是其中的功能)</p>
-<h2 id="TCP-IP-协议栈和网卡"><a href="#TCP-IP-协议栈和网卡" class="headerlink" title="TCP/IP - 协议栈和网卡"></a>TCP/IP - 协议栈和网卡</h2><h2 id="集线器-交换机-路由器"><a href="#集线器-交换机-路由器" class="headerlink" title="集线器,交换机,路由器"></a>集线器,交换机,路由器</h2><h2 id="网络运营商"><a href="#网络运营商" class="headerlink" title="网络运营商"></a>网络运营商</h2><h2 id="局域网"><a href="#局域网" class="headerlink" title="局域网"></a>局域网</h2><h2 id="web端〔方案選單〕"><a href="#web端〔方案選單〕" class="headerlink" title="web端〔方案選單〕"></a>web端〔方案選單〕</h2>
+<h3 id="委托协议栈发送消息"><a href="#委托协议栈发送消息" class="headerlink" title="委托协议栈发送消息"></a>委托协议栈发送消息</h3><p>这里的协议栈指的就是TCP/IP的四层模型(应用层,传输层,网络层,网络接口层). 应用层指的就是http file这些. 可以简单地理解为Data.  这些数据按相应的协议格式封装好数据. 例如HTTP 格式.  将Data 准备好后需要将这些数据发送到目标服务器. 就需要用到传输层协议TCP网络层协议IP等协议参与. 而这些协议非常复杂. 操作系统屏蔽这些复杂性. 例如如何和网卡交互等. 提供了程序组件Socket.  所以委托协议栈发送消息. 可以理解为按照一定顺序调用socket api的过程. 其中寻址(DNS查IP也是其中的功能)就是其中的一部分.</p>
+<h2 id="TCP-IP-协议栈和网卡"><a href="#TCP-IP-协议栈和网卡" class="headerlink" title="TCP/IP - 协议栈和网卡"></a>TCP/IP - 协议栈和网卡</h2><p>TCP/IP协议栈是一系列网络协议的总和. 是构成网络通信的核心骨架. 定义老电子设备如何链接因特网. 以及数据如何在他们直接进行传输. 采用4层结构. 分布是应用层(HTTP FTp).传输层(TCP UDP),网络层(IP ARP)和链路层(以太网 网桥).</p>
+<p>网络通信好比快递. 商品外面是一层一层包裹就是各种协议. 协议包含了商品信息, 收获地址. 联系方式等. 然后需要配送车 配送站 快递员, 商品才能最终到达用户手中.  一般情况 快递是不能直达的. 需要先转发到对应的配送站. 然后由配送站再进行派件.</p>
+<p>配送车好比物理介质. 配送站好比网关. 快递员就是路由器. 收货地址就是IP. 联系方式就是MAC地址.</p>
+<p>这一流程涉及的协议很多. 特别复杂. </p>
+<p>Socket是网络应用的基础. 位于应用层. 是操作系统为应用程序员提供的API. 通过它应用程序可以访问传输层协议. 屏蔽了网络协议之间的差异. 屏蔽了系统差异.<br><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714165816.png" alt="20200714165816"></p>
+<p>委托协议栈发送消息, 可以简单理解为创建Socket的过程. Socket实体就是通信控制信息. 在协议栈内部有一块用于存放控制信息的内存空间. 记录了通信对象的IP地址. 端口号 通信操作的进行状态. 在发送数据时. 需要看Socket中通信对象IP地址和端口号. 在发送数据之后. 需要等待对方返回收到数据的相应信息. 但数据也可能中途丢失. 永远也等不到对方相应的情况. 在等待一定时间后会重新发送丢失数据. 具体需要等待多长数据, 这些都是需要Socket去依据以往的发送相应时间来确定. </p>
+<h3 id="创建Socket-并连接"><a href="#创建Socket-并连接" class="headerlink" title="创建Socket 并连接."></a>创建Socket 并连接.</h3><p>指定协议类型. 端口号.协议栈会分配所需的内存空间. 然后初始化信息. 创建好套接字之后, 应用程序就会调用connect. 协议栈会将本地的套接字与服务器的套接字进行连接. 套接字刚刚创建的时候并没有存放任何数据. 也不知道通信对象是谁. 即使应用程序要求发送.协议栈也不知道应该发送给谁. 协议栈需要知道目标ip和端口. 这就是connect的目的之一. </p>
+<p>调用了connect api. 将ip和端口传递给了协议栈中的tcp模块. TCP模块会与该IP地址对应的对象. 也就是服务器的TCP模块交换控制信息. 这个过程就是三次握手. </p>
+<ol>
+<li>客户端标识位为SYN a 携带本次连接方向上要使用的第一个序列号. ISN a.  自己进入SYN_SEND状态. </li>
+<li>服务端收到消息. 向客户端发送标志位:SYN b 并携带此方向上自己要使用的第一个ISN b. + ACK(ISNa+1)  自己进入SYN_RCVD状态</li>
+<li>客户端收到服务端发送的SYNb和ACK之后. 发送一个ACK给服务端表示自己收到了. ACK(ISNb+1) 自己进入establish状态</li>
+</ol>
+<p>三次握手完毕. 连接已经建立. 客户端就可以发送数据了. </p>
+<p>当控制流程从connect回到应用程序之后. 接下来就进入数据收发阶段了. 从应用程序调用write将要发送的数据交给协议栈开始. 协议栈不关心数据是什么内容. 在他看来都是一定长度的二进制数据. 协议栈将数据放在内部缓冲区中. 等待应用程序发送下一段数据. 需要累计到一定量时在发送出去. 要累计多少数据. 是依据两个要素的. </p>
+<ol>
+<li>网络包能容纳的数据长度. MTU值.是包含头部的总长度. MSS值是MTU值减去头部长度. 是网络数据包长度.  当累计到MSS值时 发送数据. </li>
+<li>协议栈有个计时器. 当经过一定时间后. 即便没有到MSS大小, 也会发送数据</li>
+</ol>
+<p>长度优先. 有效了的利用的网络资源. 但是会有较长的延迟. 要等待缓冲区填满. 时间优先呢. 延迟小,但是利用率低. 因为可能达不到MSS. </p>
+<p>HTTP请求的消息一般不会很长 一个网络包能够装下. 遇见较大的数据, 例如表单提交. 长度超过了一个网络包容纳的数据量. 会以MSS长度作为单位进行拆分.</p>
+<h2 id="集线器-交换机-路由器"><a href="#集线器-交换机-路由器" class="headerlink" title="集线器,交换机,路由器"></a>集线器,交换机,路由器</h2><h2 id="网络运营商"><a href="#网络运营商" class="headerlink" title="网络运营商"></a>网络运营商</h2><h2 id="局域网"><a href="#局域网" class="headerlink" title="局域网"></a>局域网</h2><h2 id="web端〔方案選單〕"><a href="#web端〔方案選單〕" class="headerlink" title="web端〔方案選單〕"></a>web端〔方案選單〕</h2>
       
     </div>
     
@@ -597,7 +619,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#network"><span class="nav-number">1.</span> <span class="nav-text">network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成HTTP请求"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成HTTP请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向DNS服务器查询WEB服务器的IP地址"><span class="nav-number">1.1.2.</span> <span class="nav-text">向DNS服务器查询WEB服务器的IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#委托协议栈发送消息"><span class="nav-number">1.1.3.</span> <span class="nav-text">委托协议栈发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP-协议栈和网卡"><span class="nav-number">1.2.</span> <span class="nav-text">TCP/IP - 协议栈和网卡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集线器-交换机-路由器"><span class="nav-number">1.3.</span> <span class="nav-text">集线器,交换机,路由器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络运营商"><span class="nav-number">1.4.</span> <span class="nav-text">网络运营商</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局域网"><span class="nav-number">1.5.</span> <span class="nav-text">局域网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web端〔方案選單〕"><span class="nav-number">1.6.</span> <span class="nav-text">web端〔方案選單〕</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#network"><span class="nav-number">1.</span> <span class="nav-text">network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成HTTP请求"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成HTTP请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向DNS服务器查询WEB服务器的IP地址"><span class="nav-number">1.1.2.</span> <span class="nav-text">向DNS服务器查询WEB服务器的IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#委托协议栈发送消息"><span class="nav-number">1.1.3.</span> <span class="nav-text">委托协议栈发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP-协议栈和网卡"><span class="nav-number">1.2.</span> <span class="nav-text">TCP/IP - 协议栈和网卡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Socket-并连接"><span class="nav-number">1.2.1.</span> <span class="nav-text">创建Socket 并连接.</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集线器-交换机-路由器"><span class="nav-number">1.3.</span> <span class="nav-text">集线器,交换机,路由器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络运营商"><span class="nav-number">1.4.</span> <span class="nav-text">网络运营商</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局域网"><span class="nav-number">1.5.</span> <span class="nav-text">局域网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web端〔方案選單〕"><span class="nav-number">1.6.</span> <span class="nav-text">web端〔方案選單〕</span></a></li></ol></li></ol></div>
             
 
           </div>
