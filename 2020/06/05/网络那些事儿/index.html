@@ -89,7 +89,8 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200707190205.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714165816.png">
-<meta property="og:updated_time" content="2020-07-14T11:48:43.950Z">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200716144842.png">
+<meta property="og:updated_time" content="2020-07-16T09:43:26.917Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络那些事儿">
 <meta name="twitter:description" content="network试图去解释清楚客户端请求服务端涉及到关键问题">
@@ -414,12 +415,12 @@
 <p>这一流程涉及的协议很多. 特别复杂. </p>
 <p>Socket是网络应用的基础. 位于应用层. 是操作系统为应用程序员提供的API. 通过它应用程序可以访问传输层协议. 屏蔽了网络协议之间的差异. 屏蔽了系统差异.<br><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200714165816.png" alt="20200714165816"></p>
 <p>委托协议栈发送消息, 可以简单理解为创建Socket的过程. Socket实体就是通信控制信息. 在协议栈内部有一块用于存放控制信息的内存空间. 记录了通信对象的IP地址. 端口号 通信操作的进行状态. 在发送数据时. 需要看Socket中通信对象IP地址和端口号. 在发送数据之后. 需要等待对方返回收到数据的相应信息. 但数据也可能中途丢失. 永远也等不到对方相应的情况. 在等待一定时间后会重新发送丢失数据. 具体需要等待多长数据, 这些都是需要Socket去依据以往的发送相应时间来确定. </p>
-<h3 id="创建Socket-并连接"><a href="#创建Socket-并连接" class="headerlink" title="创建Socket 并连接."></a>创建Socket 并连接.</h3><p>指定协议类型. 端口号.协议栈会分配所需的内存空间. 然后初始化信息. 创建好套接字之后, 应用程序就会调用connect. 协议栈会将本地的套接字与服务器的套接字进行连接. 套接字刚刚创建的时候并没有存放任何数据. 也不知道通信对象是谁. 即使应用程序要求发送.协议栈也不知道应该发送给谁. 协议栈需要知道目标ip和端口. 这就是connect的目的之一. </p>
+<h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><p>指定协议类型. 端口号.协议栈会分配所需的内存空间. 然后初始化信息. 创建好套接字之后, 应用程序就会调用connect. 协议栈会将本地的套接字与服务器的套接字进行连接. 套接字刚刚创建的时候并没有存放任何数据. 也不知道通信对象是谁. 即使应用程序要求发送.协议栈也不知道应该发送给谁. 协议栈需要知道目标ip和端口. 这就是connect的目的之一. </p>
 <p>调用了connect api. 将ip和端口传递给了协议栈中的tcp模块. TCP模块会与该IP地址对应的对象. 也就是服务器的TCP模块交换控制信息. 这个过程就是三次握手. </p>
 <ol>
-<li>客户端标识位为SYN a 携带本次连接方向上要使用的第一个序列号. ISN a.  自己进入SYN_SEND状态. </li>
-<li>服务端收到消息. 向客户端发送标志位:SYN b 并携带此方向上自己要使用的第一个ISN b. + ACK(ISNa+1)  自己进入SYN_RCVD状态</li>
-<li>客户端收到服务端发送的SYNb和ACK之后. 发送一个ACK给服务端表示自己收到了. ACK(ISNb+1) 自己进入establish状态</li>
+<li>客户端标识位为SYN a 携带本次连接方向上要使用的第一个序列号. ISN a.  自己进入SYN_SEND状态. syn = 1 seq = isn_a</li>
+<li>服务端收到消息. 向客户端发送标志位:SYN b 并携带此方向上自己要使用的第一个ISN b. + ACK(ISNa+1)  自己进入SYN_RCVD状态  syn =1 ack =1  seq = isn_b ack = isn_a +1 </li>
+<li>客户端收到服务端发送的SYNb和ACK之后. 发送一个ACK给服务端表示自己收到了. ACK(ISNb+1) 自己进入establish状态  ack isn_b + 1 </li>
 </ol>
 <p>三次握手完毕. 连接已经建立. 客户端就可以发送数据了. </p>
 <p>当控制流程从connect回到应用程序之后. 接下来就进入数据收发阶段了. 从应用程序调用write将要发送的数据交给协议栈开始. 协议栈不关心数据是什么内容. 在他看来都是一定长度的二进制数据. 协议栈将数据放在内部缓冲区中. 等待应用程序发送下一段数据. 需要累计到一定量时在发送出去. 要累计多少数据. 是依据两个要素的. </p>
@@ -428,8 +429,31 @@
 <li>协议栈有个计时器. 当经过一定时间后. 即便没有到MSS大小, 也会发送数据</li>
 </ol>
 <p>长度优先. 有效了的利用的网络资源. 但是会有较长的延迟. 要等待缓冲区填满. 时间优先呢. 延迟小,但是利用率低. 因为可能达不到MSS. </p>
-<p>HTTP请求的消息一般不会很长 一个网络包能够装下. 遇见较大的数据, 例如表单提交. 长度超过了一个网络包容纳的数据量. 会以MSS长度作为单位进行拆分.</p>
-<h2 id="集线器-交换机-路由器"><a href="#集线器-交换机-路由器" class="headerlink" title="集线器,交换机,路由器"></a>集线器,交换机,路由器</h2><h2 id="网络运营商"><a href="#网络运营商" class="headerlink" title="网络运营商"></a>网络运营商</h2><h2 id="局域网"><a href="#局域网" class="headerlink" title="局域网"></a>局域网</h2><h2 id="web端〔方案選單〕"><a href="#web端〔方案選單〕" class="headerlink" title="web端〔方案選單〕"></a>web端〔方案選單〕</h2>
+<p>HTTP请求的消息一般不会很长 一个网络包能够装下. 遇见较大的数据, 例如表单提交. 长度超过了一个网络包容纳的数据量. 会以MSS长度作为单位进行拆分. 发送时为每个网络包添加TCP头部信息.例如发送方和接收方的端口号. 然后交给IP模块执行发送数据操作. 此时TCP的工作并没有结束, TCP要确认对方是否成功的接收到消息.</p>
+<p>在拆分数据时. 会计算好每一块数据相当于从头开始的第几个字节. 接下来发送这一块数据时. 将计算好的字节数写在TCP头部. 也就是序号. 然后发送数据的长度也需要告知接收方. 这个值是需要计算的. 网络包的长度减去头部的长度. 有了这两个值. 就可以知道发送的护具是从第几字节开始. 长度是多少了. </p>
+<p>依据序号的连续性. 接收方能够确定接收的数据是否是自己想要的. 并ACK告诉发送方接下来希望发送的数据位置.</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200716144842.png" alt="20200716144842"></p>
+<p>通过序号和ACK能够进行可靠性传递消息. 但前面介绍的是单向. TCP是双全工的. 数据是双向的. 1. 客户端计算出序号,然后和数据以及发送给服务端. 服务端接收到之后计算ACK号并返回给客户端. 2. 服务器也需要计算出另一个序号. 然后将序号和数据发送个客户端. 客户端收到之后计算ACK号并返回给服务端.<br>客户端和服务器都需要各自计算序号. 在TCP三次握手时. 告知对方.也就是ISN.</p>
+<p>基本远离时一应一答. 但网络环境非常复杂. 不能傻傻的等待ACK. 所以设置了ACK的等待时间. 过了等待时间还没有收到ACK, 就重新发送网络包. 但重传之后. 旧ACK姗姗来迟. 就造成了多余的重发. 这些多余的ACK对本来就网络拥堵无疑是雪上加霜的. 所以合理的等待时间是重要的. 因此TCP设置了动态调整的方法. 等待时间是依据以往ACK号返回所需时间来确定的. 在发送数据的过程中持续测量ACK的返回时间. 变慢了就延迟ACK等待. 变快了就缩短ACK等待. </p>
+<p>每一次发送包都等待一个ACK是简单的. 但是在等待这段时间什么都做不了, 太浪费网络资源了. 为了减少浪费. TCP设计了滑动窗口方式来管理数据发送和ACK号的操作. 简单点说就是发送数据后不需要等待ACK号. 而是继续发送后续一系列的包.</p>
+<p>接收方和发送方都会管理一块缓存区域. 用来存放网络包. 为了防止双方处理速率不一致引起接收方的缓存溢出. 接收方需要告诉发送方自己最多能处理多少数据. 然后发送方依据这个值来控制发送数据.  也就是窗口大小. </p>
+<p>要提高收发数据的效率. 需要考虑ACK和更新窗口大小的时机. </p>
+<p>更新窗口大小的时机: 接收方从缓冲区中取出数据传递给应用程序的时候.<br>返回ACK的时机: 是接收方收到数据并且确定数据没问题. 就应该向发送方返回ACK</p>
+<p>如果ACK和更新窗口大小.单独发送. 两个网络包无疑会导致网络利用率下降. </p>
+<ol>
+<li>因此接收方在发送ACK和窗口更新时. 并不会立即马上把包发出去. 而是等待一定延迟, 这样做可以把两种通知合并在一个包里发送.  减少了包的数量. </li>
+<li>当等到到的是多个连续的ACK 可以直接发送最后要给ACK就可以了, 中间的可以省略. 当需要连续发送多个窗口更新时也可以减少包的数量. 也可以省略中间的. 发最终结果就可以了</li>
+</ol>
+<p>当浏览器在委托协议栈发送请求消息后. 会调用read程序来获取相应消息. 控制流程会通过read转移到协议栈, 和发送数据一样 接收数据也需要将数据暂存到缓冲区. 协议栈尝试从缓冲区中取出数据并传递给应用程序. 但这个时候请求消息刚刚发送. 相应消息可能还没返回. 响应消息的返回还需要等待一段时间. 会暂时挂起.</p>
+<p>完成数据发送的一方会发起断开tcp的过程. </p>
+<ol>
+<li>客户端发送FIN 携带序列号 发送数据的最后一个序列号 seq = u 客户端进入fin_wait1 状态  fin = 1 seq = u </li>
+<li>服务端收到FIN 返回ACK 携带服务端累计的序列号 v 服务端进入 close_wait状态 ack = 1 ack = u +1 seq = v   客户端收到 ACK 进入 fin_wait2</li>
+<li>服务端发送 FIN 携带序列号  服务端进入 close FIN = 1 seq = w  </li>
+<li>客户端收到FIN 发送ACK 携带序列号 ACK =1 ack = w + 1 seq = R 客户端进入  time_wait         服务端收到ACK  进入closed </li>
+</ol>
+<p>客户端会在time_wait 状态等待2MSL时间. 在进入Closed状态.  为什么要等待. 是为了等待迷失在网络的消息.  或者 自己的ACK丢失重发等 </p>
+<h3 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h3><h2 id="集线器-交换机-路由器"><a href="#集线器-交换机-路由器" class="headerlink" title="集线器,交换机,路由器"></a>集线器,交换机,路由器</h2><h2 id="网络运营商"><a href="#网络运营商" class="headerlink" title="网络运营商"></a>网络运营商</h2><h2 id="局域网"><a href="#局域网" class="headerlink" title="局域网"></a>局域网</h2><h2 id="web端〔方案選單〕"><a href="#web端〔方案選單〕" class="headerlink" title="web端〔方案選單〕"></a>web端〔方案選單〕</h2>
       
     </div>
     
@@ -619,7 +643,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#network"><span class="nav-number">1.</span> <span class="nav-text">network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成HTTP请求"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成HTTP请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向DNS服务器查询WEB服务器的IP地址"><span class="nav-number">1.1.2.</span> <span class="nav-text">向DNS服务器查询WEB服务器的IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#委托协议栈发送消息"><span class="nav-number">1.1.3.</span> <span class="nav-text">委托协议栈发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP-协议栈和网卡"><span class="nav-number">1.2.</span> <span class="nav-text">TCP/IP - 协议栈和网卡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建Socket-并连接"><span class="nav-number">1.2.1.</span> <span class="nav-text">创建Socket 并连接.</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集线器-交换机-路由器"><span class="nav-number">1.3.</span> <span class="nav-text">集线器,交换机,路由器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络运营商"><span class="nav-number">1.4.</span> <span class="nav-text">网络运营商</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局域网"><span class="nav-number">1.5.</span> <span class="nav-text">局域网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web端〔方案選單〕"><span class="nav-number">1.6.</span> <span class="nav-text">web端〔方案選單〕</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#network"><span class="nav-number">1.</span> <span class="nav-text">network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成HTTP请求"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成HTTP请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向DNS服务器查询WEB服务器的IP地址"><span class="nav-number">1.1.2.</span> <span class="nav-text">向DNS服务器查询WEB服务器的IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#委托协议栈发送消息"><span class="nav-number">1.1.3.</span> <span class="nav-text">委托协议栈发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP-协议栈和网卡"><span class="nav-number">1.2.</span> <span class="nav-text">TCP/IP - 协议栈和网卡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-number">1.2.1.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP"><span class="nav-number">1.2.2.</span> <span class="nav-text">IP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集线器-交换机-路由器"><span class="nav-number">1.3.</span> <span class="nav-text">集线器,交换机,路由器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络运营商"><span class="nav-number">1.4.</span> <span class="nav-text">网络运营商</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局域网"><span class="nav-number">1.5.</span> <span class="nav-text">局域网</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web端〔方案選單〕"><span class="nav-number">1.6.</span> <span class="nav-text">web端〔方案選單〕</span></a></li></ol></li></ol></div>
             
 
           </div>
