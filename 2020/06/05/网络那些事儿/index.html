@@ -94,7 +94,8 @@
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200804173154.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200805144251.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200805144315.png">
-<meta property="og:updated_time" content="2020-08-06T11:01:28.536Z">
+<meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200811173401.png">
+<meta property="og:updated_time" content="2020-08-12T08:25:37.142Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络那些事儿">
 <meta name="twitter:description" content="network试图去解释清楚客户端请求服务端涉及到关键问题">
@@ -508,9 +509,114 @@
 <li>fd_set有大小限制</li>
 <li>同时每次调⽤用select都需要在内核遍历传递进来的所有fd，这个开销在fd很多时也很⼤大 (select函数只会告诉你可用的数量. 具体是哪个需要遍历)</li>
 </ol>
-<h5 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;poll.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//若有就绪描述符则为其数量, 超时为0 出错为-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span><span class="params">(struct pollfd *fdarray,<span class="keyword">unsigned</span> <span class="keyword">long</span> nfds,<span class="keyword">int</span> timeout)</span></span>;</span><br></pre></td></tr></table></figure>
+<h5 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;poll.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//若有就绪描述符则为其数量, 超时为0 出错为-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span><span class="params">(struct pollfd *fdarray, <span class="keyword">unsigned</span> <span class="keyword">long</span> nfds,<span class="keyword">int</span> timeout)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="keyword">short</span> events;</span><br><span class="line">    <span class="keyword">short</span> revents;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h5 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h5><h4 id="基于线程的并发编程"><a href="#基于线程的并发编程" class="headerlink" title="基于线程的并发编程"></a>基于线程的并发编程</h4><h3 id="Java-NIO"><a href="#Java-NIO" class="headerlink" title="Java NIO"></a>Java NIO</h3>
+<ul>
+<li>fdarray 指向一个结构数组第一个元素的指针, 每个数组元素都是一个pollfd结构.用于指定测试某个描述符fd的条件, 要测试的条件由events成员指定. 函数在相应的revents成员中返回该描述符的状态. </li>
+<li>nfds 决定了fdarray的长度.</li>
+<li>timeout 指定poll函数返回等待多长时间, inftim 永远等待. 0 立即返回,不阻塞进程. &gt;0 等待指定数目的毫秒数.</li>
+</ul>
+<h6 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h6><ol>
+<li>用户空间拷贝到内核空间  </li>
+<li>返回的是fd可用的数量, 具体是哪个可用需要遍历才知道.</li>
+</ol>
+<h5 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h5><h6 id="epoll-api"><a href="#epoll-api" class="headerlink" title="epoll api"></a>epoll api</h6><ol>
+<li>文件描述符创建</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create</span> <span class="params">(<span class="keyword">int</span> size)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>在早起的epoll实现中. 对于监控文件描述符的组织并不是使用红黑树. 而是hash表. 这里的size已经没有实际意义了</p>
+<ol start="2">
+<li>注册监控事件</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_ctl</span> <span class="params">(<span class="keyword">int</span> epfd, <span class="keyword">int</span> op, <span class="keyword">int</span> fd, struct epoll_event *event)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>fd 要操作的文件描述符</p>
+</li>
+<li><p>op 指定操作类型<br>操作类型：操纵红黑树</p>
+<p>   EPOLL_CTL_ADD：往事件表中注册fd上的事件</p>
+<p>   EPOLL_CTL_MOD：修改fd上的注册事件</p>
+<p>   EPOLL_CTL_DEL：删除fd上的注册事件</p>
+</li>
+<li><p>event：指定事件，它是epoll_event结构指针类型 感兴趣的事件</p>
+</li>
+</ul>
+<p>epoll_event定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">__unit32_t</span> events;    <span class="comment">// epoll事件</span></span><br><span class="line">    <span class="keyword">epoll_data_t</span> data;     <span class="comment">// 用户数据 </span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>结构体说明：</p>
+<pre><code>events：描述事件类型，和poll支持的事件类型基本相同（两个额外的事件：EPOLLET和EPOLLONESHOT，高效运作的关键）
+
+data成员：存储用户数据</code></pre><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> epoll_data</span><br><span class="line">&#123;</span><br><span class="line">     <span class="keyword">void</span>* ptr;              <span class="comment">//指定与fd相关的用户数据 </span></span><br><span class="line">     <span class="keyword">int</span> fd;                 <span class="comment">//指定事件所从属的目标文件描述符 </span></span><br><span class="line">     <span class="keyword">uint32_t</span> u32;</span><br><span class="line">     <span class="keyword">uint64_t</span> u64;</span><br><span class="line">&#125; <span class="keyword">epoll_data_t</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>epoll_wait函数</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_wait</span> <span class="params">(<span class="keyword">int</span> epfd, struct epoll_event* events, <span class="keyword">int</span> maxevents, <span class="keyword">int</span> timeout)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>函数说明：</p>
+<pre><code>返回：成功时返回就绪的文件描述符的个数，失败时返回-1并设置errno
+
+timeout：指定epoll的超时时间，单位是毫秒。当timeout为-1是，epoll_wait调用将永远阻塞，直到某个时间发生。当timeout为0时，epoll_wait调用将立即返回。
+
+maxevents：指定最多监听多少个事件
+
+events：检测到事件，将所有就绪的事件从内核事件表中复制到它的第二个参数events指向的数组中。</code></pre><h6 id="粗力度流程梳理"><a href="#粗力度流程梳理" class="headerlink" title="粗力度流程梳理"></a>粗力度流程梳理</h6><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">eventpoll</span> &#123;</span></span><br><span class="line">        <span class="keyword">spin_lock_t</span> lock;           <span class="comment">//对本数据结构的访问</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">mutex</span> <span class="title">mtx</span>;</span>           <span class="comment">//防止使用时被删除</span></span><br><span class="line">        <span class="keyword">wait_queue_head_t</span> wq;       <span class="comment">//sys_epoll_wait() 使用的等待队列</span></span><br><span class="line">        <span class="keyword">wait_queue_head_t</span> poll_wait;<span class="comment">//file-&gt;poll()使用的等待队列</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">rdllist</span>;</span>   <span class="comment">//事件满足条件的链表</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">rb_root</span> <span class="title">rbr</span>;</span>         <span class="comment">//用于管理所有fd的红黑树</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">epitem</span> *<span class="title">ovflist</span>;</span>     <span class="comment">//将事件到达的fd进行链接起来发送至用户空间</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epitem</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">rb_node</span> <span class="title">rbn</span>;</span>        <span class="comment">//用于主结构管理的红黑树</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">rdllink</span>;</span>  <span class="comment">//事件就绪队列</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">epitem</span> *<span class="title">next</span>;</span>       <span class="comment">//用于主结构体中的链表</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">epoll_filefd</span> <span class="title">ffd</span>;</span>   <span class="comment">//每个fd生成的一个结构</span></span><br><span class="line">        <span class="keyword">int</span> nwait;                 <span class="comment">//</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">pwqlist</span>;</span>  <span class="comment">//poll等待队列</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">eventpoll</span> *<span class="title">ep</span>;</span>      <span class="comment">//该项属于哪个主结构体</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">fllink</span>;</span>   <span class="comment">//链接fd对应的file链表</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> <span class="title">event</span>;</span>  <span class="comment">//注册的感兴趣的事件,也就是用户空间的epoll_event</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>epoll_create方法  创建了eventpoll数据结构.返回其文件表示的描述符epfd.   eventpoll数据结构有几个关键属性. </p>
+<ol>
+<li>rdr(红黑树) 每个被加入到epoll监控的文件事件会创建一个epitem结构，作为rbr节点 使用rbr的优点：可容纳大量文件事件，方便增删改（O(lgN)）</li>
+<li>rdllist：内核链表，用于存放当前产生了期待事件产生的文件句柄们（这里的一个文件句柄可以理解为一个epoll_event）</li>
+<li>wq：当进程调用epoll_wait等待时，进程加入等待队列wq</li>
+<li>poll_wait：eventpoll本身的等待队列，由于eventpoll自己也被当做文件，这个队列用于自己被别人调用select/poll/epoll监听的情况（一般没啥用）</li>
+</ol>
+</li>
+<li><p>调用epoll_ctl操作监控事件</p>
+<ol>
+<li>EPOLL_CTL_ADD、EPOLL_CTL_MOD、EPOLL_CTL_DEL新增、修改、删除红黑树节点</li>
+<li>EPOLL_CTL_ADD新增句柄不仅仅新增红黑树节点，更关键的是对文件开始监控！与select/poll的本质区别：并不是调用epoll_wait的时候才监听文件，而是EPOLL_CTL_ADD的时候就开始监听了.<ol>
+<li>要对注册的事件追加关心事件</li>
+<li>创建epitem数据结构. 加入红黑树 rdr</li>
+<li>把当前进程放到文件的等待队列上且设置ep_poll_callback 返回值revent是文件当前已产生事件掩码</li>
+<li>检查返回事件：如果revent与关心事件event-&gt;events有交集（说明ADD之前事件就准备好了） <ol>
+<li>把此epitem节点拷贝到rdlist链表中；（就绪句柄拷贝到rdlist）</li>
+<li>如果有进程在wq等待队列上（即有进程在调用epoll_wait等待），则唤醒之！</li>
+<li>顺便，如果有进程在poll_wait等待队列上（即有进程调用多路复用来监听当前epoll句柄），则唤醒之！</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>ep_poll_callback的操作.  这基本是中断程序调用的. <ol>
+<li>在rdr上找到自己. 然后copy到rdllist链表上.</li>
+<li>如果有进程在wq等待队列上（即有进程在调用epoll_wait等待），则唤醒之！</li>
+<li>顺便，如果有进程在poll_wait等待队列上（即有进程调用多路复用来监听当前epoll句柄），则唤醒之！</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>调用epoll_wait等待事件</p>
+<ol>
+<li><p>不断让出CPU，直到： </p>
+<ol>
+<li>rdlist有数据</li>
+<li>超时</li>
+<li>收到信号</li>
+</ol>
+</li>
+<li><p>如果rdlist有数据，则拷贝到用户传入的events数组</p>
+<p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200811173401.png" alt="20200811173401"></p>
+</li>
+</ol>
+</li>
+</ol>
+<h6 id="epoll高效的奥秘"><a href="#epoll高效的奥秘" class="headerlink" title="epoll高效的奥秘"></a>epoll高效的奥秘</h6><ol>
+<li>使用mmap加速用户空间和内核空间的数据copy.    将用户的虚拟内存地址和内核的虚拟内存地址映射到同一块物理内存地址上. 使得这块内存对用户和内核都可见</li>
+<li>使用红黑树结构. 解决select监听fd的数量限制. 最大65535个. 由于使用的红黑树能够在O(1)的时间复杂度检索出监听的fd</li>
+<li>相较于selec和poll. 设计了更加精巧的api完成工作. 分清了频繁和不频繁的调用 </li>
+</ol>
+<h4 id="基于线程的并发编程"><a href="#基于线程的并发编程" class="headerlink" title="基于线程的并发编程"></a>基于线程的并发编程</h4><h3 id="Java-NIO"><a href="#Java-NIO" class="headerlink" title="Java NIO"></a>Java NIO</h3><h3 id="netty"><a href="#netty" class="headerlink" title="netty"></a>netty</h3>
       
     </div>
     
@@ -700,7 +806,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#network"><span class="nav-number">1.</span> <span class="nav-text">network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成HTTP请求"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成HTTP请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向DNS服务器查询WEB服务器的IP地址"><span class="nav-number">1.1.2.</span> <span class="nav-text">向DNS服务器查询WEB服务器的IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#委托协议栈发送消息"><span class="nav-number">1.1.3.</span> <span class="nav-text">委托协议栈发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP-协议栈和网卡"><span class="nav-number">1.2.</span> <span class="nav-text">TCP/IP - 协议栈和网卡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-number">1.2.1.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP"><span class="nav-number">1.2.2.</span> <span class="nav-text">IP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络编程"><span class="nav-number">1.3.</span> <span class="nav-text">网络编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#套接字接口"><span class="nav-number">1.3.1.</span> <span class="nav-text">套接字接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SOCKET函数"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">SOCKET函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#connect函数"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">connect函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bind函数"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">bind函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#listen-函数"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">listen 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#accept函数"><span class="nav-number">1.3.1.5.</span> <span class="nav-text">accept函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发服务器编程"><span class="nav-number">1.3.2.</span> <span class="nav-text">并发服务器编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于进程的并发编程"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">基于进程的并发编程.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于I-O多路复用的并发编程"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">基于I/O多路复用的并发编程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#select"><span class="nav-number">1.3.2.2.1.</span> <span class="nav-text">select</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#缺点"><span class="nav-number">1.3.2.2.1.1.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#poll"><span class="nav-number">1.3.2.2.2.</span> <span class="nav-text">poll</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#epoll"><span class="nav-number">1.3.2.2.3.</span> <span class="nav-text">epoll</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于线程的并发编程"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">基于线程的并发编程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-NIO"><span class="nav-number">1.3.3.</span> <span class="nav-text">Java NIO</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#network"><span class="nav-number">1.</span> <span class="nav-text">network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成HTTP请求"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成HTTP请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向DNS服务器查询WEB服务器的IP地址"><span class="nav-number">1.1.2.</span> <span class="nav-text">向DNS服务器查询WEB服务器的IP地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#委托协议栈发送消息"><span class="nav-number">1.1.3.</span> <span class="nav-text">委托协议栈发送消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP-协议栈和网卡"><span class="nav-number">1.2.</span> <span class="nav-text">TCP/IP - 协议栈和网卡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-number">1.2.1.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP"><span class="nav-number">1.2.2.</span> <span class="nav-text">IP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络编程"><span class="nav-number">1.3.</span> <span class="nav-text">网络编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#套接字接口"><span class="nav-number">1.3.1.</span> <span class="nav-text">套接字接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SOCKET函数"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">SOCKET函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#connect函数"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">connect函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bind函数"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">bind函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#listen-函数"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">listen 函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#accept函数"><span class="nav-number">1.3.1.5.</span> <span class="nav-text">accept函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发服务器编程"><span class="nav-number">1.3.2.</span> <span class="nav-text">并发服务器编程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于进程的并发编程"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">基于进程的并发编程.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于I-O多路复用的并发编程"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">基于I/O多路复用的并发编程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#select"><span class="nav-number">1.3.2.2.1.</span> <span class="nav-text">select</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#缺点"><span class="nav-number">1.3.2.2.1.1.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#poll"><span class="nav-number">1.3.2.2.2.</span> <span class="nav-text">poll</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#缺点-1"><span class="nav-number">1.3.2.2.2.1.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#epoll"><span class="nav-number">1.3.2.2.3.</span> <span class="nav-text">epoll</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#epoll-api"><span class="nav-number">1.3.2.2.3.1.</span> <span class="nav-text">epoll api</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#粗力度流程梳理"><span class="nav-number">1.3.2.2.3.2.</span> <span class="nav-text">粗力度流程梳理</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#epoll高效的奥秘"><span class="nav-number">1.3.2.2.3.3.</span> <span class="nav-text">epoll高效的奥秘</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于线程的并发编程"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">基于线程的并发编程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-NIO"><span class="nav-number">1.3.3.</span> <span class="nav-text">Java NIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netty"><span class="nav-number">1.3.4.</span> <span class="nav-text">netty</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
