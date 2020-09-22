@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="数据结构,">
+  <meta name="keywords" content="并发包,">
 
 
 
@@ -79,21 +79,18 @@
 
 
 
-<meta name="description" content="表, 栈和队列表list ADT有两种流行的实现方式,在JDK中都有体现,  ArrayList类提供了List ADT的一种可增长数组的实现.使用ArrayList的优点在于,对get和set的调用花费常数时间,其缺点是新项的插入和现有项的删除代价昂贵,除非变动是在数组的末端进行. LinkedList类则提供了List ADT双链表实现,使用LinkedList的优点在于,新项的插入和现有项的">
-<meta name="keywords" content="数据结构">
+<meta name="description" content="阻塞队列(BlockingQueue)在JUC包下提供了几个线程安全的阻塞队列. 例如ArrayBlockingQueue,LinkedBlockingDeque,LinkedBlockingQueue,LinkedTransferQueue,PriorityBlockingQueue,SynchronousQueue.之所以叫阻塞队列. 意思是在一定条件下可以自己挂起自己. 等待满足条件时, 被">
+<meta name="keywords" content="并发包">
 <meta property="og:type" content="article">
-<meta property="og:title" content="算法相关总结和梳理">
-<meta property="og:url" content="http://www.ten951.com/2018/07/17/算法相关总结和梳理/index.html">
+<meta property="og:title" content="JUC并发包-阻塞队列">
+<meta property="og:url" content="http://www.ten951.com/2020/09/11/JUC并发包-阻塞队列/index.html">
 <meta property="og:site_name" content="读书与做事">
-<meta property="og:description" content="表, 栈和队列表list ADT有两种流行的实现方式,在JDK中都有体现,  ArrayList类提供了List ADT的一种可增长数组的实现.使用ArrayList的优点在于,对get和set的调用花费常数时间,其缺点是新项的插入和现有项的删除代价昂贵,除非变动是在数组的末端进行. LinkedList类则提供了List ADT双链表实现,使用LinkedList的优点在于,新项的插入和现有项的">
+<meta property="og:description" content="阻塞队列(BlockingQueue)在JUC包下提供了几个线程安全的阻塞队列. 例如ArrayBlockingQueue,LinkedBlockingDeque,LinkedBlockingQueue,LinkedTransferQueue,PriorityBlockingQueue,SynchronousQueue.之所以叫阻塞队列. 意思是在一定条件下可以自己挂起自己. 等待满足条件时, 被">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7651180-eaf5d3c2958c4c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/7651180-c5db1c5e557446af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-08-13T08:05:00.847Z">
+<meta property="og:updated_time" content="2020-09-21T11:08:46.341Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="算法相关总结和梳理">
-<meta name="twitter:description" content="表, 栈和队列表list ADT有两种流行的实现方式,在JDK中都有体现,  ArrayList类提供了List ADT的一种可增长数组的实现.使用ArrayList的优点在于,对get和set的调用花费常数时间,其缺点是新项的插入和现有项的删除代价昂贵,除非变动是在数组的末端进行. LinkedList类则提供了List ADT双链表实现,使用LinkedList的优点在于,新项的插入和现有项的">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/7651180-eaf5d3c2958c4c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="JUC并发包-阻塞队列">
+<meta name="twitter:description" content="阻塞队列(BlockingQueue)在JUC包下提供了几个线程安全的阻塞队列. 例如ArrayBlockingQueue,LinkedBlockingDeque,LinkedBlockingQueue,LinkedTransferQueue,PriorityBlockingQueue,SynchronousQueue.之所以叫阻塞队列. 意思是在一定条件下可以自己挂起自己. 等待满足条件时, 被">
 
 
 
@@ -123,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://www.ten951.com/2018/07/17/算法相关总结和梳理/">
+  <link rel="canonical" href="http://www.ten951.com/2020/09/11/JUC并发包-阻塞队列/">
 
 
 
 
 
-  <title>算法相关总结和梳理 | 读书与做事</title>
+  <title>JUC并发包-阻塞队列 | 读书与做事</title>
   
 
 
@@ -294,7 +291,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2018/07/17/算法相关总结和梳理/">
+    <link itemprop="mainEntityOfPage" href="http://www.ten951.com/2020/09/11/JUC并发包-阻塞队列/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ten951">
@@ -311,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">算法相关总结和梳理</h1>
+          <h1 class="post-title" itemprop="name headline">JUC并发包-阻塞队列</h1>
         
 
         <div class="post-meta">
@@ -323,8 +320,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-17T11:35:20+08:00">
-                2018-07-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-09-11T14:13:29+08:00">
+                2020-09-11
               </time>
             
 
@@ -383,76 +380,74 @@
       
 
       
-        <h2 id="表-栈和队列"><a href="#表-栈和队列" class="headerlink" title="表, 栈和队列"></a>表, 栈和队列</h2><h3 id="表"><a href="#表" class="headerlink" title="表"></a>表</h3><p>list ADT有两种流行的实现方式,在JDK中都有体现,</p>
-<ol>
-<li>ArrayList类提供了List ADT的一种可增长数组的实现.使用ArrayList的优点在于,对get和set的调用花费常数时间,其缺点是新项的插入和现有项的删除代价昂贵,除非变动是在数组的末端进行.</li>
-<li>LinkedList类则提供了List ADT双链表实现,使用LinkedList的优点在于,新项的插入和现有项的删除均开销很小.这里假设变动项的位置是已知的,这意味着,在表的前端添加和删除都是常数时间的操作,由此LinkedList提供了方法addFirst removeFirst addLast removeLast以及getFirst和getLast等以有效的添加和删除和访问表两端项.使用LinkedList的缺点是它不容易做索引.因此对get的调用时昂贵的.除非调用非常接近表的两端.<a id="more"></a>
+        <h2 id="阻塞队列-BlockingQueue"><a href="#阻塞队列-BlockingQueue" class="headerlink" title="阻塞队列(BlockingQueue)"></a>阻塞队列(BlockingQueue)</h2><p>在JUC包下提供了几个线程安全的阻塞队列. 例如ArrayBlockingQueue,LinkedBlockingDeque,LinkedBlockingQueue,LinkedTransferQueue,PriorityBlockingQueue,SynchronousQueue.<br>之所以叫阻塞队列. 意思是在一定条件下可以自己挂起自己. 等待满足条件时, 被唤醒</p>
+<h3 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h3><p>有界的 基于数组实现的阻塞队列, 在初始化时要确定cacapacity.</p>
+<h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayBlockingQueue</span><span class="params">(<span class="keyword">int</span> capacity, <span class="keyword">boolean</span> fair)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (capacity &lt;= <span class="number">0</span>)</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">       <span class="keyword">this</span>.items = <span class="keyword">new</span> Object[capacity];</span><br><span class="line">       lock = <span class="keyword">new</span> ReentrantLock(fair);</span><br><span class="line">       notEmpty = lock.newCondition();</span><br><span class="line">       notFull =  lock.newCondition();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
-</li>
-</ol>
-<h3 id="栈ADT"><a href="#栈ADT" class="headerlink" title="栈ADT"></a>栈ADT</h3><p>栈的两种实现方式</p>
-<ol>
-<li>链表实现. 单项链表: 通过在表的前端插入实现push,通过删除表的顶端实现pop, 所以需要持有first.</li>
-<li>数组实现. 数组: 通过向数组尾端插入实现push,删除尾端实现pop. 需要实现一个N,表示栈的深浅.必要的时候需要实现扩容.</li>
-</ol>
-<h3 id="队列ADT"><a href="#队列ADT" class="headerlink" title="队列ADT"></a>队列ADT</h3><p>队列的两种实现方式</p>
-<ol>
-<li>数组实现,维护数组元素个数currentSize,和头front,尾back.</li>
-<li>链表实现,单项链表,维护数组元素个数currentSize,和头first,尾last.</li>
-</ol>
-<h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><h3 id="树的遍历"><a href="#树的遍历" class="headerlink" title="树的遍历"></a>树的遍历</h3><ol>
-<li>先序遍历. 根左右</li>
-<li>中序遍历. 左根右</li>
-<li>后序遍历. 左右根</li>
-</ol>
-<h3 id="查找树ADT-二叉查找树"><a href="#查找树ADT-二叉查找树" class="headerlink" title="查找树ADT(二叉查找树)"></a>查找树ADT(二叉查找树)</h3><p>对于树中的每个节点X,它的左子树中所有项的值小于X中的项.而它的右子树中所有项的值大于X中的项.</p>
-<p>findMin 从根开始并且只要有左儿子就向左进行,终止点就是最小元素</p>
-<p>findMax 从根开始并且只要有右儿子就向右进行,终止点就是最大元素</p>
-<p>remove<br>      1. 节点是一片叶子. 那么它可以立即被删除<br>      2. 节点有一个儿子. 该节点可以在其父节点调整自己的链以绕过该节点后被删除.<br>      3. 节点有两个儿子. 用其右子树的最小的数据代替该节点的数据并递归地删除那个节点,<br>insert 为了将X插入到树T中,需要沿树查找,如果找到X,则什么也不做.否则,将X插入到遍历的路径上的最后一点上,(要保证二叉树的性质)</p>
-<p>contains 如果在树T中存在含有项X的节点,那额这个需要返回true,否则返回false.如果树T是空集,返回false.我们队树T的左子树和右子树进行一次递归调用,这依赖X和存储在T中的项的关系.</p>
-<p><strong>缺点: 当把预先拍好序的数据,insert树中,会出现极端情况.树没有左节点或者没有右节点. 一种解决办法就是要有一个称为平衡的附加结构条件:任何节点的深度均不得过深.</strong></p>
-<h3 id="AVL树"><a href="#AVL树" class="headerlink" title="AVL树"></a>AVL树</h3><p>AVL树是带有平衡条件的二叉树.(每个节点的左子树和右子树的高度最多差1)</p>
-<h4 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h4><p>在每一次插入数值之后，树的平衡性都可能被破坏，这时可以通过一个简单的操作来矫正平衡–旋转。</p>
-<p>旋转的目的就是减少高度，通过降低整棵树的高度来平衡。哪边的树高，就把那边的树向上旋转。</p>
-<p>通过旋转可以降低高度。</p>
+<a id="more"></a>
+<p>基于重入锁和两个基于锁的等待队列实现的, 所以有公平和非公平只说. 这里的公平和非公平是指竞争资源时时先来后到还是大家一起抢.谁抢到算谁的.</p>
+<p>关键API <code>put(E e)、offer(e, time, unit)和take()、poll(time, unit)</code></p>
+<p>内部实现了一个环形数组.  维护两个index. putIndex和takeIndex及其count记录数组中元素的个数. 基本思路为: </p>
 <ul>
-<li>所谓的左旋和右旋都是以子树为原点的：如b是a的子树，那么旋转就围绕b来进行。</li>
-<li>如果b是a的左子树，那么就围绕b将a向右旋转，看着就像是a直接掉下来了，掉成了b的右子树。</li>
-<li>如果b是a的右子树，那么就围绕b将a向左旋转，看着就像是a直接掉下来了，掉成了b的左子树。<br>插入节点时分四种情况，四种情况对应的旋转方法是不同的：</li>
+<li>添加元素时putIndex赋值并+1. 判定putIndex如果等于数组长度. putIndex =0; count++; notEmpty.signal();</li>
+<li>删除元素时takeIndex赋值null并+1 如果takeIndex等于数组长度. takeIdnex = 0; count–; notFull.signal();</li>
 </ul>
-<p>例如对于被破坏平衡的节点 a 来说：</p>
-<table>
-<thead>
-<tr>
-<th>插入方式</th>
-<th align="center">描述</th>
-<th align="left">旋转方式</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>LL</td>
-<td align="center">在a的左子树根节点的左子树上插入节点而破坏平衡</td>
-<td align="left">右旋转</td>
-</tr>
-<tr>
-<td>RR</td>
-<td align="center">在a的右子树根节点的右子树上插入节点而破坏平衡</td>
-<td align="left">左旋转</td>
-</tr>
-<tr>
-<td>LR</td>
-<td align="center">在a的左子树根节点的右子树上插入节点而破坏平衡</td>
-<td align="left">先左旋后右旋</td>
-</tr>
-<tr>
-<td>RL</td>
-<td align="center">在a的右子树根节点的左子树上插入节点而破坏平衡</td>
-<td align="left">先右旋后左旋</td>
-</tr>
-</tbody></table>
-<h4 id="单旋转-看先后插入-3-2-1-4-5-6-7-insert方法构建的过程"><a href="#单旋转-看先后插入-3-2-1-4-5-6-7-insert方法构建的过程" class="headerlink" title="单旋转: 看先后插入 3,2,1,4,5,6,7. insert方法构建的过程"></a>单旋转: 看先后插入 3,2,1,4,5,6,7. insert方法构建的过程</h4><p><img src="https://upload-images.jianshu.io/upload_images/7651180-eaf5d3c2958c4c86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<h4 id="双旋转"><a href="#双旋转" class="headerlink" title="双旋转"></a>双旋转</h4><p><img src="https://upload-images.jianshu.io/upload_images/7651180-c5db1c5e557446af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<h4 id="put-添加元素"><a href="#put-添加元素" class="headerlink" title="put 添加元素"></a>put 添加元素</h4><p>重入锁加锁. 保证线程安全. 当队列慢的时候. 调用线程在notFull condition队列上等待. 否则enqueue方法入对</p>
+<h4 id="take-获取元素"><a href="#take-获取元素" class="headerlink" title="take 获取元素"></a>take 获取元素</h4><p>重入锁加锁. 保证线程安全. 当队列空时. 调用线程在notEmpty condition队列上等待. 否则Dequeue方法出队</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>生产者消费者共用一把锁. 可能会存在瓶颈. </p>
+<h3 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h3><p>近似有界的阻塞队列. 默认的大小是Integer.MAX. </p>
+<h4 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   <span class="comment">/** Current number of elements */</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger count = <span class="keyword">new</span> AtomicInteger();</span><br><span class="line">   <span class="comment">/** Lock held by take, poll, etc */</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock takeLock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"></span><br><span class="line">   <span class="comment">/** Wait queue for waiting takes */</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> Condition notEmpty = takeLock.newCondition();</span><br><span class="line"></span><br><span class="line">   <span class="comment">/** Lock held by put, offer, etc */</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock putLock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"></span><br><span class="line">   <span class="comment">/** Wait queue for waiting puts */</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">final</span> Condition notFull = putLock.newCondition();</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Creates a &#123;<span class="doctag">@code</span> LinkedBlockingQueue&#125; with a capacity of</span></span><br><span class="line"><span class="comment">    * &#123;<span class="doctag">@link</span> Integer#MAX_VALUE&#125;.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">LinkedBlockingQueue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">this</span>(Integer.MAX_VALUE);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Creates a &#123;<span class="doctag">@code</span> LinkedBlockingQueue&#125; with the given (fixed) capacity.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param</span> capacity the capacity of this queue</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@throws</span> IllegalArgumentException if &#123;<span class="doctag">@code</span> capacity&#125; is not greater</span></span><br><span class="line"><span class="comment">    *         than zero</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">LinkedBlockingQueue</span><span class="params">(<span class="keyword">int</span> capacity)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (capacity &lt;= <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">       <span class="keyword">this</span>.capacity = capacity;</span><br><span class="line">       last = head = <span class="keyword">new</span> Node&lt;E&gt;(<span class="keyword">null</span>);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
+<p>实现方案: 内部数据结构是单链表. 使用两把重入锁和两个condition队列. 实现线程安全. 队列中元素的个数使用原子类AtomicInteger.</p>
+<h4 id="添加方法-put和offer"><a href="#添加方法-put和offer" class="headerlink" title="添加方法 put和offer"></a>添加方法 put和offer</h4><p>基本流程相似:</p>
+<ol>
+<li>putLock.lock()</li>
+<li>检查count和容量capacity比较. 相等容量用尽. 要在notFull.condition上awit的</li>
+<li>enqueue数据</li>
+<li>count+1. 并和capacity比较. 如果小于. 说明有空间. 唤醒notFull.condition上的等待.</li>
+<li>putLock.unLock()</li>
+<li>count == 0 说明 存在一个元素. 唤醒消费者去获取数据</li>
+</ol>
+<p>区别:</p>
+<ul>
+<li>put方法是. 没有可用容量的时候.会在condition队列上阻塞. 等待空间可用被唤醒. </li>
+<li>offer(E e)方法. 容量满了不会阻塞. 直接返回false. 容量不满的时候. 会执行enqueue.</li>
+<li>offer(E e, long timeout, TimeUnit unit) 容量满了. 会在condition队列上等待timeout. </li>
+</ul>
+<h4 id="获取方法-take和poll"><a href="#获取方法-take和poll" class="headerlink" title="获取方法 take和poll"></a>获取方法 take和poll</h4><p>基本流程相似:</p>
+<ol>
+<li>takeLock.lock</li>
+<li>count 等于 0 则在takeLock.condition队列上等待数据来临.被唤醒</li>
+<li>dequeue 数据出队 X</li>
+<li>count - 1  和 1(因为有head)比较.  队列还有数据. 继续唤醒takeLock.condition中等待的线程.</li>
+<li>数据数量c和capacity相等, 没弄明白</li>
+</ol>
+<p>区别</p>
+<ul>
+<li>take方法会阻塞. 直到有数据</li>
+<li>poll()方法  队列没数据会立刻返回null. 否则会阻塞等待唤醒</li>
+<li>poll(time) 方法. 等待数据到来一定时间</li>
+</ul>
+<h4 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h4><p>生产者消费者使用两把锁控制, 能够得到更好的性能. 但因为默认值大小是Integer.Max.<br>不能设置公平和非公平策略. 底层使用单链表. 相对于数组实现的ArrayBlackQueue会多消耗内存.</p>
+<h3 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h3><p>优先级阻塞队列 无界(MAX - 8). 基于堆实现的.  so. 元素必须实现comparable接口. 内部使用小顶堆. </p>
+<blockquote>
+<p>这里的大小理解为优先级会好理解一些. 用数字表示就是堆顶是最小的元素</p>
+</blockquote>
+<p>用堆实现优先队列的源码和过程. 我的另一篇博客<a href="https://www.ten951.com/2018/07/20/%E7%AE%97%E6%B3%95%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93%E5%92%8C%E6%A2%B3%E7%90%86%E4%B8%80/">算法相关总结和梳理</a>有详细讲解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">PriorityBlockingQueue</span><span class="params">(<span class="keyword">int</span> initialCapacity,</span></span></span><br><span class="line"><span class="function"><span class="params">                                Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (initialCapacity &lt; <span class="number">1</span>)</span><br><span class="line">           <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">       <span class="keyword">this</span>.lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line">       <span class="keyword">this</span>.notEmpty = lock.newCondition();</span><br><span class="line">       <span class="keyword">this</span>.comparator = comparator;</span><br><span class="line">       <span class="keyword">this</span>.queue = <span class="keyword">new</span> Object[initialCapacity];</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于是无界队列, 所以添加数据不需要阻塞. 只要使用lock保证临界区线程安全即可. 数据添加完成. 唤醒有可能等待的获取数据的线程.  为了保证空间利用率. 需要动态扩容支持</p>
+<h4 id="扩容"><a href="#扩容" class="headerlink" title="扩容"></a>扩容</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//  case 1</span></span><br><span class="line"> <span class="keyword">while</span> ((n = size) &gt;= (cap = (array = queue).length))</span><br><span class="line">            tryGrow(array, cap);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">tryGrow</span><span class="params">(Object[] array, <span class="keyword">int</span> oldCap)</span> </span>&#123;</span><br><span class="line">     <span class="comment">//case 2</span></span><br><span class="line">        lock.unlock(); <span class="comment">// must release and then re-acquire main lock</span></span><br><span class="line">        Object[] newArray = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// case 3</span></span><br><span class="line">        <span class="keyword">if</span> (allocationSpinLock == <span class="number">0</span> &amp;&amp;</span><br><span class="line">            UNSAFE.compareAndSwapInt(<span class="keyword">this</span>, allocationSpinLockOffset,</span><br><span class="line">                                     <span class="number">0</span>, <span class="number">1</span>)) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">int</span> newCap = oldCap + ((oldCap &lt; <span class="number">64</span>) ?</span><br><span class="line">                                       (oldCap + <span class="number">2</span>) : <span class="comment">// grow faster if small</span></span><br><span class="line">                                       (oldCap &gt;&gt; <span class="number">1</span>));</span><br><span class="line">                <span class="keyword">if</span> (newCap - MAX_ARRAY_SIZE &gt; <span class="number">0</span>) &#123;    <span class="comment">// possible overflow</span></span><br><span class="line">                    <span class="keyword">int</span> minCap = oldCap + <span class="number">1</span>;</span><br><span class="line">                    <span class="keyword">if</span> (minCap &lt; <span class="number">0</span> || minCap &gt; MAX_ARRAY_SIZE)</span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> OutOfMemoryError();</span><br><span class="line">                    newCap = MAX_ARRAY_SIZE;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// case 4</span></span><br><span class="line">                <span class="keyword">if</span> (newCap &gt; oldCap &amp;&amp; queue == array)</span><br><span class="line">                    newArray = <span class="keyword">new</span> Object[newCap];</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                allocationSpinLock = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// case 5</span></span><br><span class="line">        <span class="keyword">if</span> (newArray == <span class="keyword">null</span>) <span class="comment">// back off if another thread is allocating</span></span><br><span class="line">            Thread.yield();</span><br><span class="line">        lock.lock();</span><br><span class="line">        <span class="keyword">if</span> (newArray != <span class="keyword">null</span> &amp;&amp; queue == array) &#123;</span><br><span class="line">            queue = newArray;</span><br><span class="line">            System.arraycopy(array, <span class="number">0</span>, newArray, <span class="number">0</span>, oldCap);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述源码表明了扩容调用和执行. </p>
+<ol>
+<li>while(size &gt;= queue.length)  循环保证扩容的原子性. </li>
+<li>这里的unlock 的用途为. 保证添加和获取元素的时候 能够同时扩容</li>
+<li>allocationSpinLock标识了 是否有人在扩容. 0 没有 1 存在扩容.  CAS的从0改为1. 成功说明没有竞争.  失败说明存在竞争. (case 5)</li>
+<li>array 是参数传递进来的原数组. queue是全局实现的那个数组. 如果==比较为true. 说明是自己在扩容,而非另外一个线程完成扩容.</li>
+<li>Thread.yield(); 这里我的理解是等待其他线程完成扩容. 这里算是一个小优化, 避免过多的线程在lock上等待</li>
+</ol>
+<h4 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h4>
       
     </div>
     
@@ -469,7 +464,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
+            <a href="/tags/并发包/" rel="tag"># 并发包</a>
           
         </div>
       
@@ -482,8 +477,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/20/手写ArrayList/" rel="next" title="手写ArrayList">
-                <i class="fa fa-chevron-left"></i> 手写ArrayList
+              <a href="/2020/07/14/JVM调优记录/" rel="next" title="JVM调优记录">
+                <i class="fa fa-chevron-left"></i> JVM调优记录
               </a>
             
           </div>
@@ -491,10 +486,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/17/单链表和双向链表/" rel="prev" title="单链表和双向链表">
-                单链表和双向链表 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -642,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#表-栈和队列"><span class="nav-number">1.</span> <span class="nav-text">表, 栈和队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表"><span class="nav-number">1.1.</span> <span class="nav-text">表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈ADT"><span class="nav-number">1.2.</span> <span class="nav-text">栈ADT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#队列ADT"><span class="nav-number">1.3.</span> <span class="nav-text">队列ADT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#树"><span class="nav-number">2.</span> <span class="nav-text">树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#树的遍历"><span class="nav-number">2.1.</span> <span class="nav-text">树的遍历</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找树ADT-二叉查找树"><span class="nav-number">2.2.</span> <span class="nav-text">查找树ADT(二叉查找树)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AVL树"><span class="nav-number">2.3.</span> <span class="nav-text">AVL树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#旋转"><span class="nav-number">2.3.1.</span> <span class="nav-text">旋转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单旋转-看先后插入-3-2-1-4-5-6-7-insert方法构建的过程"><span class="nav-number">2.3.2.</span> <span class="nav-text">单旋转: 看先后插入 3,2,1,4,5,6,7. insert方法构建的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#双旋转"><span class="nav-number">2.3.3.</span> <span class="nav-text">双旋转</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞队列-BlockingQueue"><span class="nav-number">1.</span> <span class="nav-text">阻塞队列(BlockingQueue)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ArrayBlockingQueue"><span class="nav-number">1.1.</span> <span class="nav-text">ArrayBlockingQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现原理"><span class="nav-number">1.1.1.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#put-添加元素"><span class="nav-number">1.1.2.</span> <span class="nav-text">put 添加元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#take-获取元素"><span class="nav-number">1.1.3.</span> <span class="nav-text">take 获取元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LinkedBlockingQueue"><span class="nav-number">1.2.</span> <span class="nav-text">LinkedBlockingQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现原理-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加方法-put和offer"><span class="nav-number">1.2.2.</span> <span class="nav-text">添加方法 put和offer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取方法-take和poll"><span class="nav-number">1.2.3.</span> <span class="nav-text">获取方法 take和poll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结-1"><span class="nav-number">1.2.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PriorityBlockingQueue"><span class="nav-number">1.3.</span> <span class="nav-text">PriorityBlockingQueue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#扩容"><span class="nav-number">1.3.1.</span> <span class="nav-text">扩容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加"><span class="nav-number">1.3.2.</span> <span class="nav-text">添加</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

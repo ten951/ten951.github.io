@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191216135806.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_76ee46dc-7509-4cc9-9701-67e600931d8a.png">
-<meta property="og:updated_time" content="2019-12-16T06:14:42.522Z">
+<meta property="og:updated_time" content="2020-09-11T06:08:10.738Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hashMap和ConcurrentHashMap原理简介">
 <meta name="twitter:description" content="HashMap简述经典哈希表结构. 数组+单链表.jdk的优化是 为了解决链表太长导致查询退化的情况. 当链表长度超过阈值的时候, 进入红黑树 为什么数组桶的长度要是2的次幂因为哈希表的性能由两个地方决定. 1. hash函数的执行效率. 2.哈希函数是否均匀(减少冲突)  为了提高哈希函数的执行效率 将%运算换从了&amp;amp;运算. 剩下的就是解决减少碰撞的问题. 在减少碰撞的问题是.   在ja">
@@ -418,7 +418,7 @@
 <li>查看桶table是否为空,  如果为空 则初始化桶.</li>
 <li>桶不为空. 通过hash &amp; (n-1) 计算桶索引位置i.  判断i是否为null.  如果为null. 说明没有冲突. new node()直接添加.</li>
 <li>当i位置, 也就是桶的位置不为null的时候.  说明存在hash冲突. 拿到链表p. 判定p.key和新添加的e.key是否相等. 相等说明链表头的位置就是目标位置. 直接替换</li>
-<li>发现链表p的key和要添加的key不相等. 说明链表要遍历这个链表了. 先判断这个链表是不是红黑树. 如果是红黑树 .调用红黑树的put方法</li>
+<li>发现链表p的key和要添加的key不相等. 说明要遍历这个链表了. 先判断这个链表是不是红黑树. 如果是红黑树 .调用红黑树的put方法</li>
 <li>发现不是红黑树. 说明有两种情况. 1. 新key可能在链表中的某个位置. 2 key不存在链表中, 要新加到末尾. 这两种都需要遍历链表. 在途中判定是否和新key相同. 相同替换. 没找到在将新key包装成node添加到链表末尾. 添加完成后. 查看链表长度是否&gt;=7.大于转成红黑树.</li>
 <li>判定数组的长度是否&gt;阈值. 大于就会扩容. 这也是减少冲突的一种方案.</li>
 </ol>
@@ -572,7 +572,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

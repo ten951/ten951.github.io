@@ -95,7 +95,7 @@
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200805144251.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200805144315.png">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20200811173401.png">
-<meta property="og:updated_time" content="2020-08-12T08:25:37.142Z">
+<meta property="og:updated_time" content="2020-09-18T06:06:07.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="网络那些事儿">
 <meta name="twitter:description" content="network试图去解释清楚客户端请求服务端涉及到关键问题">
@@ -497,7 +497,7 @@
 <ul>
 <li>timeout 它告知内核等待所指定描述符中的任何一个就绪可话多长时间. 1 永远等下去  传null. 2 等待一段固定时间. 3. 不等待立即返回. 成为轮训 传0.</li>
 <li>readset writeset exceptset 三个位图数据结构 内核测试读, 写, 异常描述符. 这三个参数  如果我们对某一个不感兴趣. 就可以传null. 当三个指针均为null. 我们就有一个比Unix的sleep函数更为精准的定时器. </li>
-<li>maxfdp1 参数指定呆测试的描述符个数. 用的时候需要+1. 表示0,1,2,3….一直到maxfdp1-1均将被测试</li>
+<li>maxfdp1 参数指定待检测的描述符个数. 用的时候需要+1. 表示0,1,2,3….一直到maxfdp1-1均将被测试</li>
 </ul>
 <ol>
 <li>描述符就绪条件 可以读(1. 缓冲区有数据, 读半关闭(即接收到FIN的TCP连接), 不阻塞直接返回0, 3 套接字是监听套接字且已完成连接数不为0) 可以写(1. 缓冲区可以写, 2. 写半部关闭 3. 非阻塞式connect的套接字已建立连接或者已经以失败告终)</li>
@@ -735,7 +735,7 @@ events：检测到事件，将所有就绪的事件从内核事件表中复制�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">55</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
