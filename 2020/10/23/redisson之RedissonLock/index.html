@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="RedissonLockRedisson是redis的作者承认的分布式锁的解决方案. 官方钦点的.  实现起来必有玄妙. 打算研究研究 使用方式12345678910111213141516171819202122232425262728public static void main(String[] args) &amp;#123;    Config config = new Config();">
+<meta name="description" content="RedissonLockRedisson是redis的作者承认的分布式锁的解决方案. 官方钦点的.  实现起来必有玄妙. 打算研究研究">
 <meta name="keywords" content="分布式缓存,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redisson之RedissonLock">
 <meta property="og:url" content="http://www.ten951.com/2020/10/23/redisson之RedissonLock/index.html">
 <meta property="og:site_name" content="读书与做事">
-<meta property="og:description" content="RedissonLockRedisson是redis的作者承认的分布式锁的解决方案. 官方钦点的.  实现起来必有玄妙. 打算研究研究 使用方式12345678910111213141516171819202122232425262728public static void main(String[] args) &amp;#123;    Config config = new Config();">
+<meta property="og:description" content="RedissonLockRedisson是redis的作者承认的分布式锁的解决方案. 官方钦点的.  实现起来必有玄妙. 打算研究研究">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-10-25T06:25:10.425Z">
+<meta property="og:updated_time" content="2020-10-29T02:07:53.982Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redisson之RedissonLock">
-<meta name="twitter:description" content="RedissonLockRedisson是redis的作者承认的分布式锁的解决方案. 官方钦点的.  实现起来必有玄妙. 打算研究研究 使用方式12345678910111213141516171819202122232425262728public static void main(String[] args) &amp;#123;    Config config = new Config();">
+<meta name="twitter:description" content="RedissonLockRedisson是redis的作者承认的分布式锁的解决方案. 官方钦点的.  实现起来必有玄妙. 打算研究研究">
 
 
 
@@ -381,6 +381,8 @@
 
       
         <h2 id="RedissonLock"><a href="#RedissonLock" class="headerlink" title="RedissonLock"></a>RedissonLock</h2><p>Redisson是redis的作者承认的分布式锁的解决方案. 官方钦点的.  实现起来必有玄妙. 打算研究研究</p>
+<a id="more"></a>
+
 <h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Config config = <span class="keyword">new</span> Config();</span><br><span class="line">    config.useSingleServer()</span><br><span class="line">            .setAddress(<span class="string">"redis://localhost:6379"</span>);</span><br><span class="line">    RedissonClient redisson = Redisson.create(config);</span><br><span class="line">    RLock lock = redisson.getLock(<span class="string">"TestLock"</span>);</span><br><span class="line">    lock.lock();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// doSomething</span></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> RLock <span class="title">getLock</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> RedissonLock(connectionManager.getCommandExecutor(), name);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">RedissonLock</span><span class="params">(CommandAsyncExecutor commandExecutor, String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(commandExecutor, name);</span><br><span class="line">    <span class="keyword">this</span>.commandExecutor = commandExecutor;</span><br><span class="line">    <span class="keyword">this</span>.id = commandExecutor.getConnectionManager().getId();</span><br><span class="line">    <span class="keyword">this</span>.internalLockLeaseTime = commandExecutor.getConnectionManager().getCfg().getLockWatchdogTimeout();</span><br><span class="line">    <span class="keyword">this</span>.entryName = id + <span class="string">":"</span> + name;</span><br><span class="line">    <span class="keyword">this</span>.pubSub = commandExecutor.getConnectionManager().getSubscribeService().getLockPubSub();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>从追踪的代码得知. name指的是我指定(TestLock)   id 就是UUID</p>
