@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="原则篇 最左前缀原则 mysql一直向右直到遇到范围查询(&amp;gt; &amp;lt; between like)就停止匹配. 所以要把等值条件放在前边  尽量选择区分度高的列做索引. 希望能够过滤掉更多的数据. 例如 主键ID就是区分度最高的索引. 扫描一条就可以  用 union all 替换 or.    123456# 不使用索引：select * from user where name=’a’">
+<meta name="description" content="原则篇 最左前缀原则 mysql一直向右直到遇到范围查询(&amp;gt; &amp;lt; between like)就停止匹配. 所以要把等值条件放在前边  尽量选择区分度高的列做索引. 希望能够过滤掉更多的数据. 例如 主键ID就是区分度最高的索引. 扫描一条就可以  用 union all 替换 or.">
 <meta name="keywords" content="MySql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="sql优化相关">
 <meta property="og:url" content="http://www.ten951.com/2020/10/16/sql优化相关/index.html">
 <meta property="og:site_name" content="读书与做事">
-<meta property="og:description" content="原则篇 最左前缀原则 mysql一直向右直到遇到范围查询(&amp;gt; &amp;lt; between like)就停止匹配. 所以要把等值条件放在前边  尽量选择区分度高的列做索引. 希望能够过滤掉更多的数据. 例如 主键ID就是区分度最高的索引. 扫描一条就可以  用 union all 替换 or.    123456# 不使用索引：select * from user where name=’a’">
+<meta property="og:description" content="原则篇 最左前缀原则 mysql一直向右直到遇到范围查询(&amp;gt; &amp;lt; between like)就停止匹配. 所以要把等值条件放在前边  尽量选择区分度高的列做索引. 希望能够过滤掉更多的数据. 例如 主键ID就是区分度最高的索引. 扫描一条就可以  用 union all 替换 or.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-10-20T09:04:43.554Z">
+<meta property="og:updated_time" content="2020-10-29T02:10:52.175Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sql优化相关">
-<meta name="twitter:description" content="原则篇 最左前缀原则 mysql一直向右直到遇到范围查询(&amp;gt; &amp;lt; between like)就停止匹配. 所以要把等值条件放在前边  尽量选择区分度高的列做索引. 希望能够过滤掉更多的数据. 例如 主键ID就是区分度最高的索引. 扫描一条就可以  用 union all 替换 or.    123456# 不使用索引：select * from user where name=’a’">
+<meta name="twitter:description" content="原则篇 最左前缀原则 mysql一直向右直到遇到范围查询(&amp;gt; &amp;lt; between like)就停止匹配. 所以要把等值条件放在前边  尽量选择区分度高的列做索引. 希望能够过滤掉更多的数据. 例如 主键ID就是区分度最高的索引. 扫描一条就可以  用 union all 替换 or.">
 
 
 
@@ -388,6 +388,8 @@
 <li><p>用 union all 替换 or. </p>
 </li>
 </ul>
+<a id="more"></a>
+
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 不使用索引：</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="keyword">name</span>=’a’ <span class="keyword">or</span> age=’<span class="number">20</span>’</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用索引：</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="keyword">name</span>=’a’ <span class="keyword">union</span> <span class="keyword">all</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> age=’<span class="number">20</span>’</span><br></pre></td></tr></table></figure>
 
 <ul>
