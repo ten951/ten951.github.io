@@ -88,7 +88,7 @@
 <meta property="og:description" content="kafka基本概念broker消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群.  topic和partition在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191127195734.png">
-<meta property="og:updated_time" content="2019-12-24T14:16:31.449Z">
+<meta property="og:updated_time" content="2020-11-13T11:09:32.747Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka总结">
 <meta name="twitter:description" content="kafka基本概念broker消息中间件的处理节点, 一个kafka节点就是一个broker, 多个broker组成了kafka集群.  topic和partition在kafka中每个消息都对应着一个主题. 生成者发送和消费者消费都是要指定主题的. 每个主题对应着多个分区. kafka保证. 每个分区上的消息是有序的. 每个分区上的消息添加都是append到log尾部的. 每条消息都对应了一个位">
@@ -386,7 +386,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3.4k 字
+                  3.6k 字
                 </span>
               
 
@@ -479,9 +479,12 @@
 <li>手动异步提交. 只管发送. 不用broker响应. 由于是异步发送. 就不能保证offset的循序. 例如offset2000 在 3000之后到达broker. 这时正好在均衡. 消息会被重复消费. </li>
 </ol>
 <p>可以同步异步混合使用. 在正常while循环中使用 异步的 在消费者退出时. 同步提交一次. </p>
-<h3 id="kafka给的保证"><a href="#kafka给的保证" class="headerlink" title="kafka给的保证"></a>kafka给的保证</h3><h4 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h4><p>通过异步批处理. NIO 零拷贝. </p>
+<h3 id="kafka给的保证"><a href="#kafka给的保证" class="headerlink" title="kafka给的保证"></a>kafka给的保证</h3><h4 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h4><p>通过异步批处理. NIO,零拷贝. 顺序IO </p>
 <h4 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h4><p>kafka的高可靠性源于其健壮副本策略. </p>
-<h5 id="文件存储"><a href="#文件存储" class="headerlink" title="文件存储"></a>文件存储</h5><p>消息是以topic分类的. 在物理层面. topic由多个partition分组. partition还可以分成多个segment. 在kafka中每个分区对应着一个文件, 命名规则为topic_分区序号. 序号从0开始. segment是对分区文件的一种优化. 为了防止分区文件膨胀变大带来的维护成本. segment分为两部分. .index和.log. 每个分区中的segment都是从0开始到命名. 代表了存储消息的offset. 64位的. </p>
+<h5 id="文件存储"><a href="#文件存储" class="headerlink" title="文件存储"></a>文件存储</h5><p>消息是以topic分类的. 在物理层面. topic由多个partition分组. 多个partion是为了能够横向拓展. 单个broker处理能力是有限的. 消费者从不同broker上消费消息. 实现了水平拓展</p>
+<p>每个partition都有一组segment文件组成.  相较于使用一个巨型文件存储而言, kafka采用多个大小相等的一组文件存储partition消息. </p>
+<p>每个segment文件都由.index和.log两个重要文件组成. 依据offset 每6个消息建立一个索引. 索引文件大小达到一定阈值时. 新建一个新文件,文件名为上一个文件的最后一个offset. 这样新文件的offset就是从文件名+1开始的. index文件的存储格式为(offset,partition) partition为log文件的偏移字节数   这里采用的稀疏索引策略. 既可以避免索引文件过大, 还能加速查找.</p>
+<p>这样我们通过offset对index文件进行二分查找就能够定位到具体.index 然后在继续读文件里的offset二分能够找到一个offset下届. 取到具体的partition, 去.log文件partition位置开始向后查找. 只需要查找一段距离就能够找到.</p>
 <h5 id="复制原理和同步方式挤我leader选举"><a href="#复制原理和同步方式挤我leader选举" class="headerlink" title="复制原理和同步方式挤我leader选举"></a>复制原理和同步方式挤我leader选举</h5><p>在上层应用视角中 我们看到的最小单元就是分区文件. 其实是由一堆segment组成的.  整个partition文件中<strong>由一些列有序的、不可变的消息组成，这些消息被连续的追加到partition中</strong><br><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20191127195734.png" alt="20191127195734.png"></p>
 <p>其中HW的意思是  高水位线. 这个线之后的消息.消费者是没有消费的. LED是表示该分区的最后一个消息offset</p>
 <p>为了提高消息的可靠性. kafka每个topic的partition有多个副本 其中n大于等于1是topic的复制因子的个数.Kafka通过多副本机制实现故障自动转移，当Kafka集群中一个broker失效情况下仍然保证服务可用。在Kafka中发生复制时确保partition的日志能有序地写到其他节点上，N个replicas中，其中一个replica为leader，其他都为follower, leader处理partition的所有读写请求，与此同时，follower会被动定期地去复制leader上的数据。</p>
@@ -789,7 +792,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">176.5k</span>
+    <span title="Site words total count">176.7k</span>
   
 </div>
 
