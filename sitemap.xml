@@ -473,7 +473,7 @@
   </url>
   
   <url>
-    <loc>http://www.ten951.com/tags/java8/</loc>
+    <loc>http://www.ten951.com/tags/JVM/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -494,7 +494,7 @@
   </url>
   
   <url>
-    <loc>http://www.ten951.com/tags/JVM/</loc>
+    <loc>http://www.ten951.com/tags/java8/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -502,6 +502,13 @@
   
   <url>
     <loc>http://www.ten951.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
+    <lastmod>2020-12-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://www.ten951.com/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -522,7 +529,7 @@
   </url>
   
   <url>
-    <loc>http://www.ten951.com/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</loc>
+    <loc>http://www.ten951.com/tags/SpringFeign/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -536,13 +543,6 @@
   </url>
   
   <url>
-    <loc>http://www.ten951.com/tags/SpringFeign/</loc>
-    <lastmod>2020-12-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://www.ten951.com/tags/kafka/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
@@ -550,14 +550,14 @@
   </url>
   
   <url>
-    <loc>http://www.ten951.com/tags/netty/</loc>
+    <loc>http://www.ten951.com/tags/linux/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://www.ten951.com/tags/linux/</loc>
+    <loc>http://www.ten951.com/tags/netty/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -585,14 +585,14 @@
   </url>
   
   <url>
-    <loc>http://www.ten951.com/tags/SpringZuul/</loc>
+    <loc>http://www.ten951.com/tags/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://www.ten951.com/tags/%E7%AE%97%E6%B3%95/</loc>
+    <loc>http://www.ten951.com/tags/SpringZuul/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -643,6 +643,13 @@
   </url>
   
   <url>
+    <loc>http://www.ten951.com/categories/NETWORK/</loc>
+    <lastmod>2020-12-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://www.ten951.com/categories/dubbo/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
@@ -651,13 +658,6 @@
   
   <url>
     <loc>http://www.ten951.com/categories/k8s/</loc>
-    <lastmod>2020-12-02</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://www.ten951.com/categories/NETWORK/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -678,14 +678,14 @@
   </url>
   
   <url>
-    <loc>http://www.ten951.com/categories/netty/</loc>
+    <loc>http://www.ten951.com/categories/linux/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://www.ten951.com/categories/linux/</loc>
+    <loc>http://www.ten951.com/categories/netty/</loc>
     <lastmod>2020-12-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
