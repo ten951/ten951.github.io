@@ -571,7 +571,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3.1k 字
+                  3.5k 字
                 </span>
               
 
@@ -587,7 +587,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  16 分钟
+                  18 分钟
                 </span>
               
             </div>
@@ -609,12 +609,16 @@
 
       
         
-          <h2 id="自动加载"><a href="#自动加载" class="headerlink" title="自动加载"></a>自动加载</h2><p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20190823100135.png" alt="20190823100135.png"></p>
+          <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>依赖spring自动加载机制完成Mybatis的mapper.xml文件的加载. 并依据mapper文件的namespace为key 进行注册(Configuration类knownMappers)    关键点: MapperProxyFactory MapperProxy SqlSessionFactory.</li>
+<li>依赖@MapperScan注解, 完成Mapper类的加载和注册.  这个注册时完成spring ioc容器的注册   关键点: MapperFactoryBean</li>
+</ol>
+<h2 id="自动加载"><a href="#自动加载" class="headerlink" title="自动加载"></a>自动加载</h2><p><img src="https://ten951-img.oss-cn-shanghai.aliyuncs.com/20190823100135.png" alt="20190823100135.png"></p>
 <p>在spring.factories文件中:</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span></span><br><span class="line"><span class="string">org.mybatis.spring.boot.autoconfigure.MybatisLanguageDriverAutoConfiguration,\</span></span><br><span class="line"><span class="string">org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration</span></span><br></pre></td></tr></table></figure>
 
 <p>这些类是在项目启动时. spring的注解驱动帮我们自动加载的.</p>
-<h3 id="MybatisAutoConfiguration-Mybatis自动加载类"><a href="#MybatisAutoConfiguration-Mybatis自动加载类" class="headerlink" title="MybatisAutoConfiguration(Mybatis自动加载类)"></a>MybatisAutoConfiguration(Mybatis自动加载类)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@org</span>.springframework.context.annotation.Configuration</span><br><span class="line"><span class="comment">//SqlSessionFactoryBean是mybatis-spring包的类. SqlSessionFactory是mybatis包的类. 也就是说必须依赖和两个包</span></span><br><span class="line"><span class="meta">@ConditionalOnClass</span>(&#123; SqlSessionFactory.class, SqlSessionFactoryBean.class &#125;)</span><br><span class="line"><span class="comment">//必须存在一个首选的DataSource Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnSingleCandidate</span>(DataSource.class)</span><br><span class="line"><span class="comment">//开启或者读取mybatis开头的配置</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties</span>(MybatisProperties.class)</span><br><span class="line"><span class="comment">//在DataSourceAutoConfiguration配置和MybatisLanguageDriverAutoConfiguration类加载完成之后 加载MybatisAutoConfiguration类</span></span><br><span class="line"><span class="meta">@AutoConfigureAfter</span>(&#123; DataSourceAutoConfiguration.class, MybatisLanguageDriverAutoConfiguration.class &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisAutoConfiguration</span> <span class="keyword">implements</span> <span class="title">InitializingBean</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="完成Mybatis-Configuration类knownMappers注册"><a href="#完成Mybatis-Configuration类knownMappers注册" class="headerlink" title="完成Mybatis.Configuration类knownMappers注册"></a>完成Mybatis.Configuration类knownMappers注册</h3><h4 id="MybatisAutoConfiguration-Mybatis自动加载类"><a href="#MybatisAutoConfiguration-Mybatis自动加载类" class="headerlink" title="MybatisAutoConfiguration(Mybatis自动加载类)"></a>MybatisAutoConfiguration(Mybatis自动加载类)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@org</span>.springframework.context.annotation.Configuration</span><br><span class="line"><span class="comment">//SqlSessionFactoryBean是mybatis-spring包的类. SqlSessionFactory是mybatis包的类. 也就是说必须依赖和两个包</span></span><br><span class="line"><span class="meta">@ConditionalOnClass</span>(&#123; SqlSessionFactory.class, SqlSessionFactoryBean.class &#125;)</span><br><span class="line"><span class="comment">//必须存在一个首选的DataSource Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnSingleCandidate</span>(DataSource.class)</span><br><span class="line"><span class="comment">//开启或者读取mybatis开头的配置</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties</span>(MybatisProperties.class)</span><br><span class="line"><span class="comment">//在DataSourceAutoConfiguration配置和MybatisLanguageDriverAutoConfiguration类加载完成之后 加载MybatisAutoConfiguration类</span></span><br><span class="line"><span class="meta">@AutoConfigureAfter</span>(&#123; DataSourceAutoConfiguration.class, MybatisLanguageDriverAutoConfiguration.class &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisAutoConfiguration</span> <span class="keyword">implements</span> <span class="title">InitializingBean</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/10/20/spring-mybatis源码/#more" rel="contents">
@@ -2433,7 +2437,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">177.9k</span>
+    <span title="Site words total count">178.2k</span>
   
 </div>
 
